@@ -3,46 +3,35 @@ package com.shrubsink.everylifeismatter;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Objects;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private static final String ARG_NAME = "username";
-    CircleImageView mProfilePicture;
-    TextView mUsernameTv;
+public class MainActivity extends AppCompatActivity {
 
     public static void startActivity(Context context, String username) {
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(ARG_NAME, username);
+        intent.putExtra("username", username);
         context.startActivity(intent);
     }
 
     FirebaseAuth mFirebaseAuth;
     GoogleSignInClient googleSignInClient;
+    private QueryFragment queryFragment;
+    private SettingsFragment settingsFragment;
+    BottomNavigationView mBottomNavigationView;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -50,34 +39,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mProfilePicture = findViewById(R.id.profile_image);
-        mUsernameTv = findViewById(R.id.username_tv);
-
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        findViewById(R.id.profile_image).setOnClickListener(this);
+        mBottomNavigationView = findViewById(R.id.mainBottomNav);
+        queryFragment = new QueryFragment();
+        settingsFragment = new SettingsFragment();
 
-        googleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN);
-        mFirebaseAuth = FirebaseAuth.getInstance();
-
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if (acct != null) {
-            String personName = acct.getDisplayName();
-            Uri personPhoto = acct.getPhotoUrl();
-
-            mUsernameTv.setText(personName);
-            Glide.with(this).load(personPhoto).placeholder(R.drawable.profile_placeholder).into(mProfilePicture);
-        }
+        replaceFragment(queryFragment);
+        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.bottom_action_home : replaceFragment(queryFragment); return true;
+                    case R.id.bottom_action_settings : replaceFragment(settingsFragment); return true;
+                    default: return true;
+                }
+            }
+        });
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.profile_image:
-                goToProfile();
-                break;
-        }
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -97,25 +82,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-
     private void signOut() {
-        // Firebase sign out
         mFirebaseAuth.signOut();
-
-        // Google sign out
         googleSignInClient.signOut().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // Google Sign In failed, update UI appropriately
                         Intent googleSignInActivity = new Intent(MainActivity.this, GoogleSignInActivity.class);
                         startActivity(googleSignInActivity);
                     }
                 });
-    }
-
-    private void goToProfile() {
-        Intent profileActivity = new Intent(MainActivity.this, ProfileActivity.class);
-        startActivity(profileActivity);
     }
 }
