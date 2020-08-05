@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">ShrubsLink</string>
+    <string name="shrubslink">ShrubsLink</string>
+    <string name="_1_tree_oxygen_for_you">1 Tree = Oxygen for YOU</string>
+    <string name="don_t_travel_to_deserted_future">Don\'t travel to deserted future</string>
+    <string name="tnc">By continuing, you agree that you have read and accept our TnCs and Privacy Policy</string>
+    <string name="profile_settings">Profile Settings</string>
+    <string name="email">sample@gmail.com</string>
+    <string name="username">Arul Mozhi</string>
+    <string name="gender">Gender</string>
+    <string name="country">Country</string>
+    <string name="state">State</string>
+    <string name="address_line">Address Line</string>
+    <string name="city">City</string>
+    <string name="personal">Personal</string>
+    <string name="age">Age</string>
+    <string name="save_content">Save Content</string>
+    <string name="phone">Phone</string>
+    <string name="pincode">Pincode</string>
+    <string name="address">Address</string>
+    <string name="save_address">Save Address</string>
+    <string name="save_your_address">Save your address</string>
+    <string name="add_address">Add Address</string>
+    <string name="sample_address">472/4, Sample Address Line, Shrubs Nagar</string>
+    <string name="city_pincode">City, Pincode</string>
+    <string name="state_country">State, Country</string>
+    <string name="save_your_general">Save your general</string>
+    <string name="save_general">Save General</string>
+    <string name="general">General</string>
+    <string name="male_20">Male, 20</string>
+    <string name="phone_8248433574">Phone: 8248433574</string>
+    <string name="edit_general">Edit General</string>
+    <string name="add_general">Add General</string>
+    <string name="edit_address">Edit Address</string>
+    <string name="back_arrow">Back Arrow</string>
+    <string name="short_bio">Short Bio</string>
+    <string name="designation">Designation</string>
+    <string name="shrubsink_bw_logo">ShrubsInk BW Logo</string>
+    <string name="hello_arul_mozhi">Hello, Arul Mozhi</string>
+    <string name="discuss_with_your_peers_amp_be_the_part_of_their_life"><![CDATA[Discuss with your peers & be the part of their life.]]></string>
+    <string name="logout">Logout</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

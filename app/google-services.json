@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "324450998650",
+    "firebase_url": "https://app-shrubsink.firebaseio.com",
+    "project_id": "app-shrubsink",
+    "storage_bucket": "app-shrubsink.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324450998650:android:538c8f735ba75cf3965ec3",
+        "android_client_info": {
+          "package_name": "com.shrubsink.everylifeismatter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324450998650-p5bjqk0vfh21m2c232jceu0o2bo50mcp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shrubsink.everylifeismatter",
+            "certificate_hash": "d55cfc9e4518358f5b559cced37287a80fb04188"
+          }
+        },
+        {
+          "client_id": "324450998650-gv4lqnjvnd4l338if43hva45siuu7tth.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXBv_Sq_E81FAFNI-zozHVVYuIpzr9oic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "324450998650-gv4lqnjvnd4l338if43hva45siuu7tth.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
