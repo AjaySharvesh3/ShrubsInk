@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,6 +47,7 @@ public class AddressActivity extends AppCompatActivity {
     String mUserId;
     String address_line, city, pincode, state, country, phone, age, gender;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +55,11 @@ public class AddressActivity extends AppCompatActivity {
 
         /*showProgressDialog(this, "Loading...","Collecting your existing profile..",false);*/
 
-        mCloseActivityIv = findViewById(R.id.close_activity_iv);
-        closeActivity();
+        /*Toolbar toolbar = findViewById(R.id.address_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);*/
 
         mAddressLineTIL = findViewById(R.id.address_line_et);
         mCityTIL = findViewById(R.id.city_et);
@@ -61,6 +67,17 @@ public class AddressActivity extends AppCompatActivity {
         mStateTIL = findViewById(R.id.state_et);
         mCountryTIL = findViewById(R.id.country_et);
         saveAddressBtn = findViewById(R.id.save_address_button);
+        mCloseActivityIv = findViewById(R.id.close_activity);
+
+        mCloseActivityIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i= new Intent(AddressActivity.this, ProfileActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finish();
+            }
+        });
 
         mAddressLineEt = findViewById(R.id.address_line_tiet);
         mCityEt = findViewById(R.id.city_tiet);
@@ -147,17 +164,6 @@ public class AddressActivity extends AppCompatActivity {
                         "Failed to save address, please check network connection",
                         Toast.LENGTH_LONG)
                         .show();
-            }
-        });
-    }
-
-
-    public void closeActivity() {
-        mCloseActivityIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent closeActivity = new Intent(AddressActivity.this, ProfileActivity.class);
-                startActivity(closeActivity);
             }
         });
     }

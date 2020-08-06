@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">ShrubsLink</string>
-    <string name="shrubslink">ShrubsLink</string>
+    <string name="app_name">ShrubsInk</string>
+    <string name="shrubslink">ShrubsInk</string>
     <string name="_1_tree_oxygen_for_you">1 Tree = Oxygen for YOU</string>
     <string name="don_t_travel_to_deserted_future">Don\'t travel to deserted future</string>
     <string name="tnc">By continuing, you agree that you have read and accept our TnCs and Privacy Policy</string>
     <string name="profile_settings">Profile Settings</string>
     <string name="email">sample@gmail.com</string>
-    <string name="username">Arul Mozhi</string>
+    <string name="username">Swetha Prabhakaran</string>
     <string name="gender">Gender</string>
     <string name="country">Country</string>
     <string name="state">State</string>
@@ -44,4 +44,19 @@
     <string name="home">Home</string>
     <string name="settings">Settings</string>
     <string name="search">Search</string>
+    <string name="post_query">Post Query</string>
+    <string name="ask_a_public_question">Ask a public question</string>
+    <string name="title">1. Title</string>
+    <string name="title_content">Be specific and imagine you’re asking an issue to another person.</string>
+    <string name="title_example">E.G. Are there any medicines to avoid bugs in Sapota (Chiku) plant?</string>
+    <string name="body">3. Body</string>
+    <string name="body_content">Include all the information someone would need to clarify your question</string>
+    <string name="body_example">Detail your question correctly</string>
+    <string name="issue_example">E.G. Madurai, Tamil Nadu</string>
+    <string name="picture">2. Picture</string>
+    <string name="picture_content">Add plant image, that helps peers to understand question better</string>
+    <string name="issue_content">Solution may differ based on soil location, so please mention it</string>
+    <string name="publish">Publish</string>
+    <string name="close">Close</string>
+    <string name="_4_issue_location">4. Issue Location</string>
 </resources>

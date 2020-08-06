@@ -21,7 +21,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_post_btn"
+        android:id="@+id/post_query_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -33,19 +33,25 @@
         android:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/mainBottomNav"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_baseline_add_24"
+        app:srcCompat="@drawable/ic_baseline_add_24"
+        android:tint="@android:color/white"
+        app:fabSize="mini"
+        app:tint="@color/white"
         android:layout_marginRight="16dp"
-        tools:ignore="UnusedAttribute" />
+        tools:ignore="UnusedAttribute,VectorDrawableCompat" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mainBottomNav"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_menu"
-        android:background="@color/whitesmoke"
+        android:background="@android:color/white"
+        android:clickable="true"
+        app:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:focusable="true" />
 
     <FrameLayout
         android:id="@+id/main_container"

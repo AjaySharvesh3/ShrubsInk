@@ -5,6 +5,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:fontFamily">@font/sf_pro_text</item>
+
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
 
     <style name="AppThemeActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
@@ -12,11 +16,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:fontFamily">@font/sf_pro_text</item>
     </style>
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">19sp</item>
-        <item name="android:fontFamily">@font/product_sans_medium</item>
+        <item name="android:fontFamily">@font/sf_pro_text</item>
     </style>
 
 </resources>

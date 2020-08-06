@@ -3,6 +3,7 @@ package com.shrubsink.everylifeismatter;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -11,7 +12,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -39,7 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     TextView mEmail;
     CircleImageView mProfilePicture;
     Button mAddAddressBtn, mAddGeneralButton;
-    ImageView mEditAddressIv, mEditGeneralIv, mBackActivityIv;
+    ImageView mEditAddressIv, mEditGeneralIv, mCloseActivityIv;
     TextView mAddressLineTv, mCityPincodeTv, mStateCountryTv;
     TextView mShortBioTv, mDesignationTv, mPhoneTv, mGenderAgeTv;
     FirebaseAuth mFirebaseAuth;
@@ -57,6 +60,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         showProgressDialog(this, "Loading...","Collecting your profile..",false);
 
+        /*Toolbar toolbar = findViewById(R.id.profile_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);*/
+
         mUsername = findViewById(R.id.username_et);
         mEmail = findViewById(R.id.email_et);
         mProfilePicture = findViewById(R.id.profile_image);
@@ -64,7 +73,6 @@ public class ProfileActivity extends AppCompatActivity {
         mAddGeneralButton = findViewById(R.id.add_personal_btn);
         mEditAddressIv = findViewById(R.id.edit_address_iv);
         mEditGeneralIv = findViewById(R.id.edit_general_iv);
-        mBackActivityIv = findViewById(R.id.back_activity_iv);
 
         mAddressLineTv = findViewById(R.id.address_line_tv);
         mCityPincodeTv = findViewById(R.id.city_pincode_tv);
@@ -75,11 +83,22 @@ public class ProfileActivity extends AppCompatActivity {
         mPhoneTv = findViewById(R.id.phone_tv);
         mGenderAgeTv = findViewById(R.id.gender_age_tv);
 
+        mCloseActivityIv = findViewById(R.id.profile_close_activity);
+
+        mCloseActivityIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i= new Intent(ProfileActivity.this, MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finish();
+            }
+        });
+
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
             String personName = acct.getDisplayName();
             String personEmail = acct.getEmail();
-            Uri personPhoto = acct.getPhotoUrl();
 
             mUsername.setText(personName);
             mEmail.setText(personEmail);
@@ -103,7 +122,6 @@ public class ProfileActivity extends AppCompatActivity {
         editAddress();
         addGeneral();
         editGeneral();
-        goBack();
     }
 
     public void fetchAddress() {
@@ -173,6 +191,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public static void showProgressDialog(Context context, String title,
                                           String msg, boolean isCancelable) {
@@ -261,16 +280,6 @@ public class ProfileActivity extends AppCompatActivity {
                 editGeneralActivity.putExtra("short_bio", short_bio);
                 editGeneralActivity.putExtra("designation", designation);
                 startActivity(editGeneralActivity);
-            }
-        });
-    }
-
-    public void goBack() {
-        mBackActivityIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent goBack = new Intent(ProfileActivity.this, MainActivity.class);
-                startActivity(goBack);
             }
         });
     }

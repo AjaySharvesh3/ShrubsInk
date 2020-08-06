@@ -12,11 +12,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,9 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth mFirebaseAuth;
     GoogleSignInClient googleSignInClient;
-    private QueryFragment queryFragment;
-    private SettingsFragment settingsFragment;
+    QueryFragment queryFragment;
+    SettingsFragment settingsFragment;
     BottomNavigationView mBottomNavigationView;
+    FloatingActionButton mPostQueryFAB;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -42,7 +47,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        googleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN);
+
         mBottomNavigationView = findViewById(R.id.mainBottomNav);
+        mPostQueryFAB = findViewById(R.id.post_query_fab);
+
         queryFragment = new QueryFragment();
         settingsFragment = new SettingsFragment();
 
@@ -55,6 +65,14 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.bottom_action_settings : replaceFragment(settingsFragment); return true;
                     default: return true;
                 }
+            }
+        });
+
+        mPostQueryFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent postQueryIntent = new Intent(MainActivity.this, PostQueryActivity.class);
+                startActivity(postQueryIntent);
             }
         });
     }

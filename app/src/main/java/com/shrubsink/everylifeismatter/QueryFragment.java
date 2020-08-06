@@ -1,5 +1,6 @@
 package com.shrubsink.everylifeismatter;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -36,6 +37,7 @@ public class QueryFragment extends Fragment implements View.OnClickListener  {
 
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,15 +49,15 @@ public class QueryFragment extends Fragment implements View.OnClickListener  {
 
         view.findViewById(R.id.profile_image).setOnClickListener(this);
 
-        googleSignInClient = GoogleSignIn.getClient(Objects.requireNonNull(getActivity()), GoogleSignInOptions.DEFAULT_SIGN_IN);
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), GoogleSignInOptions.DEFAULT_SIGN_IN);
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(Objects.requireNonNull(getActivity()));
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(requireActivity());
         if (acct != null) {
             String personName = acct.getDisplayName();
             Uri personPhoto = acct.getPhotoUrl();
 
-            mUsernameTv.setText(personName);
+            mUsernameTv.setText("Hello, " + personName);
             Glide.with(this).load(personPhoto).placeholder(R.drawable.profile_placeholder).into(mProfilePicture);
         }
 

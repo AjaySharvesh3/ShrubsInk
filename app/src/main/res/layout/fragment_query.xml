@@ -36,11 +36,12 @@
             android:id="@+id/username_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:fontFamily="@font/product_sans_regular"
+            android:layout_marginTop="10dp"
             android:text="@string/hello_arul_mozhi"
             android:textColor="@color/white"
             android:textSize="18sp"
+            android:fontFamily="@font/sf_pro_text"
+            android:textFontWeight="900"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,10 +49,10 @@
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/product_sans_light"
             android:text="@string/discuss_with_your_peers_amp_be_the_part_of_their_life"
             android:textColor="@color/white"
             android:textSize="10sp"
+            android:fontFamily="@font/sf_pro_text"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/username_tv"
             tools:ignore="SmallSp" />

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -12,6 +13,8 @@ import android.content.Intent;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,13 +48,17 @@ public class PersonalActivity extends AppCompatActivity {
     String mUserId;
     String phone, age, gender, short_bio, designation;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
 
-        mCloseActivityIv = findViewById(R.id.close_activity_iv);
-        closeActivity();
+        /*Toolbar toolbar = findViewById(R.id.general_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);*/
 
         mGenderTIL = findViewById(R.id.gender_et);
         mAgeTIL = findViewById(R.id.age_et);
@@ -59,6 +66,17 @@ public class PersonalActivity extends AppCompatActivity {
         mShortBioTIL = findViewById(R.id.short_bio_et);
         mDesignationTIL = findViewById(R.id.designation_et);
         savePersonalBtn = findViewById(R.id.save_general_button);
+        mCloseActivityIv = findViewById(R.id.close_activity);
+
+        mCloseActivityIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i= new Intent(PersonalActivity.this, ProfileActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finish();
+            }
+        });
 
         mGenderEt = findViewById(R.id.gender_tiet);
         mAgeEt = findViewById(R.id.age_tiet);
@@ -96,8 +114,6 @@ public class PersonalActivity extends AppCompatActivity {
         mShortBioEt.setText(short_bio);
         mDesignationTIL.setHintAnimationEnabled(false);
         mDesignationEt.setText(designation);
-
-        Toast.makeText(PersonalActivity.this, short_bio + designation, Toast.LENGTH_LONG).show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -156,16 +172,6 @@ public class PersonalActivity extends AppCompatActivity {
                         "Failed to save general, please check network connection",
                         Toast.LENGTH_LONG)
                         .show();
-            }
-        });
-    }
-
-    public void closeActivity() {
-        mCloseActivityIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent closeActivity = new Intent(PersonalActivity.this, ProfileActivity.class);
-                startActivity(closeActivity);
             }
         });
     }
