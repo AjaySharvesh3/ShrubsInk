@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,18 +22,39 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.shrubsink.everylifeismatter.adapter.QueryPostRecyclerAdapter;
+import com.shrubsink.everylifeismatter.model.QueryPost;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Executor;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class QueryFragment extends Fragment implements View.OnClickListener  {
+public class QueryFragment extends Fragment implements View.OnClickListener {
 
     CircleImageView mProfilePicture;
     TextView mUsernameTv;
     FirebaseAuth mFirebaseAuth;
     GoogleSignInClient googleSignInClient;
+
+    private RecyclerView query_list_view;
+    private List<QueryPost> query_list;
+
+    private FirebaseFirestore firebaseFirestore;
+    private QueryPostRecyclerAdapter queryPostRecyclerAdapter;
+
+    private DocumentSnapshot lastVisible;
+    private Boolean isFirstPageFirstLoad = true;
 
     public QueryFragment() {
 
@@ -61,7 +84,90 @@ public class QueryFragment extends Fragment implements View.OnClickListener  {
             Glide.with(this).load(personPhoto).placeholder(R.drawable.profile_placeholder).into(mProfilePicture);
         }
 
+        query_list = new ArrayList<>();
+        query_list_view = view.findViewById(R.id.query_list_view);
+
+        queryPostRecyclerAdapter = new QueryPostRecyclerAdapter(query_list);
+        query_list_view.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        query_list_view.setAdapter(queryPostRecyclerAdapter);
+        query_list_view.setHasFixedSize(true);
+
+        if (mFirebaseAuth.getCurrentUser() != null) {
+            firebaseFirestore = FirebaseFirestore.getInstance();
+            query_list_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    Boolean reachedBottom = !recyclerView.canScrollVertically(1);
+                    if (reachedBottom) {
+                        loadMoreQueries();
+                    }
+                }
+            });
+
+            new Thread(new Runnable() {
+                public void run() {
+                    Query firstQuery = firebaseFirestore.collection("query_posts")
+                            .orderBy("timestamp", Query.Direction.DESCENDING).limit(3);
+                    firstQuery.addSnapshotListener(requireActivity(), new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                            if (!documentSnapshots.isEmpty()) {
+                                if (isFirstPageFirstLoad) {
+                                    lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                                    query_list.clear();
+                                }
+                                for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+                                    if (documentSnapshots != null) {
+                                        if (doc.getType() == DocumentChange.Type.ADDED) {
+                                            String queryPostPostId = doc.getDocument().getId();
+                                            QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostPostId);
+                                            if (isFirstPageFirstLoad) {
+                                                query_list.add(queryPost);
+                                            } else {
+                                                query_list.add(0, queryPost);
+                                            }
+                                            queryPostRecyclerAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                }
+                                isFirstPageFirstLoad = false;
+                            }
+                        }
+
+                    });
+                }
+            }).start();
+        }
         return view;
+    }
+
+    public void loadMoreQueries() {
+        if (mFirebaseAuth.getCurrentUser() != null) {
+            Query nextQuery = firebaseFirestore.collection("query_posts")
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .startAfter(lastVisible)
+                    .limit(3);
+
+            nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                    if (!documentSnapshots.isEmpty()) {
+                        lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                        for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+                            if (documentSnapshots != null) {
+                                if (doc.getType() == DocumentChange.Type.ADDED) {
+                                    String queryPostId = doc.getDocument().getId();
+                                    QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostId);
+                                    query_list.add(queryPost);
+                                    queryPostRecyclerAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 
     @Override

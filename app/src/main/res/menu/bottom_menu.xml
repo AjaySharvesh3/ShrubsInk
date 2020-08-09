@@ -7,7 +7,11 @@
         android:icon="@drawable/ic_baseline_home_24"
         android:title="@string/home" />
     <item
-        android:id="@+id/bottom_action_settings"
-        android:icon="@drawable/ic_baseline_settings_24"
-        android:title="@string/settings" />
+        android:id="@+id/bottom_action_product_list"
+        android:icon="@drawable/ic_baseline_dashboard_24"
+        android:title="@string/products" />
+    <item
+        android:id="@+id/bottom_action_activity"
+        android:icon="@drawable/ic_baseline_data_usage_24"
+        android:title="@string/activity" />
 </menu>

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -120,6 +121,12 @@ public class PersonalActivity extends AppCompatActivity {
     public void postPersonal() {
         showProgressDialog(this, "Loading...", "Saving your general..", false);
 
+        FirebaseUser account = mFirebaseAuth.getCurrentUser();
+        assert account != null;
+        String name = Objects.requireNonNull(account.getDisplayName());
+        String email = Objects.requireNonNull(account.getEmail());
+        String profile = Objects.requireNonNull(account.getPhotoUrl()).toString();
+
         String gender = Objects.requireNonNull(mGenderTIL.getEditText()).getText().toString();
         String age = Objects.requireNonNull(mAgeTIL.getEditText()).getText().toString();
         String phone = Objects.requireNonNull(mPhoneTIL.getEditText()).getText().toString();
@@ -147,6 +154,9 @@ public class PersonalActivity extends AppCompatActivity {
         mUserId = Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid();
         DocumentReference mDocumentreference = mFirebaseFirestore.collection("user_bio").document(mUserId).collection("personal").document(mUserId);
         Map<String, Object> user_bio = new HashMap<>();
+        user_bio.put("name", name);
+        user_bio.put("email", email);
+        user_bio.put("profile", profile);
         user_bio.put("gender", gender);
         user_bio.put("age", age);
         user_bio.put("phone", phone);
@@ -157,20 +167,22 @@ public class PersonalActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 removeProgressDialog();
-
-                Toast.makeText(PersonalActivity.this,
+                /*Toast.makeText(PersonalActivity.this,
                         "You're done. Saved your general.",
                         Toast.LENGTH_LONG)
+                        .show();*/
+                Snackbar.make(savePersonalBtn, "You're done. Saved your general.", Snackbar.LENGTH_LONG)
                         .show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 removeProgressDialog();
-
-                Toast.makeText(PersonalActivity.this,
+                /*Toast.makeText(PersonalActivity.this,
                         "Failed to save general, please check network connection",
                         Toast.LENGTH_LONG)
+                        .show();*/
+                Snackbar.make(savePersonalBtn, "Failed to save general, please check network connection", Snackbar.LENGTH_LONG)
                         .show();
             }
         });

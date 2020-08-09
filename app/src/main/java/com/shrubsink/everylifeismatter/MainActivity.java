@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mFirebaseAuth;
     GoogleSignInClient googleSignInClient;
     QueryFragment queryFragment;
-    SettingsFragment settingsFragment;
+    ActivityFragment activityFragment;
+    ProductListFragment productListFragment;
     BottomNavigationView mBottomNavigationView;
     FloatingActionButton mPostQueryFAB;
 
@@ -54,15 +55,17 @@ public class MainActivity extends AppCompatActivity {
         mPostQueryFAB = findViewById(R.id.post_query_fab);
 
         queryFragment = new QueryFragment();
-        settingsFragment = new SettingsFragment();
+        activityFragment = new ActivityFragment();
+        productListFragment = new ProductListFragment();
 
-        replaceFragment(queryFragment);
+       replaceFragment(queryFragment);
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.bottom_action_home : replaceFragment(queryFragment); return true;
-                    case R.id.bottom_action_settings : replaceFragment(settingsFragment); return true;
+                    case R.id.bottom_action_activity : replaceFragment(activityFragment);
+                    case R.id.bottom_action_product_list : replaceFragment(productListFragment);
                     default: return true;
                 }
             }

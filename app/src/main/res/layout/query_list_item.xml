@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:background="@color/white"
+    android:paddingBottom="16dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/profile_placeholder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tags_tv" />
+
+    <TextView
+        android:id="@+id/tags_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/chiko_sapota_plant"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SmallSp" />
+
+    <TextView
+        android:id="@+id/like_count_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="14dp"
+        android:text="@string/_100_likes"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/likes_icon"
+        app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+
+    <TextView
+        android:id="@+id/answer_count_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="14dp"
+        android:text="@string/_3_answers"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/answers_icon"
+        app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+
+    <TextView
+        android:id="@+id/tags_tv7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:text="@string/not_yet_solved"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+
+    <TextView
+        android:id="@+id/timestamp_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/_07_aug_06_47_am"
+        android:textSize="10sp"
+        android:layout_gravity="end"
+        android:gravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SmallSp" />
+
+    <TextView
+        android:id="@+id/short_bio_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:paddingEnd="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/short_bio_in_list"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toBottomOf="@+id/username_tv"
+        tools:ignore="RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/username_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/username"
+        android:textColor="@color/slight_black"
+        android:textSize="14sp"
+        android:fontFamily="@font/sf_pro_display"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toBottomOf="@+id/tags_tv" />
+
+    <TextView
+        android:id="@+id/issue_location_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="@string/madurai_tamil_nadu"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toBottomOf="@+id/short_bio_tv"
+        tools:ignore="SmallSp" />
+
+    <TextView
+        android:id="@+id/title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/title_example"
+        android:textColor="@color/slight_black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/issue_location_tv" />
+
+    <com.borjabravo.readmoretextview.ReadMoreTextView
+        android:id="@+id/body_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/sample_body_list_item"
+        android:textColor="@color/grey"
+        android:textSize="12sp"
+        app:colorClickableText="@color/colorAccentBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_tv"
+        app:trimCollapsedText="less"
+        app:trimExpandedText="more"
+        app:trimLines="2"
+        app:trimMode="trimModeLine" />
+
+    <ImageView
+        android:id="@+id/query_image_iv"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/image_border"
+        android:contentDescription="@string/query_image"
+        android:src="@drawable/ic_baseline_image_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/body_tv" />
+
+    <ImageView
+        android:id="@+id/likes_icon"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="14dp"
+        android:contentDescription="@string/query_image"
+        android:src="@drawable/ic_baseline_favorite_border_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+
+    <ImageView
+        android:id="@+id/likes_icon4"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:contentDescription="@string/query_image"
+        android:src="@drawable/ic_outline_check_circle_24"
+        app:layout_constraintEnd_toStartOf="@+id/tags_tv7"
+        app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+
+    <ImageView
+        android:id="@+id/answers_icon"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="14dp"
+        android:contentDescription="@string/query_image"
+        android:src="@drawable/ic_outline_rate_review_24"
+        app:layout_constraintStart_toEndOf="@+id/like_count_tv"
+        app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

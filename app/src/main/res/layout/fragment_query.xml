@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppThemeActionBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/AppThemeActionBar"
+    android:background="@color/slight_grey"
     tools:context=".QueryFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,11 +21,11 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="1dp"
             android:layout_marginBottom="14dp"
             android:contentDescription="@string/shrubsink_bw_logo"
             android:src="@drawable/shrubslink_bw"
@@ -36,12 +37,10 @@
             android:id="@+id/username_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:fontFamily="@font/sf_pro_text"
             android:text="@string/hello_arul_mozhi"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:fontFamily="@font/sf_pro_text"
-            android:textFontWeight="900"
+            android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,38 +48,43 @@
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/sf_pro_text"
             android:text="@string/discuss_with_your_peers_amp_be_the_part_of_their_life"
             android:textColor="@color/white"
             android:textSize="10sp"
-            android:fontFamily="@font/sf_pro_text"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/username_tv"
             tools:ignore="SmallSp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="13dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/profile_placeholder"
             app:civ_border_color="@color/white"
             app:civ_border_overlay="true"
-            app:civ_border_width="2dp"
+            app:civ_border_width="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/blog_list_view"
+        android:id="@+id/query_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="49dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

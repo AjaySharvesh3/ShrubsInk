@@ -53,7 +53,6 @@
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="30dp"
                 android:fillViewport="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,11 +81,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="16dp"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="16dp"
                         android:fontFamily="@font/sf_pro_text"
                         android:text="@string/title"
                         android:textColor="@color/slight_black"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -98,11 +97,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="16dp"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="16dp"
                         android:fontFamily="@font/sf_pro_text"
                         android:text="@string/picture"
                         android:textColor="@color/slight_black"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/query_title_et"
@@ -115,6 +114,8 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="16dp"
                         android:fontFamily="@font/sf_pro_display"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginEnd="16dp"
                         android:text="@string/title_content"
                         android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -129,6 +130,8 @@
                         android:fontFamily="@font/sf_pro_display"
                         android:text="@string/picture_content"
                         android:textSize="12sp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginEnd="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
@@ -141,6 +144,10 @@
                         android:fontFamily="@font/sf_pro_display"
                         android:text="@string/body_content"
                         android:textSize="12sp"
+                        android:paddingRight="16dp"
+                        android:paddingEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginEnd="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/body_tv" />
 
@@ -153,8 +160,24 @@
                         android:fontFamily="@font/sf_pro_display"
                         android:text="@string/issue_content"
                         android:textSize="12sp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginEnd="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/body_tv2" />
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:fontFamily="@font/sf_pro_display"
+                        android:text="@string/tag_content"
+                        android:textSize="12sp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tag_tv" />
 
                     <EditText
                         android:id="@+id/query_title_et"
@@ -165,7 +188,6 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginRight="16dp"
-                        android:autofillHints=""
                         android:background="@drawable/edit_text_border"
                         android:cursorVisible="true"
                         android:ems="10"
@@ -173,7 +195,7 @@
                         android:hint="@string/title_example"
                         android:inputType="textMultiLine"
                         android:textColor="@color/slight_black"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
@@ -225,17 +247,40 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
+                    <EditText
+                        android:id="@+id/query_tag_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:autofillHints=""
+                        android:background="@drawable/edit_text_border"
+                        android:cursorVisible="true"
+                        android:ems="10"
+                        android:gravity="start|top"
+                        android:hint="@string/tag_example"
+                        android:inputType="textMultiLine"
+                        android:textColor="@color/slight_black"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
                     <TextView
                         android:id="@+id/body_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="16dp"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="16dp"
                         android:fontFamily="@font/sf_pro_text"
                         android:text="@string/body"
                         android:textColor="@color/slight_black"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
@@ -246,14 +291,29 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="16dp"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="16dp"
                         android:fontFamily="@font/sf_pro_text"
                         android:text="@string/_4_issue_location"
                         android:textColor="@color/slight_black"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/query_body_et" />
+
+                    <TextView
+                        android:id="@+id/tag_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/sf_pro_text"
+                        android:text="@string/_5_tag"
+                        android:textColor="@color/slight_black"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/query_issue_location_et" />
 
                     <Button
                         android:id="@+id/post_query_button"
@@ -262,13 +322,15 @@
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="24dp"
                         android:layout_marginRight="24dp"
+                        android:layout_marginBottom="32dp"
                         android:background="@drawable/view_gradient"
                         android:fontFamily="@font/sf_pro_text"
                         android:letterSpacing="0.2"
                         android:text="@string/publish"
                         android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/query_issue_location_et"
+                        app:layout_constraintTop_toBottomOf="@+id/query_tag_et"
                         tools:ignore="UnusedAttribute" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

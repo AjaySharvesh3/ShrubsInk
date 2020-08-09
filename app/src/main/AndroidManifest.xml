@@ -14,24 +14,31 @@
         android:roundIcon="@mipmap/shrubslink"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PostQueryActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".AnswerActivity"></activity>
+        <activity
+            android:name=".PostQueryActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".PersonalActivity"
+        <activity
+            android:name=".PersonalActivity"
             android:parentActivityName=".ProfileActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".AddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddressActivity"
             android:parentActivityName=".ProfileActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProfileActivity"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".GoogleSignInActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GoogleSignInActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

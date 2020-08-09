@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/whitesmoke"
     tools:context=".AddressActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -60,10 +61,9 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_marginTop="76dp"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
@@ -75,10 +75,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/sf_pro_display"
+                android:fontFamily="@font/sf_pro_text"
                 android:text="@string/username"
                 android:textColor="@color/slight_black"
-                android:textSize="26sp"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_image" />
@@ -90,7 +90,7 @@
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/sf_pro_text"
                 android:text="@string/email"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/username_et" />
@@ -101,10 +101,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginLeft="24dp"
-                android:fontFamily="@font/sf_pro_display"
+                android:fontFamily="@font/sf_pro_text"
                 android:text="@string/address"
                 android:textColor="@color/slight_black"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view"
                 tools:ignore="MissingConstraints" />
@@ -129,7 +129,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/sample_address"
                 android:textColor="@color/slight_black"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view4"
                 tools:ignore="MissingConstraints" />
@@ -143,7 +143,7 @@
                 android:layout_marginTop="2dp"
                 android:text="@string/city_pincode"
                 android:textColor="@color/grey"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/address_line_tv"
                 tools:ignore="MissingConstraints" />
@@ -157,7 +157,7 @@
                 android:layout_marginTop="2dp"
                 android:text="@string/state_country"
                 android:textColor="@color/grey"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/city_pincode_tv"
                 tools:ignore="MissingConstraints" />
@@ -169,11 +169,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginLeft="24dp"
-                android:layout_marginTop="30dp"
-                android:fontFamily="@font/sf_pro_display"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/sf_pro_text"
                 android:text="@string/general"
                 android:textColor="@color/slight_black"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/email_et"
                 tools:ignore="MissingConstraints" />
@@ -182,7 +182,7 @@
                 android:id="@+id/edit_general_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="24dp"
                 android:contentDescription="@string/edit_general"
@@ -217,6 +217,7 @@
                 android:text="@string/add_address"
                 android:textStyle="bold"
                 app:icon="@drawable/add"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view4" />
@@ -232,6 +233,7 @@
                 android:text="@string/add_general"
                 android:textStyle="bold"
                 app:icon="@drawable/add"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view3" />
@@ -245,7 +247,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/short_bio"
                 android:textColor="@color/slight_black"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view3"
                 tools:ignore="MissingConstraints" />
@@ -259,7 +261,7 @@
                 android:layout_marginTop="2dp"
                 android:text="@string/designation"
                 android:textColor="@color/slight_black"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/short_bio_tv"
                 tools:ignore="MissingConstraints" />
@@ -273,7 +275,7 @@
                 android:layout_marginTop="2dp"
                 android:text="@string/phone_8248433574"
                 android:textColor="@color/grey"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/designation_tv"
                 tools:ignore="MissingConstraints" />
@@ -287,7 +289,7 @@
                 android:layout_marginTop="2dp"
                 android:text="@string/male_20"
                 android:textColor="@color/grey"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/phone_tv"
                 tools:ignore="MissingConstraints" />

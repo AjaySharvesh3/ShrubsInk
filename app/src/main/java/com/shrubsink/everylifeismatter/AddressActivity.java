@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -123,10 +124,7 @@ public class AddressActivity extends AppCompatActivity {
     public void postUserDataAndAddress() {
         showProgressDialog(this, "Loading...","Saving your address..",false);
 
-        FirebaseUser account = mFirebaseAuth.getCurrentUser();
-        assert account != null;
-        String name = Objects.requireNonNull(account.getDisplayName());
-        String email = Objects.requireNonNull(account.getEmail());
+
 
         String addressLine = Objects.requireNonNull(mAddressLineTIL.getEditText()).getText().toString();
         String city = Objects.requireNonNull(mCityTIL.getEditText()).getText().toString();
@@ -134,11 +132,15 @@ public class AddressActivity extends AppCompatActivity {
         String state = Objects.requireNonNull(mStateTIL.getEditText()).getText().toString();
         String country = Objects.requireNonNull(mCountryTIL.getEditText()).getText().toString();
 
+        if (addressLine.length() > 40) {
+            mAddressLineEt.setError("Character Exceeds");
+            removeProgressDialog();
+            return;
+        }
+
         mUserId = Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid();
         DocumentReference mDocumentreference = mFirebaseFirestore.collection("user_bio").document(mUserId).collection("address").document(mUserId);
         Map<String, Object> user_bio = new HashMap<>();
-        user_bio.put("name", name);
-        user_bio.put("email", email);
         user_bio.put("address_line", addressLine);
         user_bio.put("city", city);
         user_bio.put("pincode", pincode);
@@ -149,20 +151,22 @@ public class AddressActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 removeProgressDialog();
-
-                Toast.makeText(AddressActivity.this,
+                /*Toast.makeText(AddressActivity.this,
                         "You're done. Saved your address.",
                         Toast.LENGTH_LONG)
+                        .show();*/
+                Snackbar.make(saveAddressBtn, "You're done. Saved your address.", Snackbar.LENGTH_LONG)
                         .show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 removeProgressDialog();
-
-                Toast.makeText(AddressActivity.this,
+                /*Toast.makeText(AddressActivity.this,
                         "Failed to save address, please check network connection",
                         Toast.LENGTH_LONG)
+                        .show();*/
+                Snackbar.make(saveAddressBtn, "Failed to save address, please check network connection", Snackbar.LENGTH_LONG)
                         .show();
             }
         });
