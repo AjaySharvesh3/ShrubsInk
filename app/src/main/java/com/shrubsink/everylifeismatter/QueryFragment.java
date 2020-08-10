@@ -1,6 +1,8 @@
 package com.shrubsink.everylifeismatter;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -49,6 +51,7 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
 
     private RecyclerView query_list_view;
     private List<QueryPost> query_list;
+    static ProgressDialog mProgressDialog;
 
     private FirebaseFirestore firebaseFirestore;
     private QueryPostRecyclerAdapter queryPostRecyclerAdapter;
@@ -105,6 +108,8 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
                 }
             });
 
+            showProgressDialog(getActivity(), "Please wait...","Collecting your queries..",false);
+
             new Thread(new Runnable() {
                 public void run() {
                     Query firstQuery = firebaseFirestore.collection("query_posts")
@@ -123,8 +128,10 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
                                             String queryPostPostId = doc.getDocument().getId();
                                             QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostPostId);
                                             if (isFirstPageFirstLoad) {
+                                                removeProgressDialog();
                                                 query_list.add(queryPost);
                                             } else {
+                                                removeProgressDialog();
                                                 query_list.add(0, queryPost);
                                             }
                                             queryPostRecyclerAdapter.notifyDataSetChanged();
@@ -157,6 +164,7 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
                         for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
                             if (documentSnapshots != null) {
                                 if (doc.getType() == DocumentChange.Type.ADDED) {
+                                    removeProgressDialog();
                                     String queryPostId = doc.getDocument().getId();
                                     QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostId);
                                     query_list.add(queryPost);
@@ -167,6 +175,43 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
                     }
                 }
             });
+        }
+    }
+
+    public static void showProgressDialog(Context context, String title, String msg, boolean isCancelable) {
+        try {
+            if (mProgressDialog == null) {
+                mProgressDialog = ProgressDialog.show(context, title, msg);
+                mProgressDialog.setCancelable(isCancelable);
+            }
+            if (!mProgressDialog.isShowing()) {
+                mProgressDialog.show();
+            }
+        } catch (IllegalArgumentException ie) {
+            ie.printStackTrace();
+        } catch (RuntimeException re) {
+            re.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void removeProgressDialog() {
+        try {
+            if (mProgressDialog != null) {
+                if (mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                    mProgressDialog = null;
+                }
+            }
+        } catch (IllegalArgumentException ie) {
+            ie.printStackTrace();
+
+        } catch (RuntimeException re) {
+            re.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

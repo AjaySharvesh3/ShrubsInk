@@ -1,5 +1,6 @@
 package com.shrubsink.everylifeismatter.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +26,8 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
     public List<QueryAnswer> answerList;
     public Context context;
 
-    private FirebaseFirestore firebaseFirestore;
-    private FirebaseAuth firebaseAuth;
+    FirebaseFirestore firebaseFirestore;
+    FirebaseAuth firebaseAuth;
 
     public QueryAnswerRecyclerAdapter(List<QueryAnswer> answerList, AnswerActivity answerActivity){
         this.answerList = answerList;
@@ -44,31 +45,26 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
 
     @Override
     public void onBindViewHolder(final QueryAnswerRecyclerAdapter.ViewHolder holder, int position) {
-
         holder.setIsRecyclable(false);
-
         String answerMessage = answerList.get(position).getAnswer();
         holder.setComment_message(answerMessage);
-
-        /*holder.username.setText(commentsList.get(position).getUserName());*/
+        /*holder.username.setText(answerList.get(position).getUserName());*/
     }
 
 
     @Override
     public int getItemCount() {
-        /*if(commentsList != null) {
-            return commentsList.size();
+        if(answerList != null) {
+            return answerList.size();
         } else {
             return 0;
-        }*/
-        return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private View mView;
-
-        public TextView comment_message;
+        public TextView answerContent;
         public TextView username;
         public ImageView userImage;
 
@@ -77,19 +73,20 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
             mView = itemView;
         }
 
-        public void setComment_message(String message){
-            /*comment_message = mView.findViewById(R.id.comment_message);
-            comment_message.setText(message);*/
+        public void setComment_message(String answer){
+            answerContent = mView.findViewById(R.id.answer_content_tv);
+            answerContent.setText(answer);
         }
 
-        public void userData(String name, String image) {
-            /*username = mView.findViewById(R.id.comment_username);
-            userImage = mView.findViewById(R.id.comment_image);
+        @SuppressLint("CheckResult")
+        public void setUserData(String name, String image) {
+            username = mView.findViewById(R.id.answer_username_tv);
+            userImage = mView.findViewById(R.id.profile_image);
             username.setText(name);
+
             RequestOptions placeholderOption = new RequestOptions();
             placeholderOption.placeholder(R.drawable.profile_placeholder);
-
-            Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(image).into(userImage);*/
+            Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(image).into(userImage);
         }
 
     }

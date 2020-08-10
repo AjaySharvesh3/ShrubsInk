@@ -39,7 +39,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="14dp"
-        android:text="@string/_100_likes"
+        android:text="@string/likes"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/likes_icon"
         app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
@@ -51,7 +51,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="14dp"
-        android:text="@string/_3_answers"
+        android:text="@string/answers"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/answers_icon"
         app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />

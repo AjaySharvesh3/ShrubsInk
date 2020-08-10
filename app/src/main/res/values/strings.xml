@@ -6,7 +6,7 @@
     <string name="tnc">By continuing, you agree that you have read and accept our TnCs and Privacy Policy</string>
     <string name="profile_settings">Profile Settings</string>
     <string name="email">sample@gmail.com</string>
-    <string name="username">Swetha Prabhakaran</string>
+    <string name="username">Arul Mozhi S</string>
     <string name="gender">Gender</string>
     <string name="country">Country</string>
     <string name="state">State</string>
@@ -69,11 +69,12 @@
     <string name="sample_body_list_item">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
     <string name="query_image">Query Image</string>
     <string name="_100_likes">100 likes</string>
-    <string name="_3_answers">3 Answers</string>
     <string name="not_yet_solved">Not yet solved</string>
     <string name="check_internet_connection">Something went wrong, Please check internet connectivity</string>
     <string name="madurai_tamil_nadu">Madurai, Tamil Nadu</string>
     <string name="products">Products</string>
     <string name="likes">Likes</string>
     <string name="answers">Answers</string>
+    <string name="loading_comment">Loading Comment...</string>
+    <string name="your_answer_here">Your answer here ...</string>
 </resources>
