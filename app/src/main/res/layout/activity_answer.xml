@@ -61,7 +61,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/short_bio_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -77,32 +77,31 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/profile_image"
                 app:layout_constraintTop_toBottomOf="@+id/username_tv"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry" />-->
 
             <TextView
                 android:id="@+id/tags_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:paddingEnd="20dp"
                 android:paddingRight="20dp"
                 android:text="@string/tags_chiko_sapota_plant"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/query_image_iv"
+                app:layout_constraintStart_toEndOf="@+id/issue_location_tv"
+                app:layout_constraintTop_toTopOf="@+id/issue_location_tv"
                 tools:ignore="RtlSymmetry,SmallSp" />
 
             <TextView
                 android:id="@+id/username_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="6dp"
                 android:fontFamily="@font/sf_pro_display"
                 android:text="@string/username"
                 android:textColor="@color/slight_black"
@@ -114,12 +113,12 @@
                 android:id="@+id/issue_location_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:text="@string/madurai_tamil_nadu"
                 android:textSize="10sp"
                 app:layout_constraintStart_toEndOf="@+id/profile_image"
-                app:layout_constraintTop_toBottomOf="@+id/short_bio_tv"
+                app:layout_constraintTop_toBottomOf="@+id/username_tv"
                 tools:ignore="SmallSp" />
 
             <TextView
@@ -145,14 +144,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/answers"
                 android:textColor="@color/slight_black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tags_tv" />
+                app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
 
             <com.borjabravo.readmoretextview.ReadMoreTextView
                 android:id="@+id/body_tv"
@@ -198,6 +197,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -213,7 +214,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:paddingTop="20dp"
+        android:paddingTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout

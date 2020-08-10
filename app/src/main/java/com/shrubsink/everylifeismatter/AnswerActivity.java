@@ -47,7 +47,8 @@ public class AnswerActivity extends AppCompatActivity {
     ImageView queryPostImageView;
     /*TextView queryPostDate;*/
 
-    TextView queryPostUserName, queryPostUserShortBio;
+    TextView queryPostUserName;
+    /*TextView queryPostUserShortBio;*/
     CircleImageView queryPostUserImage;
 
     RecyclerView answerRecyclerView;
@@ -79,7 +80,7 @@ public class AnswerActivity extends AppCompatActivity {
         queryPostImageView = findViewById(R.id.query_image_iv);
         /*queryPostDate = findViewById(R.id.timestamp_tv);*/
         queryPostUserName = findViewById(R.id.username_tv);
-        queryPostUserShortBio = findViewById(R.id.short_bio_tv);
+        /*queryPostUserShortBio = findViewById(R.id.short_bio_tv);*/
         queryPostUserImage = findViewById(R.id.profile_image);
 
         answerRecyclerView = findViewById(R.id.answer_list);
@@ -116,7 +117,6 @@ public class AnswerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String answer = answerFieldEt.getText().toString();
-
                 if (!TextUtils.isEmpty(answer)) {
                     Map<String, Object> answerMap = new HashMap<>();
                     answerMap.put("answer", answer);
@@ -167,7 +167,7 @@ public class AnswerActivity extends AppCompatActivity {
                             titleView.setText(title);
                             bodyView.setText(body);
                             issueLocationView.setText(issueLocation);
-                            tagsView.setText(tags);
+                            tagsView.setText("TAGS: " + tags);
                             /*queryPostDate.setText("•  " + dateString);*/
 
                             RequestOptions requestOptions = new RequestOptions();
@@ -184,11 +184,11 @@ public class AnswerActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             if (task.isSuccessful()) {
                                                 String name = task.getResult().getString("name");
-                                                String shortBio = task.getResult().getString("short_bio");
+                                                /*String shortBio = task.getResult().getString("short_bio");*/
                                                 String profile = task.getResult().getString("profile");
 
                                                 queryPostUserName.setText(name);
-                                                queryPostUserShortBio.setText(shortBio);
+                                                /*queryPostUserShortBio.setText(shortBio);*/
 
                                                 RequestOptions requestOptions = new RequestOptions();
                                                 requestOptions.placeholder(R.drawable.ic_baseline_image_24);

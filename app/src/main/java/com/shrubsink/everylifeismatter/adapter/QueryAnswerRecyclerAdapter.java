@@ -7,12 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.shrubsink.everylifeismatter.AnswerActivity;
 import com.shrubsink.everylifeismatter.R;
@@ -49,6 +54,27 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
         String answerMessage = answerList.get(position).getAnswer();
         holder.setComment_message(answerMessage);
         /*holder.username.setText(answerList.get(position).getUserName());*/
+
+        String user_id = answerList.get(position).getUser_id();
+        //User Data will be retrieved here...
+        firebaseFirestore.collection("user_bio").document(user_id)
+                .collection("personal").document(user_id).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                        if (task.isSuccessful()) {
+                            String userName = task.getResult().getString("name");
+                            String userImage = task.getResult().getString("profile");
+                            /*String shortBio = task.getResult().getString("short_bio");*/
+                            holder.setUserData(userName, userImage);
+                        } else {
+                            Toast.makeText(answerActivity,
+                                    context.getString(R.string.check_internet_connection),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 
 
