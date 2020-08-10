@@ -1,3 +1,3 @@
 # ShrubsInk
 
-![image](./././././Cover.png)
+![image](./img/Cover.png)
