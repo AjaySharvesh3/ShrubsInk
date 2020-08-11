@@ -31,6 +31,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shrubsink.everylifeismatter.adapter.QueryAnswerRecyclerAdapter;
 import com.shrubsink.everylifeismatter.model.QueryAnswer;
+import com.shrubsink.everylifeismatter.model.QueryPost;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,7 +106,7 @@ public class AnswerActivity extends AppCompatActivity {
                             for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
                                 if (doc.getType() == DocumentChange.Type.ADDED) {
                                     String answerId = doc.getDocument().getId();
-                                    QueryAnswer queryAnswer = doc.getDocument().toObject(QueryAnswer.class);
+                                    QueryAnswer queryAnswer = doc.getDocument().toObject(QueryAnswer.class).withId(answerId);
                                     queryAnswerList.add(queryAnswer);
                                     queryAnswerRecyclerAdapter.notifyDataSetChanged();
                                 }

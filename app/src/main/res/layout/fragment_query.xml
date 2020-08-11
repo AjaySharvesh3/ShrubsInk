@@ -74,6 +74,33 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+    <io.supercharge.shimmerlayout.ShimmerLayout
+        android:id="@+id/shimmer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:shimmer_animation_duration="1200"
+        tools:ignore="MissingConstraints"
+        android:layout_marginTop="49dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/query_list_item_placeholder" />
+            <include layout="@layout/query_list_item_placeholder" />
+            <include layout="@layout/query_list_item_placeholder" />
+
+        </LinearLayout>
+
+    </io.supercharge.shimmerlayout.ShimmerLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/query_list_view"
         android:layout_width="match_parent"

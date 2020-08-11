@@ -2,7 +2,7 @@ package com.shrubsink.everylifeismatter.model;
 
 import java.util.Date;
 
-public class QueryAnswer {
+public class QueryAnswer extends com.shrubsink.everylifeismatter.model.QueryAnswerId {
 
     private String answer, user_id, userName, thumbnail;
     private Date timestamp;

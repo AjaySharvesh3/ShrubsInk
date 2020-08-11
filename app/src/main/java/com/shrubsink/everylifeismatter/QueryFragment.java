@@ -40,6 +40,8 @@ import java.util.Objects;
 import java.util.concurrent.Executor;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.disposables.CompositeDisposable;
+import io.supercharge.shimmerlayout.ShimmerLayout;
 
 
 public class QueryFragment extends Fragment implements View.OnClickListener {
@@ -59,6 +61,8 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
     private DocumentSnapshot lastVisible;
     private Boolean isFirstPageFirstLoad = true;
 
+    ShimmerLayout shimmerLayout;
+
     public QueryFragment() {
 
     }
@@ -72,6 +76,7 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
 
         mProfilePicture = view.findViewById(R.id.profile_image);
         mUsernameTv = view.findViewById(R.id.username_tv);
+        shimmerLayout = view.findViewById(R.id.shimmer_layout);
 
         view.findViewById(R.id.profile_image).setOnClickListener(this);
 
@@ -108,12 +113,12 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
                 }
             });
 
-            showProgressDialog(getActivity(), "Please wait...","Collecting your queries..",false);
 
             new Thread(new Runnable() {
                 public void run() {
+                    shimmerLayout.startShimmerAnimation();
                     Query firstQuery = firebaseFirestore.collection("query_posts")
-                            .orderBy("timestamp", Query.Direction.DESCENDING).limit(3);
+                            .orderBy("timestamp", Query.Direction.DESCENDING);
                     firstQuery.addSnapshotListener(requireActivity(), new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -121,6 +126,8 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
                                 if (isFirstPageFirstLoad) {
                                     lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
                                     query_list.clear();
+                                    shimmerLayout.stopShimmerAnimation();
+                                    shimmerLayout.setVisibility(View.GONE);
                                 }
                                 for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
                                     if (documentSnapshots != null) {
@@ -128,11 +135,13 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
                                             String queryPostPostId = doc.getDocument().getId();
                                             QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostPostId);
                                             if (isFirstPageFirstLoad) {
-                                                removeProgressDialog();
                                                 query_list.add(queryPost);
+                                                shimmerLayout.stopShimmerAnimation();
+                                                shimmerLayout.setVisibility(View.GONE);
                                             } else {
-                                                removeProgressDialog();
                                                 query_list.add(0, queryPost);
+                                                shimmerLayout.stopShimmerAnimation();
+                                                shimmerLayout.setVisibility(View.GONE);
                                             }
                                             queryPostRecyclerAdapter.notifyDataSetChanged();
                                         }
@@ -150,11 +159,11 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
     }
 
     public void loadMoreQueries() {
+        shimmerLayout.startShimmerAnimation();
         if (mFirebaseAuth.getCurrentUser() != null) {
             Query nextQuery = firebaseFirestore.collection("query_posts")
                     .orderBy("timestamp", Query.Direction.DESCENDING)
-                    .startAfter(lastVisible)
-                    .limit(3);
+                    .startAfter(lastVisible);
 
             nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                 @Override
@@ -164,11 +173,12 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
                         for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
                             if (documentSnapshots != null) {
                                 if (doc.getType() == DocumentChange.Type.ADDED) {
-                                    removeProgressDialog();
                                     String queryPostId = doc.getDocument().getId();
                                     QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostId);
                                     query_list.add(queryPost);
                                     queryPostRecyclerAdapter.notifyDataSetChanged();
+                                    shimmerLayout.stopShimmerAnimation();
+                                    shimmerLayout.setVisibility(View.GONE);
                                 }
                             }
                         }
@@ -178,7 +188,7 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public static void showProgressDialog(Context context, String title, String msg, boolean isCancelable) {
+    /*public static void showProgressDialog(Context context, String title, String msg, boolean isCancelable) {
         try {
             if (mProgressDialog == null) {
                 mProgressDialog = ProgressDialog.show(context, title, msg);
@@ -213,7 +223,7 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @Override
     public void onClick(View view) {

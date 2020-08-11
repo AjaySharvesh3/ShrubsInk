@@ -98,10 +98,12 @@ public class PostQueryActivity extends AppCompatActivity {
                 final String issueLocation = mQueryIssueLocationEt.getText().toString();
                 final String tags = mQueryTagEt.getText().toString();
 
+                
+
                 if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(body) && !TextUtils.isEmpty(issueLocation)
                         && !TextUtils.isEmpty(tags) && postImageUri != null) {
 
-                    showProgressDialog(PostQueryActivity.this, "Publishing...", "Please wait util we publish your post", false);
+                    showProgressDialog(PostQueryActivity.this, "Publishing...", "Please wait until we publish your post", false);
 
                     final String randomName = UUID.randomUUID().toString();
                     File newImageFile = new File(Objects.requireNonNull(postImageUri.getPath()));

@@ -170,6 +170,7 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
                                 if (!task.getResult().exists()) {
                                     Map<String, Object> likesMap = new HashMap<>();
                                     likesMap.put("timestamp", FieldValue.serverTimestamp());
+                                    likesMap.put("user_id", currentUserId);
                                     firebaseFirestore.collection("query_posts/" + queryPostId + "/likes")
                                             .document(currentUserId).set(likesMap);
                                 } else {
