@@ -32,7 +32,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/sf_pro_text"
+        android:fontFamily="@font/product_sans_regular"
         android:letterSpacing="0.03"
         android:text="@string/app_name"
         android:textColor="@color/colorPrimaryDark"
@@ -84,10 +84,13 @@
         android:textSize="11sp"
         android:fontFamily="@font/sf_pro_display"
         android:textColor="#707070"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="SmallSp" />
+        tools:ignore="RtlSymmetry,SmallSp"
+        android:paddingStart="10dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

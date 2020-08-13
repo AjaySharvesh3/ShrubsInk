@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -128,16 +129,20 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
         //Get Comment Count
         firebaseFirestore.collection("query_posts/" + queryPostId + "/answers")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                if (!documentSnapshots.isEmpty()) {
-                    int count = documentSnapshots.size();
-                    holder.updateCommentsCount(count);
-                } else {
-                    holder.updateCommentsCount(0);
-                }
-            }
-        });
+                    @Override
+                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                        try {
+                            if (!documentSnapshots.isEmpty()) {
+                                int count = documentSnapshots.size();
+                                holder.updateCommentsCount(count);
+                            } else {
+                                holder.updateCommentsCount(0);
+                            }
+                        } catch (Exception ex) {
+                            Log.d("Error", "Error: " + ex);
+                        }
+                    }
+                });
 
         //Get Likes
         new Thread(new Runnable() {
@@ -147,10 +152,14 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
                             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                             @Override
                             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                                if (documentSnapshot.exists()) {
-                                    holder.queryPostLikeBtn.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_favorite_24));
-                                } else {
-                                    holder.queryPostLikeBtn.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_favorite_border_24));
+                                try {
+                                    if (documentSnapshot.exists()) {
+                                        holder.queryPostLikeBtn.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_favorite_24));
+                                    } else {
+                                        holder.queryPostLikeBtn.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_favorite_border_24));
+                                    }
+                                } catch (Exception ex) {
+                                    Log.d("Error", "Error: " + ex);
                                 }
                             }
                         });
@@ -160,7 +169,7 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
         //Likes Feature
         new Thread(new Runnable() {
             public void run() {
-                holder.queryPostLikeBtn.setOnClickListener(new View.OnClickListener() {
+                holder.queryPostLikeLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         firebaseFirestore.collection("query_posts/" + queryPostId + "/likes")
@@ -191,28 +200,23 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                                if (!documentSnapshots.isEmpty()) {
-                                    int count = documentSnapshots.size();
-                                    holder.updateLikesCount(count);
-                                } else {
-                                    holder.updateLikesCount(0);
+                                try {
+                                    if (!documentSnapshots.isEmpty()) {
+                                        int count = documentSnapshots.size();
+                                        holder.updateLikesCount(count);
+                                    } else {
+                                        holder.updateLikesCount(0);
+                                    }
+                                } catch (Exception ex) {
+                                    Log.d("Logout Error", "Error: " + ex);
                                 }
                             }
                         });
             }
         }).start();
 
-        holder.queryPostLikeCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ViewLikesBottomSheetDialog viewLikesBottomSheetDialog = new ViewLikesBottomSheetDialog();
-                viewLikesBottomSheetDialog.show(((AppCompatActivity) context).getSupportFragmentManager(),
-                        viewLikesBottomSheetDialog.getTag());
 
-            }
-        });
-
-        holder.queryPostAnswersBtn.setOnClickListener(new View.OnClickListener() {
+        holder.queryPostAnswersLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent answerIntent = new Intent(context, AnswerActivity.class);
@@ -240,6 +244,7 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
         private CircleImageView queryPostUserImage;
 
         private ImageView queryPostLikeBtn;
+        private LinearLayout queryPostLikeLayout, queryPostAnswersLayout;
         private TextView queryPostLikeCount;
         private TextView queryPostAnswersCount;
         private ImageView queryPostAnswersBtn;
@@ -252,6 +257,8 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
             queryPostAnswersBtn = mView.findViewById(R.id.answers_icon);
 
             queryPostLikeCount = mView.findViewById(R.id.like_count_tv);
+            queryPostLikeLayout = mView.findViewById(R.id.like_layout);
+            queryPostAnswersLayout = mView.findViewById(R.id.answer_layout);
         }
 
         public void setTitleText(String titleText) {

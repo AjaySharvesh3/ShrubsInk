@@ -7,8 +7,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
@@ -24,11 +24,25 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="17dp"
-        android:text="@string/username"
+        android:text="@string/loading"
         android:textColor="@color/slight_black"
         android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SmallSp" />
+
+    <TextView
+        android:id="@+id/answer_timestamp_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="3dp"
+        android:text="@string/loading"
+        android:textColor="@color/slight_black"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toBottomOf="@+id/answer_username_tv"
         tools:ignore="SmallSp" />
 
     <TextView
@@ -37,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:text="@string/_10"
         android:textColor="@color/slight_black"
@@ -52,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:text="@string/_10"
         android:textColor="@color/slight_black"
@@ -73,26 +87,26 @@
         android:paddingRight="32dp"
         android:text="@string/loading_comment"
         android:textColor="@color/slight_black"
+        app:colorClickableText="@color/colorAccentBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image"
+        app:layout_constraintTop_toBottomOf="@+id/answer_timestamp_tv"
         app:layout_constraintVertical_bias="0.0"
-        tools:ignore="RtlSymmetry"
-        app:colorClickableText="@color/colorAccentBlue"
         app:trimCollapsedText="less"
         app:trimExpandedText="more"
         app:trimLines="2"
-        app:trimMode="trimModeLine"/>
+        app:trimMode="trimModeLine"
+        tools:ignore="RtlSymmetry" />
 
     <ImageView
         android:id="@+id/upvote_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:padding="3dp"
         android:src="@drawable/upvote"
@@ -102,23 +116,23 @@
 
     <ImageView
         android:id="@+id/report_option_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="24dp"
         android:padding="3dp"
-        android:src="@drawable/ic_baseline_more_vert_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:src="@drawable/ic_baseline_more_horiz_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/downvote_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:padding="3dp"
         android:src="@drawable/donwvote"

@@ -161,6 +161,22 @@
                 android:background="@color/slight_grey"
                 app:layout_constraintTop_toBottomOf="@+id/answer_count_tv" />
 
+            <TextView
+                android:id="@+id/no_answer_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/no_answers"
+                android:letterSpacing="0.08"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view"
+                tools:ignore="UnusedAttribute" />
+
             <com.borjabravo.readmoretextview.ReadMoreTextView
                 android:id="@+id/body_tv"
                 android:layout_width="match_parent"
@@ -255,7 +271,8 @@
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/answer_post_btn"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                android:importantForAutofill="no" />
 
             <ImageView
                 android:id="@+id/answer_post_btn"
@@ -267,7 +284,8 @@
                 android:padding="8dp"
                 android:src="@drawable/ic_baseline_send_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@string/answers" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

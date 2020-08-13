@@ -2,7 +2,7 @@ package com.shrubsink.everylifeismatter;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
+import androidx.annotation.Nullable;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -13,10 +13,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -25,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -76,7 +79,7 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
 
         mProfilePicture = view.findViewById(R.id.profile_image);
         mUsernameTv = view.findViewById(R.id.username_tv);
-        shimmerLayout = view.findViewById(R.id.shimmer_layout);
+        /*shimmerLayout = view.findViewById(R.id.shimmer_layout);*/
 
         view.findViewById(R.id.profile_image).setOnClickListener(this);
 
@@ -113,42 +116,48 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
                 }
             });
 
-
             new Thread(new Runnable() {
                 public void run() {
-                    shimmerLayout.startShimmerAnimation();
+                    /*shimmerLayout.startShimmerAnimation();*/
                     Query firstQuery = firebaseFirestore.collection("query_posts")
                             .orderBy("timestamp", Query.Direction.DESCENDING);
                     firstQuery.addSnapshotListener(requireActivity(), new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                            if (!documentSnapshots.isEmpty()) {
-                                if (isFirstPageFirstLoad) {
-                                    lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
-                                    query_list.clear();
-                                    shimmerLayout.stopShimmerAnimation();
-                                    shimmerLayout.setVisibility(View.GONE);
-                                }
-                                for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-                                    if (documentSnapshots != null) {
-                                        if (doc.getType() == DocumentChange.Type.ADDED) {
-                                            String queryPostPostId = doc.getDocument().getId();
-                                            QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostPostId);
-                                            if (isFirstPageFirstLoad) {
-                                                query_list.add(queryPost);
-                                                shimmerLayout.stopShimmerAnimation();
-                                                shimmerLayout.setVisibility(View.GONE);
-                                            } else {
-                                                query_list.add(0, queryPost);
-                                                shimmerLayout.stopShimmerAnimation();
-                                                shimmerLayout.setVisibility(View.GONE);
+                            try {
+                                if (!documentSnapshots.isEmpty()) {
+                                    if (isFirstPageFirstLoad) {
+                                        /*shimmerLayout.stopShimmerAnimation();
+                                        shimmerLayout.setVisibility(View.GONE);*/
+                                        lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                                        query_list.clear();
+                                    }
+                                    for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+                                        if (documentSnapshots != null) {
+                                            if (doc.getType() == DocumentChange.Type.ADDED) {
+                                                String queryPostPostId = doc.getDocument().getId();
+                                                QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostPostId);
+                                                if (isFirstPageFirstLoad) {
+                                                    /*shimmerLayout.stopShimmerAnimation();
+                                                    shimmerLayout.setVisibility(View.GONE);*/
+                                                    query_list.add(queryPost);
+                                                } else {
+                                                    /*shimmerLayout.stopShimmerAnimation();
+                                                    shimmerLayout.setVisibility(View.GONE);*/
+                                                    query_list.add(0, queryPost);
+                                                }
                                             }
                                             queryPostRecyclerAdapter.notifyDataSetChanged();
                                         }
                                     }
+                                    isFirstPageFirstLoad = false;
                                 }
-                                isFirstPageFirstLoad = false;
+                            } catch (Exception ex) {
+                               /* shimmerLayout.stopShimmerAnimation();
+                                shimmerLayout.setVisibility(View.GONE);*/
+                                Log.d("Error", "Error: " + ex);
                             }
+
                         }
 
                     });
@@ -159,7 +168,7 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
     }
 
     public void loadMoreQueries() {
-        shimmerLayout.startShimmerAnimation();
+        /*shimmerLayout.startShimmerAnimation();*/
         if (mFirebaseAuth.getCurrentUser() != null) {
             Query nextQuery = firebaseFirestore.collection("query_posts")
                     .orderBy("timestamp", Query.Direction.DESCENDING)
@@ -168,62 +177,29 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
             nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                    if (!documentSnapshots.isEmpty()) {
-                        lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
-                        for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-                            if (documentSnapshots != null) {
-                                if (doc.getType() == DocumentChange.Type.ADDED) {
-                                    String queryPostId = doc.getDocument().getId();
-                                    QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostId);
-                                    query_list.add(queryPost);
-                                    queryPostRecyclerAdapter.notifyDataSetChanged();
-                                    shimmerLayout.stopShimmerAnimation();
-                                    shimmerLayout.setVisibility(View.GONE);
+                    try {
+                        if (!documentSnapshots.isEmpty()) {
+                            lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                            for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+                                if (documentSnapshots != null) {
+                                    if (doc.getType() == DocumentChange.Type.ADDED) {
+                                        /*shimmerLayout.stopShimmerAnimation();
+                                        shimmerLayout.setVisibility(View.GONE);*/
+                                        String queryPostId = doc.getDocument().getId();
+                                        QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostId);
+                                        query_list.add(queryPost);
+                                        queryPostRecyclerAdapter.notifyDataSetChanged();
+                                    }
                                 }
                             }
                         }
+                    } catch (Exception ex) {
+                        Log.d("Logout Error", "Error: " + ex);
                     }
                 }
             });
         }
     }
-
-    /*public static void showProgressDialog(Context context, String title, String msg, boolean isCancelable) {
-        try {
-            if (mProgressDialog == null) {
-                mProgressDialog = ProgressDialog.show(context, title, msg);
-                mProgressDialog.setCancelable(isCancelable);
-            }
-            if (!mProgressDialog.isShowing()) {
-                mProgressDialog.show();
-            }
-        } catch (IllegalArgumentException ie) {
-            ie.printStackTrace();
-        } catch (RuntimeException re) {
-            re.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public static void removeProgressDialog() {
-        try {
-            if (mProgressDialog != null) {
-                if (mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                    mProgressDialog = null;
-                }
-            }
-        } catch (IllegalArgumentException ie) {
-            ie.printStackTrace();
-
-        } catch (RuntimeException re) {
-            re.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 
     @Override
     public void onClick(View view) {

@@ -3,6 +3,8 @@ package com.shrubsink.everylifeismatter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,13 +23,20 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.util.Objects;
 
 public class GoogleSignInActivity extends AppCompatActivity {
 
     private static final String TAG = "GoogleSignInActivity";
     private static final int RC_SIGN_IN = 1001;
     GoogleSignInClient googleSignInClient;
-    private FirebaseAuth firebaseAuth;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +99,7 @@ public class GoogleSignInActivity extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 showToastMessage("Google Sign in Succeeded");
-                Intent i = new Intent(GoogleSignInActivity.this, MainActivity.class);
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
@@ -99,6 +108,8 @@ public class GoogleSignInActivity extends AppCompatActivity {
             }
         }
     }
+
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
@@ -109,7 +120,6 @@ public class GoogleSignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                            Log.d(TAG, "signInWithCredential:success: currentUser: " + user.getEmail());
                             showToastMessage("Firebase Authentication Succeeded ");
                             launchMainActivity(user);
                         } else {
@@ -120,9 +130,11 @@ public class GoogleSignInActivity extends AppCompatActivity {
                     }
                 });
     }
+
     private void showToastMessage(String message) {
         Toast.makeText(GoogleSignInActivity.this, message, Toast.LENGTH_LONG).show();
     }
+
     private void launchMainActivity(FirebaseUser user) {
         if (user != null) {
             MainActivity.startActivity(this, user.getDisplayName());

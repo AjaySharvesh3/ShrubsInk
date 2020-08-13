@@ -2,6 +2,7 @@ package com.shrubsink.everylifeismatter.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +26,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
@@ -31,6 +34,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shrubsink.everylifeismatter.AnswerActivity;
+import com.shrubsink.everylifeismatter.MainActivity;
+import com.shrubsink.everylifeismatter.PostQueryActivity;
+import com.shrubsink.everylifeismatter.ProfileActivity;
 import com.shrubsink.everylifeismatter.R;
 import com.shrubsink.everylifeismatter.model.QueryAnswer;
 
@@ -71,7 +77,7 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
         final String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
         String answerMessage = answerList.get(position).getAnswer();
-        String user_id = answerList.get(position).getUser_id();
+        final String user_id = answerList.get(position).getUser_id();
         holder.setComment_message(answerMessage);
 
         //User Data will be retrieved here...
@@ -240,16 +246,41 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                 final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                         answerActivity, R.style.BottomSheetDialogTheme
                 );
-                View bottomSheetView = LayoutInflater.from(context.getApplicationContext())
+                final View bottomSheetView = LayoutInflater.from(context.getApplicationContext())
                         .inflate(
                                 R.layout.answer_activity_bottom_sheet,
                                 (LinearLayout) view.findViewById(R.id.bottom_sheet_container)
                         );
-                bottomSheetView.findViewById(R.id.violation_layout).setOnClickListener(new View.OnClickListener() {
+                bottomSheetView.findViewById(R.id.sexual_activity_layout).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(context, "Violation Clicked", Toast.LENGTH_SHORT).show();
+                        reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Sexual activity");
+                    }
+                });
+                bottomSheetView.findViewById(R.id.scam_layout).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Scam or fraud");
+                    }
+                });
+                bottomSheetView.findViewById(R.id.hate_speech_layout).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Bullying or hate words or symbols");
+                    }
+                });
+                bottomSheetView.findViewById(R.id.irrelevant_layout).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Irrelevant or violent");
+                    }
+                });
+                bottomSheetView.findViewById(R.id.emergency_message_layout).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
                         bottomSheetDialog.dismiss();
+                        Intent emergencyActivity = new Intent(context, ProfileActivity.class);
+                        context.startActivity(emergencyActivity);
                     }
                 });
                 bottomSheetDialog.setContentView(bottomSheetView);
@@ -258,6 +289,27 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
         });
     }
 
+    public void reportAnswer(final BottomSheetDialog bottomSheetDialog, String queryPostId, String queryAnswerId, String user_id, String message) {
+        Map<String, Object> reportAnswer = new HashMap<>();
+        reportAnswer.put("query_post_id", queryPostId);
+        reportAnswer.put("answer_id", queryAnswerId);
+        reportAnswer.put("user_id", user_id);
+        reportAnswer.put("report_message", message);
+
+        firebaseFirestore.collection("reported_answers").add(reportAnswer)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if (task.isSuccessful()) {
+                            bottomSheetDialog.dismiss();
+                            Toast.makeText(context, "Thanks for reporting", Toast.LENGTH_LONG).show();
+                        } else {
+                            bottomSheetDialog.dismiss();
+                            Toast.makeText(context, "Failed to report, check your internet", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
 
     @Override
     public int getItemCount() {

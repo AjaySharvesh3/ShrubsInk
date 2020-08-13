@@ -317,20 +317,23 @@
 
                     <Button
                         android:id="@+id/post_query_button"
+                        style="?attr/itemShapeFillColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
-                        android:layout_marginEnd="24dp"
-                        android:layout_marginRight="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
                         android:layout_marginBottom="32dp"
-                        android:background="@drawable/view_gradient"
                         android:fontFamily="@font/sf_pro_text"
                         android:letterSpacing="0.2"
                         android:text="@string/publish"
+                        android:textSize="12sp"
                         android:textStyle="bold"
+                        app:icon="@drawable/ic_baseline_create_24"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/query_tag_et"
+                        app:layout_constraintVertical_bias="0.0"
                         tools:ignore="UnusedAttribute" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

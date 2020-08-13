@@ -33,30 +33,6 @@
         tools:ignore="SmallSp" />
 
     <TextView
-        android:id="@+id/like_count_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="14dp"
-        android:text="@string/likes"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/likes_icon"
-        app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
-
-    <TextView
-        android:id="@+id/answer_count_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="14dp"
-        android:text="@string/answers"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/answers_icon"
-        app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
-
-    <TextView
         android:id="@+id/tags_tv7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -181,17 +157,79 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/body_tv" />
 
-    <ImageView
-        android:id="@+id/likes_icon"
-        android:layout_width="17dp"
-        android:layout_height="17dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
+    <LinearLayout
+        android:id="@+id/like_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="14dp"
-        android:contentDescription="@string/query_image"
-        android:src="@drawable/ic_baseline_favorite_border_24"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+        app:layout_constraintTop_toBottomOf="@+id/query_image_iv"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/likes_icon"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:contentDescription="@string/query_image"
+            android:src="@drawable/ic_baseline_favorite_border_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+
+        <TextView
+            android:id="@+id/like_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:text="@string/likes"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/likes_icon"
+            app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/answer_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="14dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/like_layout"
+        app:layout_constraintTop_toBottomOf="@+id/query_image_iv"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/answers_icon"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:contentDescription="@string/query_image"
+            android:src="@drawable/ic_baseline_create_24"
+            app:layout_constraintStart_toEndOf="@+id/like_layout"
+            app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+
+        <TextView
+            android:id="@+id/answer_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:text="@string/answers"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/answers_icon"
+            app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/likes_icon4"
@@ -205,16 +243,6 @@
         app:layout_constraintEnd_toStartOf="@+id/tags_tv7"
         app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
 
-    <ImageView
-        android:id="@+id/answers_icon"
-        android:layout_width="17dp"
-        android:layout_height="17dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="14dp"
-        android:contentDescription="@string/query_image"
-        android:src="@drawable/ic_outline_rate_review_24"
-        app:layout_constraintStart_toEndOf="@+id/like_count_tv"
-        app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

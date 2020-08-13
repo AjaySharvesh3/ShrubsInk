@@ -85,16 +85,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         mCloseActivityIv = findViewById(R.id.profile_close_activity);
 
-        mCloseActivityIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i= new Intent(ProfileActivity.this, MainActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                finish();
-            }
-        });
-
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
             String personName = acct.getDisplayName();
@@ -118,6 +108,16 @@ public class ProfileActivity extends AppCompatActivity {
         fetchAddress();
         fetchGeneral();
 
+        mCloseActivityIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i= new Intent(ProfileActivity.this, MainActivity.class);
+                /*i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);*/
+                startActivity(i);
+                Log.d("Intent Issue", "Intent Issueeeeeeeeeee");
+            }
+        });
+
         addAddress();
         editAddress();
         addGeneral();
@@ -125,7 +125,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void fetchAddress() {
-        DocumentReference mDocumentReference = mFirebaseFirestore.collection("user_bio").document(mUserId).collection("address").document(mUserId);
+        DocumentReference mDocumentReference = mFirebaseFirestore
+                .collection("user_bio").document(mUserId).collection("address").document(mUserId);
         mDocumentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -158,7 +159,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void fetchGeneral() {
-        DocumentReference mDocumentReference = mFirebaseFirestore.collection("user_bio").document(mUserId).collection("personal").document(mUserId);
+        DocumentReference mDocumentReference = mFirebaseFirestore
+                .collection("user_bio").document(mUserId).collection("personal").document(mUserId);
         mDocumentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @SuppressLint("SetTextI18n")
             @Override

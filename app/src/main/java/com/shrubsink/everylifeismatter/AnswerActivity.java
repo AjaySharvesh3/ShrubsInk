@@ -64,6 +64,8 @@ public class AnswerActivity extends AppCompatActivity {
     String currentUserId;
     String queryPostUserId;
 
+    TextView noAnswerTv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +91,8 @@ public class AnswerActivity extends AppCompatActivity {
         postAnswerIv = findViewById(R.id.answer_post_btn);
         answerFieldEt = findViewById(R.id.answer_field);
 
+        noAnswerTv = findViewById(R.id.no_answer_tv);
+
         fetchQueryPost();
 
         //RecyclerView Firebase List
@@ -103,6 +107,7 @@ public class AnswerActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                         if (!documentSnapshots.isEmpty()) {
+                            noAnswerTv.setVisibility(View.GONE);
                             for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
                                 if (doc.getType() == DocumentChange.Type.ADDED) {
                                     String answerId = doc.getDocument().getId();
@@ -111,6 +116,8 @@ public class AnswerActivity extends AppCompatActivity {
                                     queryAnswerRecyclerAdapter.notifyDataSetChanged();
                                 }
                             }
+                        } else {
+                            noAnswerTv.setVisibility(View.VISIBLE);
                         }
                     }
                 });
