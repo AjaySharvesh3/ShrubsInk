@@ -26,7 +26,7 @@
         android:layout_marginTop="17dp"
         android:text="@string/loading"
         android:textColor="@color/slight_black"
-        android:textSize="10sp"
+        android:textSize="11sp"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SmallSp" />
@@ -45,35 +45,84 @@
         app:layout_constraintTop_toBottomOf="@+id/answer_username_tv"
         tools:ignore="SmallSp" />
 
-    <TextView
-        android:id="@+id/vote_count_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"
-        android:text="@string/_10"
-        android:textColor="@color/slight_black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/upvote_iv"
-        app:layout_constraintTop_toBottomOf="@+id/answer_content_tv"
-        tools:ignore="SmallSp" />
 
-    <TextView
-        android:id="@+id/downvote_count_tv"
+    <LinearLayout
+        android:id="@+id/upvote_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
         android:layout_marginBottom="24dp"
-        android:text="@string/_10"
-        android:textColor="@color/slight_black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/downvote_iv"
-        app:layout_constraintTop_toBottomOf="@+id/answer_content_tv"
-        tools:ignore="SmallSp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answer_content_tv">
+
+        <ImageView
+            android:id="@+id/upvote_iv"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginBottom="12dp"
+            android:padding="3dp"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/upvote"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/answer_content_tv" />
+
+        <TextView
+            android:id="@+id/vote_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="0"
+            android:textColor="@color/slight_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/upvote_iv"
+            app:layout_constraintTop_toBottomOf="@+id/answer_content_tv"
+            tools:ignore="HardcodedText,SmallSp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/downvote_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/upvote_layout"
+        app:layout_constraintTop_toBottomOf="@+id/answer_content_tv">
+
+        <ImageView
+            android:id="@+id/downvote_iv"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="12dp"
+            android:padding="3dp"
+            android:src="@drawable/downvote"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/answer_content_tv" />
+
+        <TextView
+            android:id="@+id/downvote_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="0"
+            android:textColor="@color/slight_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/upvote_iv"
+            app:layout_constraintTop_toBottomOf="@+id/answer_content_tv"
+            tools:ignore="SmallSp" />
+
+    </LinearLayout>
+
 
     <com.borjabravo.readmoretextview.ReadMoreTextView
         android:id="@+id/answer_content_tv"
@@ -86,7 +135,8 @@
         android:paddingEnd="32dp"
         android:paddingRight="32dp"
         android:text="@string/loading_comment"
-        android:textColor="@color/slight_black"
+        android:textColor="@color/grey"
+        android:textSize="12sp"
         app:colorClickableText="@color/colorAccentBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,45 +150,18 @@
         app:trimMode="trimModeLine"
         tools:ignore="RtlSymmetry" />
 
-    <ImageView
-        android:id="@+id/upvote_iv"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"
-        android:padding="3dp"
-        android:src="@drawable/upvote"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer_content_tv" />
 
     <ImageView
         android:id="@+id/report_option_iv"
         android:layout_width="26dp"
         android:layout_height="26dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="4dp"
         android:padding="3dp"
-        android:src="@drawable/ic_baseline_more_horiz_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/downvote_iv"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"
-        android:padding="3dp"
-        android:src="@drawable/donwvote"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/vote_count_tv"
-        app:layout_constraintTop_toBottomOf="@+id/answer_content_tv" />
+        android:src="@drawable/ic_baseline_report_problem_24"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
         android:id="@+id/view"
@@ -146,6 +169,7 @@
         android:layout_height="1dp"
         android:layout_marginBottom="8dp"
         android:background="@color/slight_grey"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/downvote_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

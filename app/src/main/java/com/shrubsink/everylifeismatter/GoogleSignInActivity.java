@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +39,7 @@ public class GoogleSignInActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1001;
     GoogleSignInClient googleSignInClient;
     FirebaseAuth firebaseAuth;
+    static ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,8 @@ public class GoogleSignInActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 // Launch Sign In
+                showProgressDialog(GoogleSignInActivity.this,
+                        "Please Wait...","Signing in with Google...",false);
                 signInToGoogle();
             }
         });
@@ -98,9 +103,9 @@ public class GoogleSignInActivity extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                showToastMessage("Google Sign in Succeeded");
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
+                /*showToastMessage("Google Sign in Succeeded");*/
+                /*Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);*/
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
@@ -111,7 +116,6 @@ public class GoogleSignInActivity extends AppCompatActivity {
 
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -120,10 +124,12 @@ public class GoogleSignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                            showToastMessage("Firebase Authentication Succeeded ");
-                            launchMainActivity(user);
+                            /*showToastMessage("Firebase Authentication Succeeded ");*/
+                            removeProgressDialog();
+                            launchProfileActivity(user);
                         } else {
                             // If sign in fails, display a message to the user.
+                            removeProgressDialog();
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             showToastMessage("Firebase Authentication failed:" + task.getException());
                         }
@@ -135,10 +141,50 @@ public class GoogleSignInActivity extends AppCompatActivity {
         Toast.makeText(GoogleSignInActivity.this, message, Toast.LENGTH_LONG).show();
     }
 
-    private void launchMainActivity(FirebaseUser user) {
+    private void launchProfileActivity(FirebaseUser user) {
         if (user != null) {
             MainActivity.startActivity(this, user.getDisplayName());
             finish();
+        }
+    }
+
+    public static void showProgressDialog(Context context, String title,
+                                          String msg, boolean isCancelable) {
+        try {
+            if (mProgressDialog == null) {
+                mProgressDialog = ProgressDialog.show(context, title, msg);
+                mProgressDialog.setCancelable(isCancelable);
+            }
+
+            if (!mProgressDialog.isShowing()) {
+                mProgressDialog.show();
+            }
+
+        } catch (IllegalArgumentException ie) {
+            ie.printStackTrace();
+        } catch (RuntimeException re) {
+            re.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void removeProgressDialog() {
+        try {
+            if (mProgressDialog != null) {
+                if (mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                    mProgressDialog = null;
+                }
+            }
+        } catch (IllegalArgumentException ie) {
+            ie.printStackTrace();
+
+        } catch (RuntimeException re) {
+            re.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

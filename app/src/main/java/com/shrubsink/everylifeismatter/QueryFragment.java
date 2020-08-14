@@ -205,13 +205,13 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.profile_image:
-                goToProfile();
+                /*goToProfile();*/
                 break;
         }
     }
 
-    private void goToProfile() {
+   /* private void goToProfile() {
         Intent profileActivity = new Intent(getActivity(), ProfileActivity.class);
         startActivity(profileActivity);
-    }
+    }*/
 }

@@ -19,41 +19,31 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="14dp"
-            android:contentDescription="@string/shrubsink_bw_logo"
-            android:src="@drawable/shrubslink_bw"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/username_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
             android:fontFamily="@font/sf_pro_text"
             android:text="@string/hello_arul_mozhi"
             android:textColor="@color/white"
             android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/profile_image"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginTop="1dp"
             android:fontFamily="@font/sf_pro_text"
             android:text="@string/discuss_with_your_peers_amp_be_the_part_of_their_life"
             android:textColor="@color/white"
             android:textSize="10sp"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/profile_image"
             app:layout_constraintTop_toBottomOf="@+id/username_tv"
             tools:ignore="SmallSp" />
 
@@ -61,14 +51,16 @@
             android:id="@+id/profile_image"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="3dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
             android:src="@drawable/profile_placeholder"
             app:civ_border_color="@color/white"
             app:civ_border_overlay="true"
             app:civ_border_width="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

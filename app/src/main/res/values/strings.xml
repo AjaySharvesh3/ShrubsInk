@@ -91,4 +91,6 @@
     <string name="thanks_for_letting_us_know">Thanks for letting us know</string>
     <string name="bullying_or_hate_words_or_symbols">Bullying or hate words or symbols</string>
     <string name="send_emergency_meesage_to_us">Send emergency meesage to us</string>
+    <string name="back_to_home">Back to home</string>
+    <string name="ask">Ask</string>
 </resources>

@@ -176,7 +176,7 @@ public class AnswerActivity extends AppCompatActivity {
                             titleView.setText(title);
                             bodyView.setText(body);
                             issueLocationView.setText(issueLocation);
-                            tagsView.setText("TAGS: " + tags);
+                            tagsView.setText(tags);
                             /*queryPostDate.setText("•  " + dateString);*/
 
                             RequestOptions requestOptions = new RequestOptions();

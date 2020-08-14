@@ -87,12 +87,12 @@
                 android:layout_marginLeft="8dp"
                 android:paddingEnd="20dp"
                 android:paddingRight="20dp"
-                android:text="@string/tags_chiko_sapota_plant"
+                android:text="@string/loading"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/issue_location_tv"
-                app:layout_constraintTop_toTopOf="@+id/issue_location_tv"
+                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintTop_toBottomOf="@+id/username_tv"
                 tools:ignore="RtlSymmetry,SmallSp" />
 
             <TextView
@@ -103,7 +103,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/sf_pro_display"
-                android:text="@string/username"
+                android:text="@string/loading"
                 android:textColor="@color/slight_black"
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/profile_image"
@@ -115,10 +115,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:text="@string/madurai_tamil_nadu"
+                android:text="@string/loading"
                 android:textSize="10sp"
                 app:layout_constraintStart_toEndOf="@+id/profile_image"
-                app:layout_constraintTop_toBottomOf="@+id/username_tv"
+                app:layout_constraintTop_toBottomOf="@+id/tags_tv"
                 tools:ignore="SmallSp" />
 
             <TextView
@@ -130,7 +130,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:text="@string/title_example"
+                android:text="@string/loading"
                 android:textColor="@color/slight_black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"

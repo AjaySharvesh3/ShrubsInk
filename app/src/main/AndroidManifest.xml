@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/shrubslink"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AnswerActivity"></activity>
+        <activity android:name=".EmergencyReportActivity"></activity>
+        <activity android:name=".AnswerActivity" />
         <activity
             android:name=".PostQueryActivity"
             android:parentActivityName=".MainActivity"
@@ -29,10 +30,6 @@
         <activity
             android:name=".AddressActivity"
             android:parentActivityName=".ProfileActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ProfileActivity"
-            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"

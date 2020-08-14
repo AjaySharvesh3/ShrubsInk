@@ -39,7 +39,7 @@ import java.util.Objects;
 
 public class PersonalActivity extends AppCompatActivity {
 
-    ImageView mCloseActivityIv;
+    /*ImageView mCloseActivityIv;*/
     TextInputLayout mGenderTIL, mAgeTIL, mPhoneTIL, mShortBioTIL, mDesignationTIL;
     TextInputEditText mGenderEt, mAgeEt, mPhoneEt, mShortBioEt, mDesignationEt;
     Button savePersonalBtn;
@@ -55,11 +55,6 @@ public class PersonalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
 
-        /*Toolbar toolbar = findViewById(R.id.general_toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);*/
 
         mGenderTIL = findViewById(R.id.gender_et);
         mAgeTIL = findViewById(R.id.age_et);
@@ -67,7 +62,7 @@ public class PersonalActivity extends AppCompatActivity {
         mShortBioTIL = findViewById(R.id.short_bio_et);
         mDesignationTIL = findViewById(R.id.designation_et);
         savePersonalBtn = findViewById(R.id.save_general_button);
-        mCloseActivityIv = findViewById(R.id.close_activity);
+        /*mCloseActivityIv = findViewById(R.id.close_activity);
 
         mCloseActivityIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +72,7 @@ public class PersonalActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
             }
-        });
+        });*/
 
         mGenderEt = findViewById(R.id.gender_tiet);
         mAgeEt = findViewById(R.id.age_tiet);
@@ -167,10 +162,7 @@ public class PersonalActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 removeProgressDialog();
-                /*Toast.makeText(PersonalActivity.this,
-                        "You're done. Saved your general.",
-                        Toast.LENGTH_LONG)
-                        .show();*/
+
                 Snackbar.make(savePersonalBtn, "You're done. Saved your general.", Snackbar.LENGTH_LONG)
                         .show();
             }
@@ -178,10 +170,7 @@ public class PersonalActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 removeProgressDialog();
-                /*Toast.makeText(PersonalActivity.this,
-                        "Failed to save general, please check network connection",
-                        Toast.LENGTH_LONG)
-                        .show();*/
+
                 Snackbar.make(savePersonalBtn, "Failed to save general, please check network connection", Snackbar.LENGTH_LONG)
                         .show();
             }
@@ -208,7 +197,6 @@ public class PersonalActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
     public static void removeProgressDialog() {
         try {

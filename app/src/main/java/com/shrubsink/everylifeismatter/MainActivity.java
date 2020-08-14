@@ -23,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,8 +46,9 @@ public class MainActivity extends AppCompatActivity {
     QueryFragment queryFragment;
     ActivityFragment activityFragment;
     ProductListFragment productListFragment;
+    ProfileFragment profileFragment;
     BottomNavigationView mBottomNavigationView;
-    FloatingActionButton mPostQueryFAB;
+    ExtendedFloatingActionButton mPostQueryFAB;
 
     FirebaseFirestore mFirebaseFirestore;
 
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         queryFragment = new QueryFragment();
         activityFragment = new ActivityFragment();
         productListFragment = new ProductListFragment();
+        profileFragment = new ProfileFragment();
 
        replaceFragment(queryFragment);
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -76,8 +79,9 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.bottom_action_home : replaceFragment(queryFragment); return true;
-                    case R.id.bottom_action_activity : replaceFragment(activityFragment);
-                    case R.id.bottom_action_product_list : replaceFragment(productListFragment);
+                    case R.id.bottom_action_product_list : replaceFragment(productListFragment); return true;
+                    case R.id.bottom_action_activity : replaceFragment(activityFragment); return true;
+                    case R.id.bottom_action_profile : replaceFragment(profileFragment); return true;
                     default: return true;
                 }
             }
@@ -109,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_sign_out: {
                 signOut();
+                break;
+            }
+            case R.id.action_search: {
+                /*signOut();*/
                 break;
             }
         }

@@ -38,7 +38,7 @@ import java.util.Objects;
 
 public class AddressActivity extends AppCompatActivity {
 
-    ImageView mCloseActivityIv;
+    /*ImageView mCloseActivityIv;*/
     TextInputLayout mAddressLineTIL, mCityTIL, mPincodeTIL, mStateTIL, mCountryTIL;
     TextInputEditText mAddressLineEt, mCityEt, mPincodeEt, mStateEt, mCountryEt;
     Button saveAddressBtn;
@@ -68,7 +68,7 @@ public class AddressActivity extends AppCompatActivity {
         mStateTIL = findViewById(R.id.state_et);
         mCountryTIL = findViewById(R.id.country_et);
         saveAddressBtn = findViewById(R.id.save_address_button);
-        mCloseActivityIv = findViewById(R.id.close_activity);
+        /*mCloseActivityIv = findViewById(R.id.close_activity);
 
         mCloseActivityIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +78,7 @@ public class AddressActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
             }
-        });
+        });*/
 
         mAddressLineEt = findViewById(R.id.address_line_tiet);
         mCityEt = findViewById(R.id.city_tiet);

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,7 +23,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,12 +32,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shrubsink.everylifeismatter.AnswerActivity;
-import com.shrubsink.everylifeismatter.MainActivity;
-import com.shrubsink.everylifeismatter.PostQueryActivity;
-import com.shrubsink.everylifeismatter.ProfileActivity;
+import com.shrubsink.everylifeismatter.EmergencyReportActivity;
 import com.shrubsink.everylifeismatter.R;
 import com.shrubsink.everylifeismatter.model.QueryAnswer;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,7 +96,15 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                     }
                 });
 
-        //Get Upvote
+        try {
+            long millisecond = answerList.get(position).getTimestamp().getTime();
+            String dateString = DateFormat.format("dd MMM yyyy • hh:mm a", new Date(millisecond)).toString();
+            holder.setTime(dateString);
+        } catch (Exception e) {
+            Toast.makeText(context, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        //Get UpVote
         new Thread(new Runnable() {
             public void run() {
                 firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
@@ -108,10 +113,14 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                             @Override
                             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                                if (documentSnapshot.exists()) {
-                                    holder.upVoteBtn.setImageDrawable(context.getDrawable(R.drawable.upvote_color));
-                                } else {
-                                    holder.upVoteBtn.setImageDrawable(context.getDrawable(R.drawable.upvote));
+                                try {
+                                    if (documentSnapshot.exists()) {
+                                        holder.upVoteBtn.setImageDrawable(context.getDrawable(R.drawable.upvote_active));
+                                    } else {
+                                        holder.upVoteBtn.setImageDrawable(context.getDrawable(R.drawable.upvote));
+                                    }
+                                } catch (Exception er) {
+                                    er.printStackTrace();
                                 }
                             }
                         });
@@ -121,7 +130,7 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
         //UpVote Feature
         new Thread(new Runnable() {
             public void run() {
-                holder.upVoteBtn.setOnClickListener(new View.OnClickListener() {
+                holder.upVoteLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
@@ -157,12 +166,16 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                                if (!documentSnapshots.isEmpty()) {
-                                    int count = documentSnapshots.size();
-                                    Log.d("count", ""+ count);
-                                    holder.updateVoteCount(count);
-                                } else {
-                                    holder.updateVoteCount(0);
+                                try {
+                                    if (!documentSnapshots.isEmpty()) {
+                                        int count = documentSnapshots.size();
+                                        Log.d("count", "" + count);
+                                        holder.updateVoteCount(count);
+                                    } else {
+                                        holder.updateVoteCount(0);
+                                    }
+                                } catch (Exception er) {
+                                    er.printStackTrace();
                                 }
                             }
                         });
@@ -180,10 +193,14 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                             @Override
                             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                                if (documentSnapshot.exists()) {
-                                    holder.downVoteBtn.setImageDrawable(context.getDrawable(R.drawable.downvote_color));
-                                } else {
-                                    holder.downVoteBtn.setImageDrawable(context.getDrawable(R.drawable.donwvote));
+                                try {
+                                    if (documentSnapshot.exists()) {
+                                        holder.downVoteBtn.setImageDrawable(context.getDrawable(R.drawable.downvote_active));
+                                    } else {
+                                        holder.downVoteBtn.setImageDrawable(context.getDrawable(R.drawable.downvote));
+                                    }
+                                } catch (Exception er) {
+                                    er.printStackTrace();
                                 }
                             }
                         });
@@ -193,7 +210,7 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
         //DownVote Feature
         new Thread(new Runnable() {
             public void run() {
-                holder.downVoteBtn.setOnClickListener(new View.OnClickListener() {
+                holder.downVoteLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
@@ -229,11 +246,15 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                                if (!documentSnapshots.isEmpty()) {
-                                    int count = documentSnapshots.size();
-                                    holder.updateDownVoteCount(count);
-                                } else {
-                                    holder.updateDownVoteCount(0);
+                                try {
+                                    if (!documentSnapshots.isEmpty()) {
+                                        int count = documentSnapshots.size();
+                                        holder.updateDownVoteCount(count);
+                                    } else {
+                                        holder.updateDownVoteCount(0);
+                                    }
+                                } catch (Exception er) {
+                                    er.printStackTrace();
                                 }
                             }
                         });
@@ -279,7 +300,7 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                     @Override
                     public void onClick(View view) {
                         bottomSheetDialog.dismiss();
-                        Intent emergencyActivity = new Intent(context, ProfileActivity.class);
+                        Intent emergencyActivity = new Intent(context, EmergencyReportActivity.class);
                         context.startActivity(emergencyActivity);
                     }
                 });
@@ -324,10 +345,11 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
 
         private View mView;
         public TextView answerContent;
-        public TextView username;
+        public TextView username, answerDate;
         public ImageView userImage;
 
         ImageView upVoteBtn, downVoteBtn, reportOptionIv;
+        LinearLayout upVoteLayout, downVoteLayout;
         TextView voteCountTv, downVoteCountTv;
 
         public ViewHolder(View itemView) {
@@ -335,7 +357,9 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
             mView = itemView;
 
             upVoteBtn = mView.findViewById(R.id.upvote_iv);
+            upVoteLayout = mView.findViewById(R.id.upvote_layout);
             downVoteBtn = mView.findViewById(R.id.downvote_iv);
+            downVoteLayout = mView.findViewById(R.id.downvote_layout);
             voteCountTv = mView.findViewById(R.id.vote_count_tv);
             downVoteCountTv = mView.findViewById(R.id.downvote_count_tv);
             reportOptionIv = mView.findViewById(R.id.report_option_iv);
@@ -344,6 +368,11 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
         public void setComment_message(String answer){
             answerContent = mView.findViewById(R.id.answer_content_tv);
             answerContent.setText(answer);
+        }
+
+        public void setTime(String date) {
+            answerDate = mView.findViewById(R.id.answer_timestamp_tv);
+            answerDate.setText(date);
         }
 
         @SuppressLint("CheckResult")

@@ -1,21 +1,19 @@
 package com.shrubsink.everylifeismatter;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
-import android.view.MenuItem;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,12 +34,12 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileFragment extends Fragment {
 
     TextView mUsername;
     TextView mEmail;
     CircleImageView mProfilePicture;
-    Button mAddAddressBtn, mAddGeneralButton;
+    Button mAddAddressBtn, mAddGeneralButton, mBackToHomeBtn;
     ImageView mEditAddressIv, mEditGeneralIv, mCloseActivityIv;
     TextView mAddressLineTv, mCityPincodeTv, mStateCountryTv;
     TextView mShortBioTv, mDesignationTv, mPhoneTv, mGenderAgeTv;
@@ -52,40 +50,36 @@ public class ProfileActivity extends AppCompatActivity {
     String address_line, city, pincode, state, country;
     String gender, age, phone, short_bio, designation;
 
+    public ProfileFragment() {
+
+    }
+
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        showProgressDialog(this, "Loading...","Collecting your profile..",false);
+        mUsername = view.findViewById(R.id.username_et);
+        mEmail = view.findViewById(R.id.email_et);
+        mProfilePicture = view.findViewById(R.id.profile_image);
+        mAddAddressBtn = view.findViewById(R.id.add_address_btn);
+        mAddGeneralButton = view.findViewById(R.id.add_personal_btn);
+        mEditAddressIv = view.findViewById(R.id.edit_address_iv);
+        mEditGeneralIv = view.findViewById(R.id.edit_general_iv);
+       /* mBackToHomeBtn = view.findViewById(R.id.home_screen_btn);*/
 
-        /*Toolbar toolbar = findViewById(R.id.profile_toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);*/
+        mAddressLineTv = view.findViewById(R.id.address_line_tv);
+        mCityPincodeTv = view.findViewById(R.id.city_pincode_tv);
+        mStateCountryTv = view.findViewById(R.id.state_country_tv);
 
-        mUsername = findViewById(R.id.username_et);
-        mEmail = findViewById(R.id.email_et);
-        mProfilePicture = findViewById(R.id.profile_image);
-        mAddAddressBtn = findViewById(R.id.add_address_btn);
-        mAddGeneralButton = findViewById(R.id.add_personal_btn);
-        mEditAddressIv = findViewById(R.id.edit_address_iv);
-        mEditGeneralIv = findViewById(R.id.edit_general_iv);
+        mShortBioTv = view.findViewById(R.id.short_bio_tv);
+        mDesignationTv = view.findViewById(R.id.designation_tv);
+        mPhoneTv = view.findViewById(R.id.phone_tv);
+        mGenderAgeTv = view.findViewById(R.id.gender_age_tv);
 
-        mAddressLineTv = findViewById(R.id.address_line_tv);
-        mCityPincodeTv = findViewById(R.id.city_pincode_tv);
-        mStateCountryTv = findViewById(R.id.state_country_tv);
-
-        mShortBioTv = findViewById(R.id.short_bio_tv);
-        mDesignationTv = findViewById(R.id.designation_tv);
-        mPhoneTv = findViewById(R.id.phone_tv);
-        mGenderAgeTv = findViewById(R.id.gender_age_tv);
-
-        mCloseActivityIv = findViewById(R.id.profile_close_activity);
-
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getContext());
         if (acct != null) {
             String personName = acct.getDisplayName();
             String personEmail = acct.getEmail();
@@ -108,26 +102,18 @@ public class ProfileActivity extends AppCompatActivity {
         fetchAddress();
         fetchGeneral();
 
-        mCloseActivityIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i= new Intent(ProfileActivity.this, MainActivity.class);
-                /*i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);*/
-                startActivity(i);
-                Log.d("Intent Issue", "Intent Issueeeeeeeeeee");
-            }
-        });
-
         addAddress();
         editAddress();
         addGeneral();
         editGeneral();
+
+        return view;
     }
 
     public void fetchAddress() {
         DocumentReference mDocumentReference = mFirebaseFirestore
                 .collection("user_bio").document(mUserId).collection("address").document(mUserId);
-        mDocumentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+        mDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -159,41 +145,99 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void fetchGeneral() {
-        DocumentReference mDocumentReference = mFirebaseFirestore
-                .collection("user_bio").document(mUserId).collection("personal").document(mUserId);
-        mDocumentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                removeProgressDialog();
-                mAddGeneralButton.setVisibility(View.GONE);
-                mEditGeneralIv.setVisibility(View.VISIBLE);
-
-                mShortBioTv.setText(value.getString("short_bio"));
-                mDesignationTv.setText(value.getString("designation"));
-                mPhoneTv.setText(value.getString("phone"));
-                mGenderAgeTv.setText(value.getString("age") + ", " + value.getString("gender"));
-
-                phone = value.getString("phone");
-                age = value.getString("age");
-                gender = value.getString("gender");
-                short_bio = value.getString("short_bio");
-                designation = value.getString("designation");
-
-                if (value.getString("phone") == null) {
+        try {
+            DocumentReference mDocumentReference = mFirebaseFirestore
+                    .collection("user_bio").document(mUserId).collection("personal").document(mUserId);
+            mDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                     removeProgressDialog();
-                    mAddGeneralButton.setVisibility(View.VISIBLE);
+                    mAddGeneralButton.setVisibility(View.GONE);
+                    mEditGeneralIv.setVisibility(View.VISIBLE);
 
-                    mShortBioTv.setVisibility(View.GONE);
-                    mPhoneTv.setVisibility(View.GONE);
-                    mDesignationTv.setVisibility(View.GONE);
-                    mGenderAgeTv.setVisibility(View.GONE);
-                    mEditGeneralIv.setVisibility(View.GONE);
+                    try {
+                        assert value != null;
+                        mShortBioTv.setText(value.getString("short_bio"));
+                        mDesignationTv.setText(value.getString("designation"));
+                        mPhoneTv.setText(value.getString("phone"));
+                        mGenderAgeTv.setText(value.getString("age") + ", " + value.getString("gender"));
+                    } catch (Exception er) {
+                        er.printStackTrace();
+                    }
+
+                    phone = value.getString("phone");
+                    age = value.getString("age");
+                    gender = value.getString("gender");
+                    short_bio = value.getString("short_bio");
+                    designation = value.getString("designation");
+
+                    if (value.getString("phone") == null) {
+                        removeProgressDialog();
+                        mAddGeneralButton.setVisibility(View.VISIBLE);
+
+                        mShortBioTv.setVisibility(View.GONE);
+                        mPhoneTv.setVisibility(View.GONE);
+                        mDesignationTv.setVisibility(View.GONE);
+                        mGenderAgeTv.setVisibility(View.GONE);
+                        mEditGeneralIv.setVisibility(View.GONE);
+                    }
                 }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addAddress() {
+        mAddAddressBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addAddressActivity = new Intent(requireActivity(), AddressActivity.class);
+                startActivity(addAddressActivity);
             }
         });
     }
 
+    public void editAddress() {
+        mEditAddressIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent editAddressActivity = new Intent(requireActivity(), AddressActivity.class);
+                editAddressActivity.putExtra("address_line", address_line);
+                editAddressActivity.putExtra("city", city);
+                editAddressActivity.putExtra("pincode", pincode);
+                editAddressActivity.putExtra("state", state);
+                editAddressActivity.putExtra("country", country);
+                startActivity(editAddressActivity);
+            }
+        });
+    }
+
+    public void addGeneral() {
+        mAddGeneralButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addGeneralActivity = new Intent(requireActivity(), PersonalActivity.class);
+                startActivity(addGeneralActivity);
+            }
+        });
+    }
+
+    public void editGeneral() {
+        mEditGeneralIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent editGeneralActivity = new Intent(requireActivity(), PersonalActivity.class);
+                editGeneralActivity.putExtra("gender", gender);
+                editGeneralActivity.putExtra("age", age);
+                editGeneralActivity.putExtra("phone", phone);
+                editGeneralActivity.putExtra("short_bio", short_bio);
+                editGeneralActivity.putExtra("designation", designation);
+                startActivity(editGeneralActivity);
+            }
+        });
+    }
 
     public static void showProgressDialog(Context context, String title,
                                           String msg, boolean isCancelable) {
@@ -235,55 +279,4 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
     }
-
-    public void addAddress() {
-        mAddAddressBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addAddressActivity = new Intent(ProfileActivity.this, AddressActivity.class);
-                startActivity(addAddressActivity);
-            }
-        });
-    }
-
-    public void editAddress() {
-        mEditAddressIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent editAddressActivity = new Intent(ProfileActivity.this, AddressActivity.class);
-                editAddressActivity.putExtra("address_line", address_line);
-                editAddressActivity.putExtra("city", city);
-                editAddressActivity.putExtra("pincode", pincode);
-                editAddressActivity.putExtra("state", state);
-                editAddressActivity.putExtra("country", country);
-                startActivity(editAddressActivity);
-            }
-        });
-    }
-
-    public void addGeneral() {
-        mAddGeneralButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addGeneralActivity = new Intent(ProfileActivity.this, PersonalActivity.class);
-                startActivity(addGeneralActivity);
-            }
-        });
-    }
-
-    public void editGeneral() {
-        mEditGeneralIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent editGeneralActivity = new Intent(ProfileActivity.this, PersonalActivity.class);
-                editGeneralActivity.putExtra("gender", gender);
-                editGeneralActivity.putExtra("age", age);
-                editGeneralActivity.putExtra("phone", phone);
-                editGeneralActivity.putExtra("short_bio", short_bio);
-                editGeneralActivity.putExtra("designation", designation);
-                startActivity(editGeneralActivity);
-            }
-        });
-    }
-
 }
