@@ -120,7 +120,7 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
 
         try {
             long millisecond = query_list.get(position).getTimestamp().getTime();
-            String dateString = DateFormat.format("dd MMM yyyy\nhh:mm a", new Date(millisecond)).toString();
+            String dateString = DateFormat.format("dd MMM yyyy • hh:mm a", new Date(millisecond)).toString();
             holder.setTime(dateString);
         } catch (Exception e) {
             Toast.makeText(context, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -240,7 +240,8 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
         private ImageView queryPostImageView;
         private TextView queryPostDate;
 
-        private TextView queryPostUserName, queryPostUserShortBio;
+        private TextView queryPostUserName;
+        /*private TextView queryPostUserShortBio;*/
         private CircleImageView queryPostUserImage;
 
         private ImageView queryPostLikeBtn;
@@ -307,8 +308,8 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
 
             queryPostUserName = mView.findViewById(R.id.username_tv);
             queryPostUserName.setText(name);
-            queryPostUserShortBio = mView.findViewById(R.id.short_bio_tv);
-            queryPostUserShortBio.setText(shortBio);
+            /*queryPostUserShortBio = mView.findViewById(R.id.short_bio_tv);
+            queryPostUserShortBio.setText(shortBio);*/
 
             RequestOptions placeholderOption = new RequestOptions();
             placeholderOption.placeholder(R.drawable.profile_placeholder);

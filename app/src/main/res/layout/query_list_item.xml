@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,10 +15,21 @@
         android:layout_height="38dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/profile_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tags_tv" />
+
+    <ImageView
+        android:id="@+id/profile_image2"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_baseline_more_horiz_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tags_tv"
@@ -28,17 +40,21 @@
         android:layout_marginTop="16dp"
         android:text="@string/loading"
         android:textSize="12sp"
+        android:paddingRight="18dp"
+        app:layout_constraintEnd_toStartOf="@+id/profile_image2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        android:paddingEnd="18dp" />
 
     <TextView
         android:id="@+id/tags_tv7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginRight="21dp"
         android:text="@string/not_yet_solved"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,34 +64,16 @@
         android:id="@+id/timestamp_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/loading"
-        android:textSize="10sp"
         android:layout_gravity="end"
-        android:gravity="end"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SmallSp" />
-
-    <TextView
-        android:id="@+id/short_bio_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:paddingEnd="20dp"
-        android:paddingRight="20dp"
+        android:layout_marginTop="2dp"
+        android:gravity="end"
         android:text="@string/loading"
         android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toBottomOf="@+id/username_tv"
-        tools:ignore="RtlSymmetry" />
+        app:layout_constraintTop_toBottomOf="@+id/issue_location_tv"
+        tools:ignore="SmallSp" />
 
     <TextView
         android:id="@+id/username_tv"
@@ -83,11 +81,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/sf_pro_display"
         android:text="@string/loading"
         android:textColor="@color/slight_black"
         android:textSize="14sp"
-        android:fontFamily="@font/sf_pro_display"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tags_tv" />
 
@@ -97,10 +95,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
         android:text="@string/loading"
-        android:textSize="10sp"
+        android:textSize="11sp"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toBottomOf="@+id/short_bio_tv"
+        app:layout_constraintTop_toBottomOf="@+id/username_tv"
         tools:ignore="SmallSp" />
 
     <TextView
@@ -109,16 +108,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="@string/loading"
         android:textColor="@color/slight_black"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/issue_location_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/timestamp_tv" />
 
     <com.borjabravo.readmoretextview.ReadMoreTextView
         android:id="@+id/body_tv"
@@ -131,7 +130,7 @@
         android:layout_marginRight="16dp"
         android:text="@string/loading"
         android:textColor="@color/grey"
-        android:textSize="12sp"
+        android:textSize="14sp"
         app:colorClickableText="@color/colorAccentBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -166,6 +165,7 @@
         android:layout_marginTop="14dp"
         android:clickable="true"
         android:focusable="true"
+        android:padding="5dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
@@ -174,7 +174,7 @@
 
         <ImageView
             android:id="@+id/likes_icon"
-            android:layout_width="17dp"
+            android:layout_width="wrap_content"
             android:layout_height="17dp"
             android:contentDescription="@string/query_image"
             android:src="@drawable/ic_baseline_favorite_border_24"
@@ -203,6 +203,7 @@
         android:layout_marginTop="14dp"
         android:clickable="true"
         android:focusable="true"
+        android:padding="5dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintStart_toEndOf="@+id/like_layout"
@@ -235,7 +236,7 @@
         android:id="@+id/likes_icon4"
         android:layout_width="17dp"
         android:layout_height="17dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="19dp"
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
         android:contentDescription="@string/query_image"

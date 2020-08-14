@@ -130,6 +130,8 @@ public class AnswerActivity extends AppCompatActivity {
                     Map<String, Object> answerMap = new HashMap<>();
                     answerMap.put("answer", answer);
                     answerMap.put("user_id", currentUserId);
+                    answerMap.put("credit", "0");
+                    answerMap.put("is_solved", false);
                     answerMap.put("timestamp", FieldValue.serverTimestamp());
 
                     firebaseFirestore.collection("query_posts/" + queryPostId + "/answers")

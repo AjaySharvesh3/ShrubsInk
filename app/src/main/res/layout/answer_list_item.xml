@@ -150,18 +150,17 @@
         app:trimMode="trimModeLine"
         tools:ignore="RtlSymmetry" />
 
-
     <ImageView
         android:id="@+id/report_option_iv"
         android:layout_width="26dp"
         android:layout_height="26dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="4dp"
-        android:padding="3dp"
-        android:src="@drawable/ic_baseline_report_problem_24"
-        app:layout_constraintBottom_toTopOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:src="@drawable/ic_baseline_more_horiz_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <View
         android:id="@+id/view"

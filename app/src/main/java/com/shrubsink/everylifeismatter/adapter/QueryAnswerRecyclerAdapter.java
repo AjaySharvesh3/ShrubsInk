@@ -46,7 +46,6 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
     public AnswerActivity answerActivity;
     public List<QueryAnswer> answerList;
     public Context context;
-    public int upVoteCount;
 
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
@@ -95,14 +94,6 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                         }
                     }
                 });
-
-        try {
-            long millisecond = answerList.get(position).getTimestamp().getTime();
-            String dateString = DateFormat.format("dd MMM yyyy • hh:mm a", new Date(millisecond)).toString();
-            holder.setTime(dateString);
-        } catch (Exception e) {
-            Toast.makeText(context, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
 
         //Get UpVote
         new Thread(new Runnable() {
@@ -308,6 +299,14 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                 bottomSheetDialog.show();
             }
         });
+
+        try {
+            long millisecond = answerList.get(position).getTimestamp().getTime();
+            String dateString = DateFormat.format("dd MMM yyyy • hh:mm a", new Date(millisecond)).toString();
+            holder.setTime(dateString);
+        } catch (Exception e) {
+            Toast.makeText(context, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void reportAnswer(final BottomSheetDialog bottomSheetDialog, String queryPostId, String queryAnswerId, String user_id, String message) {
