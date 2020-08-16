@@ -20,8 +20,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tags_tv" />
 
-    <ImageView
-        android:id="@+id/profile_image2"
+    <!--<ImageView
+        android:id="@+id/report_question_iv"
         android:layout_width="26dp"
         android:layout_height="26dp"
         android:layout_marginTop="16dp"
@@ -29,7 +29,7 @@
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_baseline_more_horiz_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />-->
 
     <TextView
         android:id="@+id/tags_tv"
@@ -38,15 +38,15 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
+        android:paddingEnd="18dp"
+        android:paddingRight="18dp"
         android:text="@string/loading"
         android:textSize="12sp"
-        android:paddingRight="18dp"
-        app:layout_constraintEnd_toStartOf="@+id/profile_image2"
+        app:layout_constraintEnd_toStartOf="@+id/timestamp_tv"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SmallSp"
-        android:paddingEnd="18dp" />
+        tools:ignore="SmallSp" />
 
     <TextView
         android:id="@+id/tags_tv7"
@@ -65,14 +65,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:gravity="end"
+        android:lineSpacingExtra="1dp"
         android:text="@string/loading"
         android:textSize="11sp"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toBottomOf="@+id/issue_location_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SmallSp" />
 
     <TextView
@@ -95,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="1dp"
         android:text="@string/loading"
         android:textSize="11sp"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
@@ -108,16 +109,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/loading"
         android:textColor="@color/slight_black"
-        android:textSize="18sp"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timestamp_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/issue_location_tv" />
 
     <com.borjabravo.readmoretextview.ReadMoreTextView
         android:id="@+id/body_tv"

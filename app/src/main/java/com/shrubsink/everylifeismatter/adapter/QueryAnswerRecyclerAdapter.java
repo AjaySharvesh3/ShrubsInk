@@ -128,20 +128,24 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                                 .document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (!task.getResult().exists()) {
-                                    Map<String, Object> likesMap = new HashMap<>();
-                                    likesMap.put("timestamp", FieldValue.serverTimestamp());
-                                    likesMap.put("user_id", currentUserId);
-                                    firebaseFirestore.collection(
-                                            "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                                            .document(currentUserId).set(likesMap);
-                                    firebaseFirestore.collection(
-                                            "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
-                                            .document(currentUserId).delete();
-                                } else {
-                                    firebaseFirestore.collection(
-                                            "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                                            .document(currentUserId).delete();
+                                try {
+                                    if (!task.getResult().exists()) {
+                                        Map<String, Object> likesMap = new HashMap<>();
+                                        likesMap.put("timestamp", FieldValue.serverTimestamp());
+                                        likesMap.put("user_id", currentUserId);
+                                        firebaseFirestore.collection(
+                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                                                .document(currentUserId).set(likesMap);
+                                        firebaseFirestore.collection(
+                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
+                                                .document(currentUserId).delete();
+                                    } else {
+                                        firebaseFirestore.collection(
+                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                                                .document(currentUserId).delete();
+                                    }
+                                } catch (Exception er) {
+                                    er.printStackTrace();
                                 }
                             }
                         });
@@ -208,20 +212,24 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                                 .document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (!task.getResult().exists()) {
-                                    Map<String, Object> likesMap = new HashMap<>();
-                                    likesMap.put("timestamp", FieldValue.serverTimestamp());
-                                    likesMap.put("user_id", currentUserId);
-                                    firebaseFirestore.collection(
-                                            "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
-                                            .document(currentUserId).set(likesMap);
-                                    firebaseFirestore.collection(
-                                            "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                                            .document(currentUserId).delete();
-                                } else {
-                                    firebaseFirestore.collection(
-                                            "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
-                                            .document(currentUserId).delete();
+                                try {
+                                    if (!task.getResult().exists()) {
+                                        Map<String, Object> likesMap = new HashMap<>();
+                                        likesMap.put("timestamp", FieldValue.serverTimestamp());
+                                        likesMap.put("user_id", currentUserId);
+                                        firebaseFirestore.collection(
+                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
+                                                .document(currentUserId).set(likesMap);
+                                        firebaseFirestore.collection(
+                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                                                .document(currentUserId).delete();
+                                    } else {
+                                        firebaseFirestore.collection(
+                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
+                                                .document(currentUserId).delete();
+                                    }
+                                } catch (Exception er) {
+                                    er.printStackTrace();
                                 }
                             }
                         });
@@ -322,7 +330,8 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
                             bottomSheetDialog.dismiss();
-                            Toast.makeText(context, "Thanks for reporting", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Thanks for reporting, you'll receive status of this report soon.",
+                                    Toast.LENGTH_LONG).show();
                         } else {
                             bottomSheetDialog.dismiss();
                             Toast.makeText(context, "Failed to report, check your internet", Toast.LENGTH_LONG).show();

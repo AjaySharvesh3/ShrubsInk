@@ -131,7 +131,7 @@ public class GoogleSignInActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             removeProgressDialog();
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            showToastMessage("Firebase Authentication failed:" + task.getException());
+                            showToastMessage("No internet connectivity found");
                         }
                     }
                 });

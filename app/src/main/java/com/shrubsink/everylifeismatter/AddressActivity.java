@@ -5,8 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -124,8 +127,6 @@ public class AddressActivity extends AppCompatActivity {
     public void postUserDataAndAddress() {
         showProgressDialog(this, "Loading...","Saving your address..",false);
 
-
-
         String addressLine = Objects.requireNonNull(mAddressLineTIL.getEditText()).getText().toString();
         String city = Objects.requireNonNull(mCityTIL.getEditText()).getText().toString();
         String pincode = Objects.requireNonNull(mPincodeTIL.getEditText()).getText().toString();
@@ -155,6 +156,7 @@ public class AddressActivity extends AppCompatActivity {
                         "You're done. Saved your address.",
                         Toast.LENGTH_LONG)
                         .show();*/
+
                 Snackbar.make(saveAddressBtn, "You're done. Saved your address.", Snackbar.LENGTH_LONG)
                         .show();
             }

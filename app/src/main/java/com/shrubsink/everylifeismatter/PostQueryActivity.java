@@ -104,11 +104,6 @@ public class PostQueryActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (postImageUri == null) {
-                    Toast.makeText(PostQueryActivity.this, "Please add picture for your issue", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
                 if (TextUtils.isEmpty(body)) {
                     mQueryBodyEt.setError("Body should not be empty");
                     Toast.makeText(PostQueryActivity.this, "Body should not be empty", Toast.LENGTH_LONG).show();
@@ -129,79 +124,111 @@ public class PostQueryActivity extends AppCompatActivity {
 
                 showProgressDialog(PostQueryActivity.this, "Publishing...", "Please wait until we publish your post", false);
 
-                final String randomName = UUID.randomUUID().toString();
-                File newImageFile = new File(Objects.requireNonNull(postImageUri.getPath()));
+                if (postImageUri != null) {
+                    final String randomName = UUID.randomUUID().toString();
+                    File newImageFile = new File(Objects.requireNonNull(postImageUri.getPath()));
 
-                try {
-                    compressedImageFile = new Compressor(PostQueryActivity.this)
-                            .setMaxHeight(720)
-                            .setMaxWidth(720)
-                            .setQuality(50)
-                            .compressToBitmap(newImageFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                compressedImageFile.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] imageData = baos.toByteArray();
-
-                UploadTask filePath = storageReference.child("post_query_images").child(current_user_id)
-                        .child(randomName + ".jpg").putBytes(imageData);
-                filePath.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        final Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
-                        uri.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                final String downloadUrl = uri.toString();
-
-                                File newThumbFile = new File(postImageUri.getPath());
-                                try {
-                                    compressedImageFile = new Compressor(PostQueryActivity.this)
-                                            .setMaxHeight(100)
-                                            .setMaxWidth(100)
-                                            .setQuality(1)
-                                            .compressToBitmap(newThumbFile);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                                Map<String, Object> postMap = new HashMap<>();
-                                postMap.put("image_url", downloadUrl);
-                                postMap.put("image_thumb", downloadUrl);
-                                postMap.put("title", title);
-                                postMap.put("body", body);
-                                postMap.put("issue_location", issueLocation);
-                                postMap.put("tags", tags);
-                                postMap.put("user_id", current_user_id);
-                                postMap.put("timestamp", FieldValue.serverTimestamp());
-                                postMap.put("credit", "0");
-
-                                firebaseFirestore.collection("query_posts").add(postMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                                        if (task.isSuccessful()) {
-                                            removeProgressDialog();
-                                            Toast.makeText(PostQueryActivity.this, "Published your query", Toast.LENGTH_LONG).show();
-                                            Intent mainIntent = new Intent(PostQueryActivity.this, MainActivity.class);
-                                            startActivity(mainIntent);
-                                            finish();
-                                        } else {
-                                            removeProgressDialog();
-                                            Toast.makeText(PostQueryActivity.this,
-                                                    "Something went wrong, check your network connection",
-                                                    Toast.LENGTH_LONG)
-                                                    .show();
-                                        }
-                                    }
-                                });
-                            }
-                        });
+                    try {
+                        compressedImageFile = new Compressor(PostQueryActivity.this)
+                                .setMaxHeight(720)
+                                .setMaxWidth(720)
+                                .setQuality(50)
+                                .compressToBitmap(newImageFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                });
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    compressedImageFile.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] imageData = baos.toByteArray();
+
+                    UploadTask filePath = storageReference.child("post_query_images").child(current_user_id)
+                            .child(randomName + ".jpg").putBytes(imageData);
+                    filePath.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            final Task<Uri> uri = taskSnapshot.getStorage().getDownloadUrl();
+                            uri.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    final String downloadUrl = uri.toString();
+
+                                    File newThumbFile = new File(postImageUri.getPath());
+                                    try {
+                                        compressedImageFile = new Compressor(PostQueryActivity.this)
+                                                .setMaxHeight(100)
+                                                .setMaxWidth(100)
+                                                .setQuality(1)
+                                                .compressToBitmap(newThumbFile);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    Map<String, Object> postMap = new HashMap<>();
+                                    postMap.put("image_url", downloadUrl);
+                                    postMap.put("image_thumb", downloadUrl);
+                                    postMap.put("title", title);
+                                    postMap.put("body", body);
+                                    postMap.put("issue_location", issueLocation);
+                                    postMap.put("tags", tags);
+                                    postMap.put("user_id", current_user_id);
+                                    postMap.put("timestamp", FieldValue.serverTimestamp());
+                                    postMap.put("credit", "0");
+
+                                    firebaseFirestore.collection("query_posts").add(postMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                                            if (task.isSuccessful()) {
+                                                removeProgressDialog();
+                                                Toast.makeText(PostQueryActivity.this, "Published your query", Toast.LENGTH_LONG).show();
+                                                Intent mainIntent = new Intent(PostQueryActivity.this, MainActivity.class);
+                                                startActivity(mainIntent);
+                                                finish();
+                                            } else {
+                                                removeProgressDialog();
+                                                Toast.makeText(PostQueryActivity.this,
+                                                        "Something went wrong, check your network connection",
+                                                        Toast.LENGTH_LONG)
+                                                        .show();
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    Map<String, Object> postMap = new HashMap<>();
+                    postMap.put("image_url", "");
+                    postMap.put("image_thumb", "");
+                    postMap.put("title", title);
+                    postMap.put("body", body);
+                    postMap.put("issue_location", issueLocation);
+                    postMap.put("tags", tags);
+                    postMap.put("user_id", current_user_id);
+                    postMap.put("timestamp", FieldValue.serverTimestamp());
+                    postMap.put("credit", "0");
+
+                    firebaseFirestore.collection("query_posts").add(postMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                            if (task.isSuccessful()) {
+                                removeProgressDialog();
+                                Toast.makeText(PostQueryActivity.this, "Published your query", Toast.LENGTH_LONG).show();
+                                Intent mainIntent = new Intent(PostQueryActivity.this, MainActivity.class);
+                                startActivity(mainIntent);
+                                finish();
+                            } else {
+                                removeProgressDialog();
+                                Toast.makeText(PostQueryActivity.this,
+                                        "Something went wrong, check your network connection",
+                                        Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        }
+                    });
+                }
             }
         });
     }

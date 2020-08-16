@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:letterSpacing="0.03"
-        android:text="@string/report_answer"
+        android:text="@string/report_question"
         android:textColor="@color/slight_black"
         android:textSize="15sp"
         android:textStyle="bold"
@@ -43,7 +43,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:paddingRight="30dp"
-        android:text="Are you sure to report this answer?"
+        android:text="Are you sure to report this question?"
         android:textColor="@color/slight_black"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp"
         android:paddingRight="30dp"
-        android:text="Make sure to report the answer, we won't let them know
+        android:text="Make sure to report the question, we won't let them know
 if you take any of these actions. If someone is in immediate issue,
 kindly send us a message which is listed below."
         android:textColor="@color/grey"
@@ -329,14 +329,5 @@ kindly send us a message which is listed below."
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--<include
-        android:id="@+id/thanks_layout"
-        layout="@layout/reported_answer_success_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

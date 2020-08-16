@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     ActivityFragment activityFragment;
     ProductListFragment productListFragment;
     ProfileFragment profileFragment;
+    NotificationFragment notificationFragment;
+    CreditsFragment creditsFragment;
     BottomNavigationView mBottomNavigationView;
     ExtendedFloatingActionButton mPostQueryFAB;
 
@@ -72,17 +76,32 @@ public class MainActivity extends AppCompatActivity {
         activityFragment = new ActivityFragment();
         productListFragment = new ProductListFragment();
         profileFragment = new ProfileFragment();
+        notificationFragment = new NotificationFragment();
+        creditsFragment = new CreditsFragment();
 
-       replaceFragment(queryFragment);
+        replaceFragment(queryFragment);
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.bottom_action_home : replaceFragment(queryFragment); return true;
-                    case R.id.bottom_action_product_list : replaceFragment(productListFragment); return true;
-                    case R.id.bottom_action_activity : replaceFragment(activityFragment); return true;
-                    case R.id.bottom_action_profile : replaceFragment(profileFragment); return true;
-                    default: return true;
+                    case R.id.bottom_action_home:
+                        replaceFragment(queryFragment);
+                        return true;
+                    /*case R.id.bottom_action_product_list : replaceFragment(productListFragment); return true;*/
+                    case R.id.bottom_action_activity:
+                        replaceFragment(activityFragment);
+                        return true;
+                    case R.id.bottom_action_rewards:
+                        replaceFragment(creditsFragment);
+                        return true;
+                    case R.id.bottom_action_notifications:
+                        replaceFragment(notificationFragment);
+                        return true;
+                    case R.id.bottom_action_profile:
+                        replaceFragment(profileFragment);
+                        return true;
+                    default:
+                        return true;
                 }
             }
         });
@@ -94,6 +113,39 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(postQueryIntent);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        try {
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser == null) {
+                Intent i = new Intent(MainActivity.this, GoogleSignInActivity.class);
+                startActivity(i);
+            } else {
+                String currentUserId = mFirebaseAuth.getCurrentUser().getUid();
+                mFirebaseFirestore.collection("user_bio").document(currentUserId)
+                        .collection("personal").document(currentUserId).get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    if (!task.getResult().exists()) {
+                                        ProfileFragment fragment = new ProfileFragment();
+                                        mBottomNavigationView.setSelectedItemId(R.id.bottom_action_profile);
+                                        replaceFragment(fragment);
+                                    }
+                                } else {
+                                    Toast.makeText(MainActivity.this, R.string.fui_no_internet, Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+            }
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
     }
 
     private void replaceFragment(Fragment fragment) {

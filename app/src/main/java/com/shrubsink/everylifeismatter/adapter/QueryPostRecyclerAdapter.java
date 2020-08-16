@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
@@ -25,10 +26,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
@@ -36,7 +42,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shrubsink.everylifeismatter.AnswerActivity;
+import com.shrubsink.everylifeismatter.EmergencyReportActivity;
 import com.shrubsink.everylifeismatter.MainActivity;
+import com.shrubsink.everylifeismatter.QueryFragment;
 import com.shrubsink.everylifeismatter.R;
 import com.shrubsink.everylifeismatter.model.QueryPost;
 
@@ -54,6 +62,7 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
     public Context context;
 
     private FragmentActivity myContext;
+    private QueryFragment thisFragment;
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
@@ -68,6 +77,7 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.query_list_item, parent, false);
         thisActivity = new MainActivity();
+        thisFragment = new QueryFragment();
         context = parent.getContext();
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -95,32 +105,41 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
 
         String image_url = query_list.get(position).getImage_url();
         String thumbUri = query_list.get(position).getImage_thumb();
-        holder.setBlogImage(image_url, thumbUri);
+        if (thumbUri != null && image_url != null) {
+            /*holder.queryPostImageView.setVisibility(View.VISIBLE);*/
+            holder.setQueryPostImage(image_url, thumbUri);
+        } else {
+           /* holder.queryPostImageView.setVisibility(View.INVISIBLE);*/
+        }
 
-        String user_id = query_list.get(position).getUser_id();
+        final String user_id = query_list.get(position).getUser_id();
+
         //User Data will be retrieved here...
         firebaseFirestore.collection("user_bio").document(user_id)
                 .collection("personal").document(user_id).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-                        if (task.isSuccessful()) {
-                            String userName = task.getResult().getString("name");
-                            String userImage = task.getResult().getString("profile");
-                            String shortBio = task.getResult().getString("short_bio");
-                            holder.setUserData(userName, shortBio, userImage);
-                        } else {
-                            Toast.makeText(thisActivity,
-                                    context.getString(R.string.check_internet_connection),
-                                    Toast.LENGTH_LONG).show();
+                        try {
+                            if (task.isSuccessful()) {
+                                String userName = task.getResult().getString("name");
+                                String userImage = task.getResult().getString("profile");
+                                String shortBio = task.getResult().getString("short_bio");
+                                holder.setUserData(userName, shortBio, userImage);
+                            } else {
+                                Toast.makeText(thisActivity,
+                                        context.getString(R.string.check_internet_connection),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } catch (Exception er) {
+                            er.printStackTrace();
                         }
                     }
                 });
 
         try {
             long millisecond = query_list.get(position).getTimestamp().getTime();
-            String dateString = DateFormat.format("dd MMM yyyy • hh:mm a", new Date(millisecond)).toString();
+            String dateString = DateFormat.format("dd MMM yyyy\nhh:mm a", new Date(millisecond)).toString();
             holder.setTime(dateString);
         } catch (Exception e) {
             Toast.makeText(context, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -176,15 +195,38 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
                                 .document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (!task.getResult().exists()) {
-                                    Map<String, Object> likesMap = new HashMap<>();
-                                    likesMap.put("timestamp", FieldValue.serverTimestamp());
-                                    likesMap.put("user_id", currentUserId);
-                                    firebaseFirestore.collection("query_posts/" + queryPostId + "/likes")
-                                            .document(currentUserId).set(likesMap);
-                                } else {
-                                    firebaseFirestore.collection("query_posts/" + queryPostId + "/likes")
-                                            .document(currentUserId).delete();
+                                try {
+                                    if (!task.getResult().exists()) {
+                                        Map<String, Object> likesMap = new HashMap<>();
+                                        likesMap.put("timestamp", FieldValue.serverTimestamp());
+                                        likesMap.put("user_id", currentUserId);
+                                        firebaseFirestore.collection("query_posts/" + queryPostId + "/likes")
+                                                .document(currentUserId).set(likesMap);
+
+                                        FirebaseUser acct = firebaseAuth.getCurrentUser();
+                                        Map<String, Object> notificationMessage = new HashMap<>();
+                                        notificationMessage.put("timestamp", FieldValue.serverTimestamp());
+                                        notificationMessage.put("message",  acct.getDisplayName() + " liked your question");
+                                        notificationMessage.put("from", currentUserId);
+
+                                        firebaseFirestore.collection("user_bio/" + user_id + "/notifications")
+                                                .add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+                                                try {
+                                                    Toast.makeText(thisActivity, "Like Notification Sent", Toast.LENGTH_LONG).show();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        firebaseFirestore.collection("query_posts/" + queryPostId + "/likes")
+                                                .document(currentUserId).delete();
+                                    }
+                                } catch (Exception e) {
+                                    Toast.makeText(thisActivity, "Check your internet connectivity", Toast.LENGTH_LONG).show();
+                                    e.printStackTrace();
                                 }
                             }
                         });
@@ -232,12 +274,37 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
         return query_list.size();
     }
 
+
+    public void reportQuestion(final BottomSheetDialog bottomSheetDialog,
+                               String queryPostId, String user_id, String message) {
+        Map<String, Object> reportAnswer = new HashMap<>();
+        reportAnswer.put("query_post_id", queryPostId);
+        reportAnswer.put("user_id", user_id);
+        reportAnswer.put("report_message", message);
+
+        firebaseFirestore.collection("reported_queries").add(reportAnswer)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if (task.isSuccessful()) {
+                            bottomSheetDialog.dismiss();
+                            Toast.makeText(context, "Thanks for reporting, you'll receive status of this report soon.",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            bottomSheetDialog.dismiss();
+                            Toast.makeText(context, "Failed to report, check your internet", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private View mView;
 
         private TextView titleView, bodyView, issueLocationView, tagsView;
-        private ImageView queryPostImageView;
+        private ImageView queryPostImageView, reportQuestionIv;
         private TextView queryPostDate;
 
         private TextView queryPostUserName;
@@ -260,6 +327,7 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
             queryPostLikeCount = mView.findViewById(R.id.like_count_tv);
             queryPostLikeLayout = mView.findViewById(R.id.like_layout);
             queryPostAnswersLayout = mView.findViewById(R.id.answer_layout);
+            /*reportQuestionIv = mView.findViewById(R.id.report_question_iv);*/
         }
 
         public void setTitleText(String titleText) {
@@ -284,7 +352,7 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
         }
 
         @SuppressLint("CheckResult")
-        public void setBlogImage(String downloadUri, String thumbUri) {
+        public void setQueryPostImage(String downloadUri, String thumbUri) {
 
             queryPostImageView = mView.findViewById(R.id.query_image_iv);
 

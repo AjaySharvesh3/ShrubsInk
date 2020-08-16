@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +41,7 @@ public class ProfileFragment extends Fragment {
     TextView mUsername;
     TextView mEmail;
     CircleImageView mProfilePicture;
-    Button mAddAddressBtn, mAddGeneralButton, mBackToHomeBtn;
+    Button mAddAddressBtn, mAddGeneralButton;
     ImageView mEditAddressIv, mEditGeneralIv, mCloseActivityIv;
     TextView mAddressLineTv, mCityPincodeTv, mStateCountryTv;
     TextView mShortBioTv, mDesignationTv, mPhoneTv, mGenderAgeTv;
@@ -68,7 +70,7 @@ public class ProfileFragment extends Fragment {
         mAddGeneralButton = view.findViewById(R.id.add_personal_btn);
         mEditAddressIv = view.findViewById(R.id.edit_address_iv);
         mEditGeneralIv = view.findViewById(R.id.edit_general_iv);
-       /* mBackToHomeBtn = view.findViewById(R.id.home_screen_btn);*/
+        /*mBackToHomeBtn = view.findViewById(R.id.back_to_home_btn);*/
 
         mAddressLineTv = view.findViewById(R.id.address_line_tv);
         mCityPincodeTv = view.findViewById(R.id.city_pincode_tv);
@@ -94,7 +96,7 @@ public class ProfileFragment extends Fragment {
         mUserId = Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid();
 
         FirebaseUser account = mFirebaseAuth.getCurrentUser();
-        if (account != null){
+        if (account != null) {
             String personImage = Objects.requireNonNull(account.getPhotoUrl()).toString();
             Glide.with(this).load(personImage).placeholder(R.drawable.profile_placeholder).into(mProfilePicture);
         }
@@ -111,37 +113,55 @@ public class ProfileFragment extends Fragment {
     }
 
     public void fetchAddress() {
-        DocumentReference mDocumentReference = mFirebaseFirestore
-                .collection("user_bio").document(mUserId).collection("address").document(mUserId);
-        mDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                removeProgressDialog();
-                mAddAddressBtn.setVisibility(View.GONE);
-                mEditAddressIv.setVisibility(View.VISIBLE);
-
-                mAddressLineTv.setText(value.getString("address_line"));
-                mCityPincodeTv.setText(value.getString("city") + ", " + value.getString("pincode"));
-                mStateCountryTv.setText(value.getString("state") + ", " + value.getString("country"));
-
-                address_line = value.getString("address_line");
-                city = value.getString("city");
-                pincode = value.getString("pincode");
-                state = value.getString("state");
-                country = value.getString("country");
-
-                if (value.getString("address_line") == null) {
+        try {
+            DocumentReference mDocumentReference = mFirebaseFirestore
+                    .collection("user_bio").document(mUserId).collection("address").document(mUserId);
+            mDocumentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                     removeProgressDialog();
-                    mAddAddressBtn.setVisibility(View.VISIBLE);
+                    mAddAddressBtn.setVisibility(View.GONE);
+                    mEditAddressIv.setVisibility(View.VISIBLE);
 
-                    mAddressLineTv.setVisibility(View.GONE);
-                    mCityPincodeTv.setVisibility(View.GONE);
-                    mStateCountryTv.setVisibility(View.GONE);
-                    mEditAddressIv.setVisibility(View.GONE);
+                    mAddressLineTv.setVisibility(View.VISIBLE);
+                    mCityPincodeTv.setVisibility(View.VISIBLE);
+                    mStateCountryTv.setVisibility(View.VISIBLE);
+                    mEditAddressIv.setVisibility(View.VISIBLE);
+                    /*mBackToHomeBtn.setVisibility(View.VISIBLE);*/
+
+                    /*goHome();*/
+
+                    try {
+                        assert value != null;
+                        mAddressLineTv.setText(value.getString("address_line"));
+                        mCityPincodeTv.setText(value.getString("city") + ", " + value.getString("pincode"));
+                        mStateCountryTv.setText(value.getString("state") + ", " + value.getString("country"));
+
+                        address_line = value.getString("address_line");
+                        city = value.getString("city");
+                        pincode = value.getString("pincode");
+                        state = value.getString("state");
+                        country = value.getString("country");
+
+                        if (value.getString("address_line") == null) {
+                            removeProgressDialog();
+                            mAddAddressBtn.setVisibility(View.VISIBLE);
+
+                            mAddressLineTv.setVisibility(View.GONE);
+                            mCityPincodeTv.setVisibility(View.GONE);
+                            mStateCountryTv.setVisibility(View.GONE);
+                            mEditAddressIv.setVisibility(View.GONE);
+                            /*mBackToHomeBtn.setVisibility(View.GONE);*/
+                        }
+                    } catch (Exception er) {
+                        er.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void fetchGeneral() {
@@ -156,31 +176,40 @@ public class ProfileFragment extends Fragment {
                     mAddGeneralButton.setVisibility(View.GONE);
                     mEditGeneralIv.setVisibility(View.VISIBLE);
 
+                    mShortBioTv.setVisibility(View.VISIBLE);
+                    mPhoneTv.setVisibility(View.VISIBLE);
+                    mDesignationTv.setVisibility(View.VISIBLE);
+                    mGenderAgeTv.setVisibility(View.VISIBLE);
+                    mEditGeneralIv.setVisibility(View.VISIBLE);
+
                     try {
                         assert value != null;
                         mShortBioTv.setText(value.getString("short_bio"));
                         mDesignationTv.setText(value.getString("designation"));
                         mPhoneTv.setText(value.getString("phone"));
                         mGenderAgeTv.setText(value.getString("age") + ", " + value.getString("gender"));
+
+
+                        phone = value.getString("phone");
+                        age = value.getString("age");
+                        gender = value.getString("gender");
+                        short_bio = value.getString("short_bio");
+                        designation = value.getString("designation");
+
+
+                        if (value.getString("phone") == null) {
+                            removeProgressDialog();
+                            mAddGeneralButton.setVisibility(View.VISIBLE);
+
+                            mShortBioTv.setVisibility(View.GONE);
+                            mPhoneTv.setVisibility(View.GONE);
+                            mDesignationTv.setVisibility(View.GONE);
+                            mGenderAgeTv.setVisibility(View.GONE);
+                            mEditGeneralIv.setVisibility(View.GONE);
+                        }
+
                     } catch (Exception er) {
                         er.printStackTrace();
-                    }
-
-                    phone = value.getString("phone");
-                    age = value.getString("age");
-                    gender = value.getString("gender");
-                    short_bio = value.getString("short_bio");
-                    designation = value.getString("designation");
-
-                    if (value.getString("phone") == null) {
-                        removeProgressDialog();
-                        mAddGeneralButton.setVisibility(View.VISIBLE);
-
-                        mShortBioTv.setVisibility(View.GONE);
-                        mPhoneTv.setVisibility(View.GONE);
-                        mDesignationTv.setVisibility(View.GONE);
-                        mGenderAgeTv.setVisibility(View.GONE);
-                        mEditGeneralIv.setVisibility(View.GONE);
                     }
                 }
             });
@@ -188,6 +217,24 @@ public class ProfileFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    /*public void goHome() {
+        mBackToHomeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new QueryFragment();
+                replaceFragment(fragment);
+            }
+        });
+    }*/
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.commit();
+    }
+
 
     public void addAddress() {
         mAddAddressBtn.setOnClickListener(new View.OnClickListener() {

@@ -93,4 +93,8 @@
     <string name="send_emergency_meesage_to_us">Send emergency meesage to us</string>
     <string name="back_to_home">Back to home</string>
     <string name="ask">Ask</string>
+    <string name="report_question">Report Question</string>
+    <string name="notifications">Notifications</string>
+    <string name="profile">Profile</string>
+    <string name="credits">Credits</string>
 </resources>

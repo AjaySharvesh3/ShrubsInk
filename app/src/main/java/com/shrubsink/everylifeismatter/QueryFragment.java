@@ -2,7 +2,10 @@ package com.shrubsink.everylifeismatter;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -10,6 +13,8 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +30,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -103,6 +110,12 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
         query_list_view.setAdapter(queryPostRecyclerAdapter);
         query_list_view.setHasFixedSize(true);
 
+        listQueries();
+
+        return view;
+    }
+
+    public void listQueries() {
         if (mFirebaseAuth.getCurrentUser() != null) {
             firebaseFirestore = FirebaseFirestore.getInstance();
             query_list_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -164,7 +177,6 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
                 }
             }).start();
         }
-        return view;
     }
 
     public void loadMoreQueries() {
@@ -210,7 +222,7 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-   /* private void goToProfile() {
+   /*private void goToProfile() {
         Intent profileActivity = new Intent(getActivity(), ProfileActivity.class);
         startActivity(profileActivity);
     }*/

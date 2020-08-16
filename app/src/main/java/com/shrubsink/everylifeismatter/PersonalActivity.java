@@ -83,7 +83,6 @@ public class PersonalActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseFirestore = FirebaseFirestore.getInstance();
 
-        fetchExistingPersonal();
         savePersonalBtn.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -91,6 +90,7 @@ public class PersonalActivity extends AppCompatActivity {
                 postPersonal();
             }
         });
+        fetchExistingPersonal();
     }
 
     public void fetchExistingPersonal() {
