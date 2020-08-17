@@ -50,7 +50,7 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
 
-    public QueryAnswerRecyclerAdapter(List<QueryAnswer> answerList, AnswerActivity answerActivity){
+    public QueryAnswerRecyclerAdapter(List<QueryAnswer> answerList, AnswerActivity answerActivity) {
         this.answerList = answerList;
         this.answerActivity = answerActivity;
     }
@@ -69,244 +69,279 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
         holder.setIsRecyclable(false);
 
         final String queryAnswerId = answerList.get(position).QueryAnswerId;
-        final String queryPostId = answerActivity.getIntent().getStringExtra("query_post_id");;
+        final String queryPostId = answerActivity.getIntent().getStringExtra("query_post_id");
+        ;
         final String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
         String answerMessage = answerList.get(position).getAnswer();
         final String user_id = answerList.get(position).getUser_id();
         holder.setComment_message(answerMessage);
 
-        //User Data will be retrieved here...
-        firebaseFirestore.collection("user_bio").document(user_id)
-                .collection("personal").document(user_id).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            String userName = task.getResult().getString("name");
-                            String userImage = task.getResult().getString("profile");
-                            /*String shortBio = task.getResult().getString("short_bio");*/
-                            holder.setUserData(userName, userImage);
-                        } else {
-                            Toast.makeText(answerActivity,
-                                    context.getString(R.string.check_internet_connection),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-        //Get UpVote
-        new Thread(new Runnable() {
-            public void run() {
-                firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                        .document(currentUserId)
-                        .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                            @Override
-                            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                                try {
-                                    if (documentSnapshot.exists()) {
-                                        holder.upVoteBtn.setImageDrawable(context.getDrawable(R.drawable.upvote_active));
-                                    } else {
-                                        holder.upVoteBtn.setImageDrawable(context.getDrawable(R.drawable.upvote));
-                                    }
-                                } catch (Exception er) {
-                                    er.printStackTrace();
-                                }
+        try {
+            //User Data will be retrieved here...
+            firebaseFirestore.collection("user_bio").document(user_id)
+                    .collection("personal").document(user_id).get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                String userName = task.getResult().getString("name");
+                                String userImage = task.getResult().getString("profile");
+                                /*String shortBio = task.getResult().getString("short_bio");*/
+                                holder.setUserData(userName, userImage);
+                            } else {
+                                Toast.makeText(answerActivity,
+                                        context.getString(R.string.check_internet_connection),
+                                        Toast.LENGTH_LONG).show();
                             }
-                        });
-            }
-        }).start();
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            //Get UpVote
+            new Thread(new Runnable() {
+                public void run() {
+                    firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                            .document(currentUserId)
+                            .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                                @Override
+                                public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                                    try {
+                                        if (documentSnapshot.exists()) {
+                                            holder.upVoteBtn.setImageDrawable(context.getDrawable(R.drawable.upvote_active));
+                                        } else {
+                                            holder.upVoteBtn.setImageDrawable(context.getDrawable(R.drawable.upvote));
+                                        }
+                                    } catch (Exception er) {
+                                        er.printStackTrace();
+                                    }
+                                }
+                            });
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         //UpVote Feature
-        new Thread(new Runnable() {
-            public void run() {
-                holder.upVoteLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                                .document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                try {
-                                    if (!task.getResult().exists()) {
-                                        Map<String, Object> likesMap = new HashMap<>();
-                                        likesMap.put("timestamp", FieldValue.serverTimestamp());
-                                        likesMap.put("user_id", currentUserId);
-                                        firebaseFirestore.collection(
-                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                                                .document(currentUserId).set(likesMap);
-                                        firebaseFirestore.collection(
-                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
-                                                .document(currentUserId).delete();
-                                    } else {
-                                        firebaseFirestore.collection(
-                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                                                .document(currentUserId).delete();
+        try {
+            new Thread(new Runnable() {
+                public void run() {
+                    holder.upVoteLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                                    .document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    try {
+                                        if (!task.getResult().exists()) {
+                                            Map<String, Object> likesMap = new HashMap<>();
+                                            likesMap.put("timestamp", FieldValue.serverTimestamp());
+                                            likesMap.put("user_id", currentUserId);
+                                            firebaseFirestore.collection(
+                                                    "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                                                    .document(currentUserId).set(likesMap);
+                                            firebaseFirestore.collection(
+                                                    "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
+                                                    .document(currentUserId).delete();
+                                        } else {
+                                            firebaseFirestore.collection(
+                                                    "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                                                    .document(currentUserId).delete();
+                                        }
+                                    } catch (Exception er) {
+                                        er.printStackTrace();
                                     }
-                                } catch (Exception er) {
-                                    er.printStackTrace();
                                 }
-                            }
-                        });
-                    }
-                });
-            }
-        }).start();
+                            });
+                        }
+                    });
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        //Get UpVote Count
-        new Thread(new Runnable() {
-            public void run() {
-                firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                            @Override
-                            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                                try {
-                                    if (!documentSnapshots.isEmpty()) {
-                                        int count = documentSnapshots.size();
-                                        Log.d("count", "" + count);
-                                        holder.updateVoteCount(count);
-                                    } else {
-                                        holder.updateVoteCount(0);
+        try {
+            //Get UpVote Count
+            new Thread(new Runnable() {
+                public void run() {
+                    firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                                    try {
+                                        if (!documentSnapshots.isEmpty()) {
+                                            int count = documentSnapshots.size();
+                                            Log.d("count", "" + count);
+                                            holder.updateVoteCount(count);
+                                        } else {
+                                            holder.updateVoteCount(0);
+                                        }
+                                    } catch (Exception er) {
+                                        er.printStackTrace();
                                     }
-                                } catch (Exception er) {
-                                    er.printStackTrace();
                                 }
-                            }
-                        });
-            }
-        }).start();
+                            });
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
-
-        //Get DownVote
-        new Thread(new Runnable() {
-            public void run() {
-                firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
-                        .document(currentUserId)
-                        .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                            @Override
-                            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                                try {
-                                    if (documentSnapshot.exists()) {
-                                        holder.downVoteBtn.setImageDrawable(context.getDrawable(R.drawable.downvote_active));
-                                    } else {
-                                        holder.downVoteBtn.setImageDrawable(context.getDrawable(R.drawable.downvote));
+        try {
+            //Get DownVote
+            new Thread(new Runnable() {
+                public void run() {
+                    firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
+                            .document(currentUserId)
+                            .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                                @Override
+                                public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                                    try {
+                                        if (documentSnapshot.exists()) {
+                                            holder.downVoteBtn.setImageDrawable(context.getDrawable(R.drawable.downvote_active));
+                                        } else {
+                                            holder.downVoteBtn.setImageDrawable(context.getDrawable(R.drawable.downvote));
+                                        }
+                                    } catch (Exception er) {
+                                        er.printStackTrace();
                                     }
-                                } catch (Exception er) {
-                                    er.printStackTrace();
                                 }
-                            }
-                        });
-            }
-        }).start();
+                            });
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        //DownVote Feature
-        new Thread(new Runnable() {
-            public void run() {
-                holder.downVoteLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
-                                .document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                try {
-                                    if (!task.getResult().exists()) {
-                                        Map<String, Object> likesMap = new HashMap<>();
-                                        likesMap.put("timestamp", FieldValue.serverTimestamp());
-                                        likesMap.put("user_id", currentUserId);
-                                        firebaseFirestore.collection(
-                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
-                                                .document(currentUserId).set(likesMap);
-                                        firebaseFirestore.collection(
-                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                                                .document(currentUserId).delete();
-                                    } else {
-                                        firebaseFirestore.collection(
-                                                "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
-                                                .document(currentUserId).delete();
+
+        try {
+            //DownVote Feature
+            new Thread(new Runnable() {
+                public void run() {
+                    holder.downVoteLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
+                                    .document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    try {
+                                        if (!task.getResult().exists()) {
+                                            Map<String, Object> likesMap = new HashMap<>();
+                                            likesMap.put("timestamp", FieldValue.serverTimestamp());
+                                            likesMap.put("user_id", currentUserId);
+                                            firebaseFirestore.collection(
+                                                    "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
+                                                    .document(currentUserId).set(likesMap);
+                                            firebaseFirestore.collection(
+                                                    "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                                                    .document(currentUserId).delete();
+                                        } else {
+                                            firebaseFirestore.collection(
+                                                    "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
+                                                    .document(currentUserId).delete();
+                                        }
+                                    } catch (Exception er) {
+                                        er.printStackTrace();
                                     }
-                                } catch (Exception er) {
-                                    er.printStackTrace();
                                 }
-                            }
-                        });
-                    }
-                });
-            }
-        }).start();
+                            });
+                        }
+                    });
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        //Get DownVote Count
-        new Thread(new Runnable() {
-            public void run() {
-                firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
-                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                            @Override
-                            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                                try {
-                                    if (!documentSnapshots.isEmpty()) {
-                                        int count = documentSnapshots.size();
-                                        holder.updateDownVoteCount(count);
-                                    } else {
-                                        holder.updateDownVoteCount(0);
+        try {
+            //Get DownVote Count
+            new Thread(new Runnable() {
+                public void run() {
+                    firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
+                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                                    try {
+                                        if (!documentSnapshots.isEmpty()) {
+                                            int count = documentSnapshots.size();
+                                            holder.updateDownVoteCount(count);
+                                        } else {
+                                            holder.updateDownVoteCount(0);
+                                        }
+                                    } catch (Exception er) {
+                                        er.printStackTrace();
                                     }
-                                } catch (Exception er) {
-                                    er.printStackTrace();
                                 }
-                            }
-                        });
-            }
-        }).start();
+                            });
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        holder.reportOptionIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
-                        answerActivity, R.style.BottomSheetDialogTheme
-                );
-                final View bottomSheetView = LayoutInflater.from(context.getApplicationContext())
-                        .inflate(
-                                R.layout.answer_activity_bottom_sheet,
-                                (LinearLayout) view.findViewById(R.id.bottom_sheet_container)
-                        );
-                bottomSheetView.findViewById(R.id.sexual_activity_layout).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Sexual activity");
-                    }
-                });
-                bottomSheetView.findViewById(R.id.scam_layout).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Scam or fraud");
-                    }
-                });
-                bottomSheetView.findViewById(R.id.hate_speech_layout).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Bullying or hate words or symbols");
-                    }
-                });
-                bottomSheetView.findViewById(R.id.irrelevant_layout).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Irrelevant or violent");
-                    }
-                });
-                bottomSheetView.findViewById(R.id.emergency_message_layout).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        bottomSheetDialog.dismiss();
-                        Intent emergencyActivity = new Intent(context, EmergencyReportActivity.class);
-                        context.startActivity(emergencyActivity);
-                    }
-                });
-                bottomSheetDialog.setContentView(bottomSheetView);
-                bottomSheetDialog.show();
-            }
-        });
+
+        try {
+            holder.reportOptionIv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                            answerActivity, R.style.BottomSheetDialogTheme
+                    );
+                    final View bottomSheetView = LayoutInflater.from(context.getApplicationContext())
+                            .inflate(
+                                    R.layout.answer_activity_bottom_sheet,
+                                    (LinearLayout) view.findViewById(R.id.bottom_sheet_container)
+                            );
+                    bottomSheetView.findViewById(R.id.sexual_activity_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Sexual activity");
+                        }
+                    });
+                    bottomSheetView.findViewById(R.id.scam_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Scam or fraud");
+                        }
+                    });
+                    bottomSheetView.findViewById(R.id.hate_speech_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Bullying or hate words or symbols");
+                        }
+                    });
+                    bottomSheetView.findViewById(R.id.irrelevant_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            reportAnswer(bottomSheetDialog, queryPostId, queryAnswerId, user_id, "Irrelevant or violent");
+                        }
+                    });
+                    bottomSheetView.findViewById(R.id.emergency_message_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            bottomSheetDialog.dismiss();
+                            Intent emergencyActivity = new Intent(context, EmergencyReportActivity.class);
+                            context.startActivity(emergencyActivity);
+                        }
+                    });
+                    bottomSheetDialog.setContentView(bottomSheetView);
+                    bottomSheetDialog.show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         try {
             long millisecond = answerList.get(position).getTimestamp().getTime();
@@ -342,7 +377,7 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
 
     @Override
     public int getItemCount() {
-        if(answerList != null) {
+        if (answerList != null) {
             return answerList.size();
         } else {
             return 0;
@@ -373,7 +408,7 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
             reportOptionIv = mView.findViewById(R.id.report_option_iv);
         }
 
-        public void setComment_message(String answer){
+        public void setComment_message(String answer) {
             answerContent = mView.findViewById(R.id.answer_content_tv);
             answerContent.setText(answer);
         }

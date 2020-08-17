@@ -97,4 +97,9 @@
     <string name="notifications">Notifications</string>
     <string name="profile">Profile</string>
     <string name="credits">Credits</string>
+    <string name="_1000_points">1000 Points</string>
+    <string name="your_current_credits">Your current credits</string>
+    <string name="credits_board">Credits Board</string>
+    <string name="posting_a_single_question">For posting each question</string>
+    <string name="posting_a_single_answer">For posting each answer</string>
 </resources>
