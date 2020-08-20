@@ -97,9 +97,19 @@
     <string name="notifications">Notifications</string>
     <string name="profile">Profile</string>
     <string name="credits">Credits</string>
-    <string name="_1000_points">1000 Points</string>
+    <string name="_1000_points">0 Credits</string>
     <string name="your_current_credits">Your current credits</string>
     <string name="credits_board">Credits Board</string>
     <string name="posting_a_single_question">For posting each question</string>
     <string name="posting_a_single_answer">For posting each answer</string>
+    <string name="how_are_credits_used">How are credits used?</string>
+    <string name="credis_usage">You can use your credits to get some amazing rewards, goodies or even saplings from us</string>
+    <string name="thousand_credits">• 1,000 Credits - ShrubsInk Suprise Goodies</string>
+    <string name="five_hundred_credits">• 500 Credits - Amazon Gift Card</string>
+    <string name="two_thousand_credits">Get Hired without interview from us for the role of ShrubsTechie (Customer Tech Care) with decent package in the industry</string>
+    <string name="ten_thousand_credits">• 10,000 Credits - Pick your favorite Shrubs</string>
+    <string name="five_thousand_credits">• 5,000 Credits - Pick your favorite Shrubs</string>
+    <string name="claim_my_credit">Claim my credit</string>
+    <string name="credit_note">Note\nIf we find your Question or your Answer seems spamming or related, your credits will be reduced, you\'ll be notified</string>
+    <string name="my_activities">My Activities</string>
 </resources>

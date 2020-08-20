@@ -6,19 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
-    android:background="@color/white"
+    android:background="@drawable/image_border"
     android:paddingBottom="12dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+    <ImageView
+        android:id="@+id/profile_image2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:src="@drawable/profile_placeholder"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tags_tv" />
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_baseline_create_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tags_tv"
@@ -31,8 +31,6 @@
         android:paddingRight="18dp"
         android:text="@string/loading"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/timestamp_tv"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SmallSp" />
@@ -50,49 +48,6 @@
         app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
 
     <TextView
-        android:id="@+id/timestamp_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:gravity="end"
-        android:lineSpacingExtra="1dp"
-        android:text="@string/loading"
-        android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SmallSp" />
-
-    <TextView
-        android:id="@+id/username_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/sf_pro_display"
-        android:text="@string/loading"
-        android:textColor="@color/slight_black"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toBottomOf="@+id/tags_tv" />
-
-    <TextView
-        android:id="@+id/issue_location_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="1dp"
-        android:text="@string/loading"
-        android:textSize="11sp"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toBottomOf="@+id/username_tv"
-        tools:ignore="SmallSp" />
-
-    <TextView
         android:id="@+id/title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,7 +62,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/issue_location_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/tags_tv" />
 
     <TextView
         android:id="@+id/body_tv"
@@ -128,7 +83,7 @@
     <ImageView
         android:id="@+id/query_image_iv"
         android:layout_width="match_parent"
-        android:layout_height="248dp"
+        android:layout_height="170dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
@@ -157,15 +112,6 @@
         app:layout_constraintTop_toBottomOf="@+id/query_image_iv"
         tools:ignore="UseCompoundDrawables">
 
-        <ImageView
-            android:id="@+id/likes_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="17dp"
-            android:contentDescription="@string/query_image"
-            android:src="@drawable/ic_baseline_favorite_border_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
-
         <TextView
             android:id="@+id/like_count_tv"
             android:layout_width="wrap_content"
@@ -183,26 +129,15 @@
         android:id="@+id/answer_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
         android:layout_marginTop="14dp"
         android:clickable="true"
         android:focusable="true"
-        android:padding="5dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:padding="5dp"
         app:layout_constraintStart_toEndOf="@+id/like_layout"
         app:layout_constraintTop_toBottomOf="@+id/query_image_iv"
         tools:ignore="UseCompoundDrawables">
-
-        <ImageView
-            android:id="@+id/answers_icon"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
-            android:contentDescription="@string/query_image"
-            android:src="@drawable/ic_baseline_create_24"
-            app:layout_constraintStart_toEndOf="@+id/like_layout"
-            app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
 
         <TextView
             android:id="@+id/answer_count_tv"
@@ -228,7 +163,5 @@
         android:src="@drawable/ic_outline_check_circle_24"
         app:layout_constraintEnd_toStartOf="@+id/tags_tv7"
         app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

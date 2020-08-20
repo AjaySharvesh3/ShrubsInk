@@ -3,6 +3,7 @@ package com.shrubsink.everylifeismatter;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,17 +11,23 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -28,6 +35,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shrubsink.everylifeismatter.adapter.QueryAnswerRecyclerAdapter;
 import com.shrubsink.everylifeismatter.model.QueryAnswer;
@@ -47,11 +55,6 @@ public class AnswerActivity extends AppCompatActivity {
 
     TextView titleView, bodyView, issueLocationView, tagsView;
     ImageView queryPostImageView;
-    /*TextView queryPostDate;*/
-
-    TextView queryPostUserName;
-    /*TextView queryPostUserShortBio;*/
-    CircleImageView queryPostUserImage;
 
     RecyclerView answerRecyclerView;
     QueryAnswerRecyclerAdapter queryAnswerRecyclerAdapter;
@@ -61,10 +64,12 @@ public class AnswerActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
 
     String queryPostId;
+    String postUserid;
     String currentUserId;
     String queryPostUserId;
 
     TextView noAnswerTv;
+    LinearLayout postAnswerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,16 +81,14 @@ public class AnswerActivity extends AppCompatActivity {
 
         currentUserId = firebaseAuth.getCurrentUser().getUid();
         queryPostId = getIntent().getStringExtra("query_post_id");
+        postUserid = getIntent().getStringExtra("user_id");
 
         titleView = findViewById(R.id.title_tv);
         bodyView = findViewById(R.id.body_tv);
         issueLocationView = findViewById(R.id.issue_location_tv);
         tagsView = findViewById(R.id.tags_tv);
         queryPostImageView = findViewById(R.id.query_image_iv);
-        /*queryPostDate = findViewById(R.id.timestamp_tv);*/
-        queryPostUserName = findViewById(R.id.username_tv);
-        /*queryPostUserShortBio = findViewById(R.id.short_bio_tv);*/
-        queryPostUserImage = findViewById(R.id.profile_image);
+        postAnswerLayout = findViewById(R.id.post_answer_layout);
 
         answerRecyclerView = findViewById(R.id.answer_list);
         postAnswerIv = findViewById(R.id.answer_post_btn);
@@ -125,12 +128,13 @@ public class AnswerActivity extends AppCompatActivity {
         postAnswerIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                postAnswerIv.setEnabled(false);
                 String answer = answerFieldEt.getText().toString();
                 if (!TextUtils.isEmpty(answer)) {
-                    Map<String, Object> answerMap = new HashMap<>();
+                    final Map<String, Object> answerMap = new HashMap<>();
                     answerMap.put("answer", answer);
                     answerMap.put("user_id", currentUserId);
-                    answerMap.put("credit", "0");
+                    answerMap.put("credits", 20);
                     answerMap.put("is_solved", false);
                     answerMap.put("timestamp", FieldValue.serverTimestamp());
 
@@ -138,8 +142,38 @@ public class AnswerActivity extends AppCompatActivity {
                             .add(answerMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentReference> task) {
+                            FirebaseUser acct = firebaseAuth.getCurrentUser();
+                            Map<String, Object> notificationMessage = new HashMap<>();
+                            notificationMessage.put("timestamp", FieldValue.serverTimestamp());
+                            notificationMessage.put("message", " answered your question");
+                            notificationMessage.put("user_name", acct.getDisplayName());
+                            notificationMessage.put("from", currentUserId);
+
+                            firebaseFirestore.collection("user_bio/" + postUserid + "/notifications/")
+                                    .add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    try {
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+
+                            firebaseFirestore.collection("user_bio/" + currentUserId + "/answer_list/")
+                                    .add(answerMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    try {
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+
                             if (task.isSuccessful()) {
                                 answerFieldEt.setText("");
+                                postAnswerIv.setEnabled(true);
                                 return;
                             }
 
@@ -155,6 +189,9 @@ public class AnswerActivity extends AppCompatActivity {
             }
         });
 
+        if (postUserid.equals(currentUserId)) {
+            postAnswerLayout.setVisibility(View.GONE);
+        }
     }
 
     public void fetchQueryPost() {
@@ -167,19 +204,11 @@ public class AnswerActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             String title = task.getResult().getString("title");
                             String body = task.getResult().getString("body");
-                            String issueLocation = task.getResult().getString("issue_location");
-                            String tags = task.getResult().getString("tags");
                             String imageUrl = task.getResult().getString("image_url");
                             queryPostUserId = task.getResult().getString("user_id");
 
-                            /*long seconds = (long) task.getResult().get("timestamp");
-                            String dateString = DateFormat.format("dd MMM yyyy\nhh:mm a", new Date(seconds)).toString();*/
-
                             titleView.setText(title);
                             bodyView.setText(body);
-                            issueLocationView.setText(issueLocation);
-                            tagsView.setText(tags);
-                            /*queryPostDate.setText("•  " + dateString);*/
 
                             RequestOptions requestOptions = new RequestOptions();
                             requestOptions.placeholder(R.drawable.ic_baseline_image_24);
@@ -194,18 +223,8 @@ public class AnswerActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             if (task.isSuccessful()) {
-                                                String name = task.getResult().getString("name");
-                                                /*String shortBio = task.getResult().getString("short_bio");*/
-                                                String profile = task.getResult().getString("profile");
-
-                                                queryPostUserName.setText(name);
-                                                /*queryPostUserShortBio.setText(shortBio);*/
-
                                                 RequestOptions requestOptions = new RequestOptions();
                                                 requestOptions.placeholder(R.drawable.ic_baseline_image_24);
-
-                                                Glide.with(getApplicationContext()).applyDefaultRequestOptions(requestOptions).load(profile)
-                                                        .into(queryPostUserImage);
                                             } else {
                                                 Toast.makeText(AnswerActivity.this,
                                                         R.string.check_internet_connection,

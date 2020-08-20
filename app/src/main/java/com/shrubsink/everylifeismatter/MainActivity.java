@@ -5,35 +5,26 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     NotificationFragment notificationFragment;
     CreditsFragment creditsFragment;
     BottomNavigationView mBottomNavigationView;
-    ExtendedFloatingActionButton mPostQueryFAB;
+    /*ExtendedFloatingActionButton mPostQueryFAB;*/
 
     FirebaseFirestore mFirebaseFirestore;
 
@@ -70,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseFirestore = FirebaseFirestore.getInstance();
 
         mBottomNavigationView = findViewById(R.id.mainBottomNav);
-        mPostQueryFAB = findViewById(R.id.post_query_fab);
+        /*mPostQueryFAB = findViewById(R.id.post_query_fab);*/
 
         queryFragment = new QueryFragment();
         activityFragment = new ActivityFragment();
@@ -87,10 +78,12 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.bottom_action_home:
                         replaceFragment(queryFragment);
                         return true;
-                    /*case R.id.bottom_action_product_list : replaceFragment(productListFragment); return true;*/
-                    case R.id.bottom_action_activity:
+                    /*case R.id.bottom_action_products:
+                        replaceFragment(productListFragment);
+                        return true;*/
+                    /*case R.id.bottom_action_activity:
                         replaceFragment(activityFragment);
-                        return true;
+                        return true;*/
                     case R.id.bottom_action_rewards:
                         replaceFragment(creditsFragment);
                         return true;
@@ -106,13 +99,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mPostQueryFAB.setOnClickListener(new View.OnClickListener() {
+        /*mPostQueryFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent postQueryIntent = new Intent(MainActivity.this, PostQueryActivity.class);
                 startActivity(postQueryIntent);
             }
-        });
+        });*/
     }
 
     @Override
@@ -151,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_container, fragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitNow();
     }
 
     @Override
@@ -167,7 +160,10 @@ public class MainActivity extends AppCompatActivity {
                 signOut();
                 break;
             }
-            case R.id.action_search: {
+            case R.id.action_post_query: {
+                Intent postQueryIntent = new Intent(MainActivity.this, PostQueryActivity.class);
+                startActivity(postQueryIntent);
+                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
                 /*signOut();*/
                 break;
             }

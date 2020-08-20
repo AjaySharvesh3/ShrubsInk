@@ -36,8 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="2dp"
         android:text="@string/loading"
         android:textColor="@color/slight_black"
         android:textSize="10sp"
@@ -50,11 +49,9 @@
         android:id="@+id/upvote_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="24dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/answer_content_tv">
 
@@ -62,9 +59,9 @@
             android:id="@+id/upvote_iv"
             android:layout_width="16dp"
             android:layout_height="16dp"
+            android:layout_marginTop="2dp"
             android:layout_marginBottom="12dp"
             android:padding="3dp"
-            android:layout_marginTop="2dp"
             android:src="@drawable/upvote"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,8 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toEndOf="@+id/upvote_layout"
         app:layout_constraintTop_toBottomOf="@+id/answer_content_tv">
@@ -124,30 +120,23 @@
     </LinearLayout>
 
 
-    <com.borjabravo.readmoretextview.ReadMoreTextView
+    <TextView
         android:id="@+id/answer_content_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:paddingEnd="32dp"
-        android:paddingRight="32dp"
         android:text="@string/loading_comment"
         android:textColor="@color/grey"
         android:textSize="12sp"
-        app:colorClickableText="@color/colorAccentBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/answer_timestamp_tv"
         app:layout_constraintVertical_bias="0.0"
-        app:trimCollapsedText="less"
-        app:trimExpandedText="more"
-        app:trimLines="2"
-        app:trimMode="trimModeLine"
         tools:ignore="RtlSymmetry" />
 
     <ImageView
@@ -159,6 +148,17 @@
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_baseline_more_horiz_24"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/is_solved_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_outline_check_circle_24"
+        app:layout_constraintEnd_toStartOf="@+id/report_option_iv"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 

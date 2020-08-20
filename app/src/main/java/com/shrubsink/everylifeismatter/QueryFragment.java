@@ -129,54 +129,59 @@ public class QueryFragment extends Fragment implements View.OnClickListener {
                 }
             });
 
-            new Thread(new Runnable() {
-                public void run() {
-                    /*shimmerLayout.startShimmerAnimation();*/
-                    Query firstQuery = firebaseFirestore.collection("query_posts")
-                            .orderBy("timestamp", Query.Direction.DESCENDING);
-                    firstQuery.addSnapshotListener(requireActivity(), new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                            try {
-                                if (!documentSnapshots.isEmpty()) {
-                                    if (isFirstPageFirstLoad) {
+            try {
+                new Thread(new Runnable() {
+                    public void run() {
+                        /*shimmerLayout.startShimmerAnimation();*/
+                        Query firstQuery = firebaseFirestore.collection("query_posts")
+                                .orderBy("timestamp", Query.Direction.DESCENDING);
+                        firstQuery.addSnapshotListener(requireActivity(), new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                                try {
+                                    if (!documentSnapshots.isEmpty()) {
+                                        if (isFirstPageFirstLoad) {
                                         /*shimmerLayout.stopShimmerAnimation();
                                         shimmerLayout.setVisibility(View.GONE);*/
-                                        lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
-                                        query_list.clear();
-                                    }
-                                    for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-                                        if (documentSnapshots != null) {
-                                            if (doc.getType() == DocumentChange.Type.ADDED) {
-                                                String queryPostPostId = doc.getDocument().getId();
-                                                QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostPostId);
-                                                if (isFirstPageFirstLoad) {
-                                                    /*shimmerLayout.stopShimmerAnimation();
-                                                    shimmerLayout.setVisibility(View.GONE);*/
-                                                    query_list.add(queryPost);
-                                                } else {
-                                                    /*shimmerLayout.stopShimmerAnimation();
-                                                    shimmerLayout.setVisibility(View.GONE);*/
-                                                    query_list.add(0, queryPost);
-                                                }
-                                            }
-                                            queryPostRecyclerAdapter.notifyDataSetChanged();
+                                            lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                                            query_list.clear();
                                         }
+                                        for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+                                            if (documentSnapshots != null) {
+                                                if (doc.getType() == DocumentChange.Type.ADDED) {
+                                                    String queryPostPostId = doc.getDocument().getId();
+                                                    QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostPostId);
+                                                    if (isFirstPageFirstLoad) {
+                                                    /*shimmerLayout.stopShimmerAnimation();
+                                                    shimmerLayout.setVisibility(View.GONE);*/
+                                                        query_list.add(queryPost);
+                                                    } else {
+                                                    /*shimmerLayout.stopShimmerAnimation();
+                                                    shimmerLayout.setVisibility(View.GONE);*/
+                                                        query_list.add(0, queryPost);
+                                                    }
+                                                }
+                                                queryPostRecyclerAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                        isFirstPageFirstLoad = false;
                                     }
-                                    isFirstPageFirstLoad = false;
-                                }
-                            } catch (Exception ex) {
+                                } catch (Exception ex) {
                                /* shimmerLayout.stopShimmerAnimation();
                                 shimmerLayout.setVisibility(View.GONE);*/
-                                Log.d("Error", "Error: " + ex);
+                                    Log.d("Error", "Error: " + ex);
+                                }
+
                             }
 
-                        }
-
-                    });
-                }
-            }).start();
+                        });
+                    }
+                }).start();
+            } catch(Exception er) {
+                er.printStackTrace();
+            }
         }
+
     }
 
     public void loadMoreQueries() {

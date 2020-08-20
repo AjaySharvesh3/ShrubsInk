@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:iconTint="@color/white"
     tools:context=".activity.MainActivity">
+    <item
+        android:id="@+id/action_my_activities"
+        android:title="@string/my_activities"
+        app:iconTint="@color/white"
+        app:showAsAction="never"
+        tools:ignore="UnusedAttribute" />
     <item
         android:id="@+id/action_sign_out"
         android:title="@string/logout"
         app:iconTint="@color/white"
         app:showAsAction="never"
         tools:ignore="UnusedAttribute" />
-
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_baseline_search_24"
+        android:id="@+id/action_post_query"
+        android:icon="@drawable/ic_baseline_create_24_white"
+        android:title="@string/post_query"
         app:showAsAction="ifRoom"
-        tools:ignore="UnusedAttribute"
-        android:title="@string/search" />
+        tools:ignore="UnusedAttribute" />
 </menu>
