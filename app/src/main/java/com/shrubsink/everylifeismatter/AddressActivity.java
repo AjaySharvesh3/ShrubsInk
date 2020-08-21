@@ -140,7 +140,8 @@ public class AddressActivity extends AppCompatActivity {
         }
 
         mUserId = Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid();
-        DocumentReference mDocumentreference = mFirebaseFirestore.collection("user_bio").document(mUserId).collection("address").document(mUserId);
+        DocumentReference mDocumentreference = mFirebaseFirestore.collection("user_bio")
+                .document(mUserId).collection("address").document(mUserId);
         Map<String, Object> user_bio = new HashMap<>();
         user_bio.put("address_line", addressLine);
         user_bio.put("city", city);

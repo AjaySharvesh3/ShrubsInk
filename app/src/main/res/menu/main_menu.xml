@@ -6,7 +6,7 @@
     tools:context=".activity.MainActivity">
     <item
         android:id="@+id/action_my_activities"
-        android:title="@string/my_activities"
+        android:title="@string/my_activity"
         app:iconTint="@color/white"
         app:showAsAction="never"
         tools:ignore="UnusedAttribute" />

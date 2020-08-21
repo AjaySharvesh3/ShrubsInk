@@ -11,21 +11,16 @@
         android:id="@+id/bottom_action_products"
         android:icon="@drawable/ic_baseline_dashboard_24"
         android:title="@string/products" />-->
-    <!--<item
-        android:id="@+id/bottom_action_activity"
-        android:icon="@drawable/ic_baseline_data_usage_24"
-        android:enabled="true"
-        android:title="@string/activity" />-->
     <item
         android:id="@+id/bottom_action_rewards"
         android:icon="@drawable/ic_baseline_card_giftcard_24"
         android:enabled="true"
         android:title="@string/credits" />
-    <item
+    <!--<item
         android:id="@+id/bottom_action_notifications"
         android:icon="@drawable/ic_baseline_notifications_24"
         android:enabled="true"
-        android:title="@string/notifications" />
+        android:title="@string/notifications" />-->
     <item
         android:id="@+id/bottom_action_profile"
         android:icon="@drawable/ic_baseline_person_24"

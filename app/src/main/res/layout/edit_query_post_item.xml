@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:layout_marginTop="8dp"
-    android:background="@drawable/image_border"
     android:paddingBottom="12dp">
 
     <ImageView
-        android:id="@+id/profile_image2"
+        android:id="@+id/edit_query_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -36,7 +36,21 @@
         tools:ignore="SmallSp" />
 
     <TextView
-        android:id="@+id/tags_tv7"
+        android:id="@+id/issue_location_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:paddingEnd="18dp"
+        android:paddingRight="18dp"
+        android:text="@string/loading"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tags_tv"
+        tools:ignore="SmallSp" />
+
+    <TextView
+        android:id="@+id/is_solved_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
@@ -52,17 +66,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:text="@string/loading"
         android:textColor="@color/slight_black"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tags_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/issue_location_tv" />
 
     <TextView
         android:id="@+id/body_tv"
@@ -153,7 +165,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/likes_icon4"
+        android:id="@+id/is_solved_query_item_iv"
         android:layout_width="17dp"
         android:layout_height="17dp"
         android:layout_marginTop="19dp"
@@ -161,7 +173,7 @@
         android:layout_marginRight="4dp"
         android:contentDescription="@string/query_image"
         android:src="@drawable/ic_outline_check_circle_24"
-        app:layout_constraintEnd_toStartOf="@+id/tags_tv7"
+        app:layout_constraintEnd_toStartOf="@+id/is_solved_tv"
         app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

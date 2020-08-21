@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mFirebaseAuth;
     GoogleSignInClient googleSignInClient;
     QueryFragment queryFragment;
-    ActivityFragment activityFragment;
     ProductListFragment productListFragment;
     ProfileFragment profileFragment;
     NotificationFragment notificationFragment;
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         /*mPostQueryFAB = findViewById(R.id.post_query_fab);*/
 
         queryFragment = new QueryFragment();
-        activityFragment = new ActivityFragment();
         productListFragment = new ProductListFragment();
         profileFragment = new ProfileFragment();
         notificationFragment = new NotificationFragment();
@@ -81,15 +79,12 @@ public class MainActivity extends AppCompatActivity {
                     /*case R.id.bottom_action_products:
                         replaceFragment(productListFragment);
                         return true;*/
-                    /*case R.id.bottom_action_activity:
-                        replaceFragment(activityFragment);
-                        return true;*/
                     case R.id.bottom_action_rewards:
                         replaceFragment(creditsFragment);
                         return true;
-                    case R.id.bottom_action_notifications:
+                    /*case R.id.bottom_action_notifications:
                         replaceFragment(notificationFragment);
-                        return true;
+                        return true;*/
                     case R.id.bottom_action_profile:
                         replaceFragment(profileFragment);
                         return true;
@@ -160,11 +155,16 @@ public class MainActivity extends AppCompatActivity {
                 signOut();
                 break;
             }
+            case R.id.action_my_activities: {
+                Intent myActivities = new Intent(MainActivity.this, MyActivitiesActivity.class);
+                startActivity(myActivities);
+                /*overridePendingTransition(R.anim.slide_out_up, R.anim.slide_in_up);*/
+                break;
+            }
             case R.id.action_post_query: {
                 Intent postQueryIntent = new Intent(MainActivity.this, PostQueryActivity.class);
                 startActivity(postQueryIntent);
-                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
-                /*signOut();*/
+                /*overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);*/
                 break;
             }
         }

@@ -112,4 +112,6 @@
     <string name="claim_my_credit">Claim my credit</string>
     <string name="credit_note">Note\nIf we find your Question or your Answer seems spamming or related, your credits will be reduced, you\'ll be notified</string>
     <string name="my_activities">My Activities</string>
+    <string name="loading_notification">Loading Notification..</string>
+    <string name="my_activity">My Activity</string>
 </resources>

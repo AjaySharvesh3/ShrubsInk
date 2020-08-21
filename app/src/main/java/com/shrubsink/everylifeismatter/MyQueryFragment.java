@@ -1,6 +1,7 @@
 package com.shrubsink.everylifeismatter;
 
 import android.app.ProgressDialog;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,9 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,9 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.shrubsink.everylifeismatter.adapter.NotificationAdapter;
+import com.shrubsink.everylifeismatter.adapter.MyQueryPostAdapter;
 import com.shrubsink.everylifeismatter.adapter.QueryPostRecyclerAdapter;
-import com.shrubsink.everylifeismatter.model.Notification;
 import com.shrubsink.everylifeismatter.model.QueryPost;
 
 import java.util.ArrayList;
@@ -35,49 +38,56 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.supercharge.shimmerlayout.ShimmerLayout;
 
 
-public class NotificationFragment extends Fragment {
+public class MyQueryFragment extends Fragment {
 
     FirebaseAuth mFirebaseAuth;
-    RecyclerView notificationRecyclerView;
-    List<Notification> notificationList;
-    static ProgressDialog mProgressDialog;
+    GoogleSignInClient googleSignInClient;
     String currentUserId;
+
+    private RecyclerView query_list_view;
+    private List<QueryPost> query_list;
+    static ProgressDialog mProgressDialog;
     private FirebaseFirestore firebaseFirestore;
-    private NotificationAdapter notificationAdapter;
+    private MyQueryPostAdapter myQueryPostAdapter;
     private DocumentSnapshot lastVisible;
     private Boolean isFirstPageFirstLoad = true;
-
     ShimmerLayout shimmerLayout;
 
-    public NotificationFragment() {
+
+    public MyQueryFragment() {
+        // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_notification, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_query, container, false);
 
+        /*shimmerLayout = view.findViewById(R.id.shimmer_layout);*/
+
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), GoogleSignInOptions.DEFAULT_SIGN_IN);
         mFirebaseAuth = FirebaseAuth.getInstance();
         currentUserId = mFirebaseAuth.getCurrentUser().getUid();
 
-        notificationList = new ArrayList<>();
-        notificationRecyclerView = view.findViewById(R.id.notification_list);
+        query_list = new ArrayList<>();
+        query_list_view = view.findViewById(R.id.query_list_view);
 
-        notificationAdapter = new NotificationAdapter(notificationList);
-        notificationRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        notificationRecyclerView.setAdapter(notificationAdapter);
-        notificationRecyclerView.setHasFixedSize(true);
+        myQueryPostAdapter = new MyQueryPostAdapter(query_list);
+        query_list_view.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        query_list_view.setAdapter(myQueryPostAdapter);
+        query_list_view.setHasFixedSize(true);
 
-        listNotifications();
+        listQueries();
 
         return view;
     }
 
-    public void listNotifications() {
+    public void listQueries() {
         if (mFirebaseAuth.getCurrentUser() != null) {
             firebaseFirestore = FirebaseFirestore.getInstance();
-            notificationRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            query_list_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
@@ -92,8 +102,9 @@ public class NotificationFragment extends Fragment {
                 new Thread(new Runnable() {
                     public void run() {
                         /*shimmerLayout.startShimmerAnimation();*/
-                        Query firstQuery = firebaseFirestore.collection("user_bio" + currentUserId + "notifications")
-                                .orderBy("timestamp", Query.Direction.DESCENDING);
+                        Query firstQuery = firebaseFirestore.collection("query_posts")
+                                .orderBy("timestamp", Query.Direction.DESCENDING)
+                                .whereEqualTo("user_id", currentUserId);
                         firstQuery.addSnapshotListener(requireActivity(), new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -102,27 +113,25 @@ public class NotificationFragment extends Fragment {
                                         if (isFirstPageFirstLoad) {
                                         /*shimmerLayout.stopShimmerAnimation();
                                         shimmerLayout.setVisibility(View.GONE);*/
-                                            Log.d("Notification", documentSnapshots+"");
                                             lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
-                                            notificationList.clear();
+                                            query_list.clear();
                                         }
                                         for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
                                             if (documentSnapshots != null) {
                                                 if (doc.getType() == DocumentChange.Type.ADDED) {
-                                                    String notificationId = doc.getDocument().getId();
-                                                    Notification notification =
-                                                            doc.getDocument().toObject(Notification.class).withId(notificationId);
+                                                    String queryPostPostId = doc.getDocument().getId();
+                                                    QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostPostId);
                                                     if (isFirstPageFirstLoad) {
                                                     /*shimmerLayout.stopShimmerAnimation();
                                                     shimmerLayout.setVisibility(View.GONE);*/
-                                                        notificationList.add(notification);
+                                                        query_list.add(queryPost);
                                                     } else {
                                                     /*shimmerLayout.stopShimmerAnimation();
                                                     shimmerLayout.setVisibility(View.GONE);*/
-                                                        notificationList.add(0, notification);
+                                                        query_list.add(0, queryPost);
                                                     }
                                                 }
-                                                notificationAdapter.notifyDataSetChanged();
+                                                myQueryPostAdapter.notifyDataSetChanged();
                                             }
                                         }
                                         isFirstPageFirstLoad = false;
@@ -142,13 +151,15 @@ public class NotificationFragment extends Fragment {
                 er.printStackTrace();
             }
         }
+
     }
 
     public void loadMoreQueries() {
         /*shimmerLayout.startShimmerAnimation();*/
         if (mFirebaseAuth.getCurrentUser() != null) {
-            Query nextQuery = firebaseFirestore.collection("user_bio" + currentUserId + "notifications")
+            Query nextQuery = firebaseFirestore.collection("query_posts")
                     .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .whereEqualTo("user_id", currentUserId)
                     .startAfter(lastVisible);
 
             nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
@@ -162,10 +173,10 @@ public class NotificationFragment extends Fragment {
                                     if (doc.getType() == DocumentChange.Type.ADDED) {
                                         /*shimmerLayout.stopShimmerAnimation();
                                         shimmerLayout.setVisibility(View.GONE);*/
-                                        String notificationID = doc.getDocument().getId();
-                                        Notification notification = doc.getDocument().toObject(Notification.class).withId(notificationID);
-                                        notificationList.add(notification);
-                                        notificationAdapter.notifyDataSetChanged();
+                                        String queryPostId = doc.getDocument().getId();
+                                        QueryPost queryPost = doc.getDocument().toObject(QueryPost.class).withId(queryPostId);
+                                        query_list.add(queryPost);
+                                        myQueryPostAdapter.notifyDataSetChanged();
                                     }
                                 }
                             }
