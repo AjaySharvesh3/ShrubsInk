@@ -77,6 +77,14 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
         final String queryAnswerId = answerList.get(position).QueryAnswerId;
         final String queryPostId = answerActivity.getIntent().getStringExtra("query_post_id");
         final String queryPostUserId = answerActivity.getIntent().getStringExtra("user_id");
+        final String title = answerActivity.getIntent().getStringExtra("title");
+        final String body = answerActivity.getIntent().getStringExtra("body");
+        final String tags = answerActivity.getIntent().getStringExtra("tags");
+        final String image_url = answerActivity.getIntent().getStringExtra("image_url");
+        final String image_thumb = answerActivity.getIntent().getStringExtra("image_thumb");
+        final String credits = answerActivity.getIntent().getStringExtra("credits");
+        final String is_solved = answerActivity.getIntent().getStringExtra("is_solved");
+        final String issue_location = answerActivity.getIntent().getStringExtra("issue_location");
         ;
         final String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
@@ -352,65 +360,86 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                 @Override
                 public void onClick(View view) {
                     if (currentUserId.equals(queryPostUserId)) {
-                        holder.isSolvedIv.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_check_circle_24));
                         firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/")
                                 .document(queryAnswerId)
                                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                                     @Override
                                     public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                                        if (Objects.equals(documentSnapshot.get("is_solved"), false)) {
-                                            Map<String, Object> answerMap = new HashMap<>();
-                                            answerMap.put("answer", documentSnapshot.getString("answer"));
-                                            answerMap.put("user_id", documentSnapshot.getString("user_id"));
-                                            answerMap.put("credits", 70);
-                                            answerMap.put("is_solved", true);
-                                            answerMap.put("timestamp", documentSnapshot.get("timestamp"));
+                                        try {
+                                            if (Objects.equals(documentSnapshot.get("is_solved"), false)) {
+                                                holder.isSolvedIv.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_check_circle_24));
+                                                Map<String, Object> answerMap = new HashMap<>();
+                                                answerMap.put("answer", documentSnapshot.getString("answer"));
+                                                answerMap.put("user_id", documentSnapshot.getString("user_id"));
+                                                answerMap.put("credits", 70);
+                                                answerMap.put("is_solved", true);
+                                                answerMap.put("timestamp", documentSnapshot.get("timestamp"));
 
-                                            DocumentReference mDocumentreference = firebaseFirestore
-                                                    .collection("query_posts").document(queryPostId)
-                                                    .collection("answers").document(queryAnswerId);
-                                            mDocumentreference.set(answerMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(context, "Failed", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
-
-                                            FirebaseUser acct = firebaseAuth.getCurrentUser();
-                                            Map<String, Object> notificationMessage = new HashMap<>();
-                                            notificationMessage.put("timestamp", FieldValue.serverTimestamp());
-                                            notificationMessage.put("message", " marked your answer as solved");
-                                            notificationMessage.put("user_name", acct.getDisplayName());
-                                            notificationMessage.put("from", currentUserId);
-
-                                            firebaseFirestore.collection("user_bio/" + user_id + "/notifications/")
-                                                    .add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                @Override
-                                                public void onSuccess(DocumentReference documentReference) {
-                                                    try {
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
+                                                DocumentReference mDocumentreference = firebaseFirestore
+                                                        .collection("query_posts").document(queryPostId)
+                                                        .collection("answers").document(queryAnswerId);
+                                                mDocumentreference.set(answerMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
                                                     }
-                                                }
-                                            });
-
-                                            firebaseFirestore.collection("user_bio/" + user_id + "/your_solutions/")
-                                                    .add(answerMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                @Override
-                                                public void onSuccess(DocumentReference documentReference) {
-                                                    try {
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(context, "Failed", Toast.LENGTH_LONG).show();
                                                     }
-                                                }
-                                            });
-                                        } else {
-                                            holder.isSolvedIv.setEnabled(false);
+                                                });
+
+                                                FirebaseUser acct = firebaseAuth.getCurrentUser();
+                                                Map<String, Object> notificationMessage = new HashMap<>();
+                                                notificationMessage.put("timestamp", FieldValue.serverTimestamp());
+                                                notificationMessage.put("message", " marked your answer as solved");
+                                                notificationMessage.put("user_name", acct.getDisplayName());
+                                                notificationMessage.put("from", currentUserId);
+
+                                                firebaseFirestore.collection("user_bio/" + user_id + "/notifications/")
+                                                        .add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        try {
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                });
+
+                                                firebaseFirestore.collection("user_bio/" + user_id + "/your_solutions/")
+                                                        .add(answerMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        try {
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                });
+
+
+                                                Map<String, Object> postMap = new HashMap<>();
+                                                postMap.put("title", title);
+                                                postMap.put("body", body);
+                                                postMap.put("tags", tags);
+                                                postMap.put("issue_location", issue_location);
+                                                postMap.put("image_thumb", image_thumb);
+                                                postMap.put("image_url", image_url);
+                                                postMap.put("credits", 10);
+                                                postMap.put("is_solved", true);
+                                                postMap.put("user_id", queryPostUserId);
+                                                postMap.put("timestamp", FieldValue.serverTimestamp());
+                                                firebaseFirestore
+                                                        .collection("query_posts/")
+                                                        .document(queryPostId)
+                                                        .update(postMap);
+                                            } else {
+                                                holder.isSolvedIv.setEnabled(false);
+                                            }
+                                        } catch (Exception er) {
+                                            er.printStackTrace();
                                         }
                                     }
                                 });
@@ -425,23 +454,21 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
             e.printStackTrace();
         }
 
-
-        /*try {
-            firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/")
-                    .document(queryAnswerId)
-                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                        @Override
-                        public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+        firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/")
+                .document(queryAnswerId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                    @Override
+                    public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                        try {
                             if (Objects.equals(documentSnapshot.get("is_solved"), true)) {
-
+                                holder.isSolvedIv.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_check_circle_24));
                             }
+                        } catch (Exception er) {
+                            er.printStackTrace();
                         }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
+                    }
+                });
 
         try {
             long millisecond = answerList.get(position).getTimestamp().getTime();

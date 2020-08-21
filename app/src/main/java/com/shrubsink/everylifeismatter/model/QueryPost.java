@@ -6,10 +6,13 @@ public class QueryPost extends com.shrubsink.everylifeismatter.model.QueryPostId
 
     public String user_id, image_url, title, body, issue_location, tags, image_thumb;
     public Date timestamp;
+    public int credits;
+    public Boolean is_solved;
 
     public QueryPost() {}
 
-    public QueryPost(String user_id, String image_url, String title, String body, String issue_location, String tags, String image_thumb, Date timestamp) {
+    public QueryPost(String user_id, String image_url, String title, String body, String issue_location, String tags,
+                     String image_thumb, Date timestamp, int credits, Boolean is_solved) {
         this.user_id = user_id;
         this.image_url = image_url;
         this.title = title;
@@ -18,6 +21,8 @@ public class QueryPost extends com.shrubsink.everylifeismatter.model.QueryPostId
         this.tags = tags;
         this.image_thumb = image_thumb;
         this.timestamp = timestamp;
+        this.credits = credits;
+        this.is_solved = is_solved;
     }
 
     public String getUser_id() {
@@ -82,5 +87,21 @@ public class QueryPost extends com.shrubsink.everylifeismatter.model.QueryPostId
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
+
+    public Boolean getIs_solved() {
+        return is_solved;
+    }
+
+    public void setIs_solved(Boolean is_solved) {
+        this.is_solved = is_solved;
     }
 }

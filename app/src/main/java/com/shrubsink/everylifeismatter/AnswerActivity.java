@@ -55,6 +55,7 @@ public class AnswerActivity extends AppCompatActivity {
 
     TextView titleView, bodyView, issueLocationView, tagsView;
     ImageView queryPostImageView;
+    ImageView isQuerySolvedIv;
 
     RecyclerView answerRecyclerView;
     QueryAnswerRecyclerAdapter queryAnswerRecyclerAdapter;
@@ -89,6 +90,7 @@ public class AnswerActivity extends AppCompatActivity {
         tagsView = findViewById(R.id.tags_tv);
         queryPostImageView = findViewById(R.id.query_image_iv);
         postAnswerLayout = findViewById(R.id.post_answer_layout);
+        isQuerySolvedIv = findViewById(R.id.is_query_solved_iv);
 
         answerRecyclerView = findViewById(R.id.answer_list);
         postAnswerIv = findViewById(R.id.answer_post_btn);
@@ -205,10 +207,17 @@ public class AnswerActivity extends AppCompatActivity {
                             String title = task.getResult().getString("title");
                             String body = task.getResult().getString("body");
                             String imageUrl = task.getResult().getString("image_url");
+                            Boolean isSolved = task.getResult().getBoolean("is_solved");
                             queryPostUserId = task.getResult().getString("user_id");
 
                             titleView.setText(title);
                             bodyView.setText(body);
+
+                            if (isSolved.equals(true)) {
+                                isQuerySolvedIv.setImageDrawable(getApplication().getDrawable(R.drawable.ic_baseline_check_circle_24));
+                            } else {
+                                isQuerySolvedIv.setImageDrawable(getApplication().getDrawable(R.drawable.ic_outline_check_circle_24_white));
+                            }
 
                             RequestOptions requestOptions = new RequestOptions();
                             requestOptions.placeholder(R.drawable.ic_baseline_image_24);

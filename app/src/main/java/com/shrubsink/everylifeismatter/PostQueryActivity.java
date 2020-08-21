@@ -173,7 +173,8 @@ public class PostQueryActivity extends AppCompatActivity {
                                     postMap.put("tags", tags);
                                     postMap.put("user_id", current_user_id);
                                     postMap.put("timestamp", FieldValue.serverTimestamp());
-                                    postMap.put("credit", 10);
+                                    postMap.put("credits", 10);
+                                    postMap.put("is_solved", false);
 
                                     firebaseFirestore.collection("query_posts").add(postMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                         @Override

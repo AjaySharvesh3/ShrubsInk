@@ -14,8 +14,7 @@
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:src="@drawable/profile_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tags_tv" />
@@ -38,7 +37,7 @@
         tools:ignore="SmallSp" />
 
     <TextView
-        android:id="@+id/tags_tv7"
+        android:id="@+id/is_solved_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
@@ -70,8 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="@font/sf_pro_display"
         android:text="@string/loading"
         android:textColor="@color/slight_black"
@@ -218,7 +216,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/likes_icon4"
+        android:id="@+id/is_solved_query_item_iv"
         android:layout_width="17dp"
         android:layout_height="17dp"
         android:layout_marginTop="19dp"
@@ -226,7 +224,7 @@
         android:layout_marginRight="4dp"
         android:contentDescription="@string/query_image"
         android:src="@drawable/ic_outline_check_circle_24"
-        app:layout_constraintEnd_toStartOf="@+id/tags_tv7"
+        app:layout_constraintEnd_toStartOf="@+id/is_solved_tv"
         app:layout_constraintTop_toBottomOf="@+id/query_image_iv" />
 
 

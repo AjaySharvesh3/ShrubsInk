@@ -86,27 +86,31 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
         return new ViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
 
         final String queryPostId = query_list.get(position).QueryPostId;
+        final int credits = query_list.get(position).getCredits();
+        final Boolean is_solved = query_list.get(position).getIs_solved();
+        final String issue_location = query_list.get(position).getIssue_location();
         final String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
-        String title = query_list.get(position).getTitle();
+        final String title = query_list.get(position).getTitle();
         holder.setTitleText(title);
 
-        String body = query_list.get(position).getBody();
+        final String body = query_list.get(position).getBody();
         holder.setBodyText(body);
 
-        String issueLocation = query_list.get(position).getIssue_location();
+        final String issueLocation = query_list.get(position).getIssue_location();
         holder.setIssueLocationText(issueLocation);
 
-        String tags = query_list.get(position).getTags();
+        final String tags = query_list.get(position).getTags();
         holder.setTagsText(tags);
 
-        String image_url = query_list.get(position).getImage_url();
-        String thumbUri = query_list.get(position).getImage_thumb();
+        final String image_url = query_list.get(position).getImage_url();
+        final String thumbUri = query_list.get(position).getImage_thumb();
         if (thumbUri != null && image_url != null) {
             /*holder.queryPostImageView.setVisibility(View.VISIBLE);*/
             holder.setQueryPostImage(image_url, thumbUri);
@@ -270,9 +274,26 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
                 Intent answerIntent = new Intent(context, AnswerActivity.class);
                 answerIntent.putExtra("query_post_id", queryPostId);
                 answerIntent.putExtra("user_id", user_id);
+                answerIntent.putExtra("title", title);
+                answerIntent.putExtra("body", body);
+                answerIntent.putExtra("tags", tags);
+                answerIntent.putExtra("image_url", image_url);
+                answerIntent.putExtra("image_thumb", thumbUri);
+                answerIntent.putExtra("credits", credits);
+                answerIntent.putExtra("is_solved", is_solved);
+                answerIntent.putExtra("issue_location", issue_location);
                 context.startActivity(answerIntent);
             }
         });
+
+
+        if (is_solved.equals(true)) {
+            holder.isSolvedQueryItemIv.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_check_circle_24));
+            holder.isSolvedTv.setText("Solution Found");
+        } else {
+            holder.isSolvedQueryItemIv.setImageDrawable(context.getDrawable(R.drawable.ic_outline_check_circle_24));
+            holder.isSolvedTv.setText("Not yet solved");
+        }
     }
 
 
@@ -295,6 +316,8 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
         private LinearLayout queryPostLikeLayout, queryPostAnswersLayout;
         private TextView queryPostLikeCount;
         private TextView queryPostAnswersCount;
+        private TextView isSolvedTv;
+        private ImageView isSolvedQueryItemIv;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -303,6 +326,8 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
             queryPostLikeCount = mView.findViewById(R.id.like_count_tv);
             queryPostLikeLayout = mView.findViewById(R.id.like_layout);
             queryPostAnswersLayout = mView.findViewById(R.id.answer_layout);
+            isSolvedTv = mView.findViewById(R.id.is_solved_tv);
+            isSolvedQueryItemIv = mView.findViewById(R.id.is_solved_query_item_iv);
         }
 
         public void setTitleText(String titleText) {
