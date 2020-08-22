@@ -5,16 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:padding="12dp"
-    android:orientation="horizontal"
+    android:paddingTop="12dp"
     android:background="@color/white">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/notification_profile"
         android:layout_width="38dp"
         android:layout_height="38dp"
-        android:layout_gravity="center"
+
+        android:layout_marginStart="12dp"
         android:src="@drawable/profile_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +22,6 @@
         android:id="@+id/notification_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_marginStart="12dp"
         android:paddingEnd="12dp"
         android:text="@string/loading_notification"
@@ -32,20 +30,33 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/notification_profile"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.06999999"
         tools:ignore="RtlSymmetry" />
 
     <TextView
         android:id="@+id/notification_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|end"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="12dp"
         android:gravity="right"
         android:text="@string/loading"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/notification_profile"
+        app:layout_constraintTop_toBottomOf="@+id/notification_message"
+        app:layout_constraintVertical_bias="0.100000024"
         tools:ignore="RtlHardcoded,SmallSp" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/grey"
+        android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notification_timestamp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

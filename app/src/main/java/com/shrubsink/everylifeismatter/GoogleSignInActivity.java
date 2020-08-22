@@ -9,8 +9,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -40,11 +44,38 @@ public class GoogleSignInActivity extends AppCompatActivity {
     GoogleSignInClient googleSignInClient;
     FirebaseAuth firebaseAuth;
     static ProgressDialog mProgressDialog;
+    TextView tncTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_sign_in);
+
+        tncTv = findViewById(R.id.tnc);
+        String tnc = "By continuing, you agree that you have read and accept our Terms and Conditions and Privacy Policy";
+        SpannableString spannableString = new SpannableString(tnc);
+
+        ClickableSpan tncCS = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                Intent tncIntent = new Intent(GoogleSignInActivity.this, TermsAndConditionsActivity.class);
+                startActivity(tncIntent);
+            }
+        };
+
+        ClickableSpan ppCS = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                Toast.makeText(GoogleSignInActivity.this, "PP", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        spannableString.setSpan(tncCS, 59, 79, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(ppCS, 84, 98, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        tncTv.setText(spannableString);
+        tncTv.setMovementMethod(LinkMovementMethod.getInstance());
+
 
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(new View.OnClickListener() {

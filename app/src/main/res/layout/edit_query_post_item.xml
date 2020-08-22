@@ -9,7 +9,7 @@
     android:layout_marginTop="8dp"
     android:paddingBottom="12dp">
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/edit_query_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_baseline_create_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />-->
 
     <TextView
         android:id="@+id/tags_tv"
@@ -40,7 +40,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="2dp"
         android:paddingEnd="18dp"
         android:paddingRight="18dp"
         android:text="@string/loading"
@@ -66,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
         android:text="@string/loading"
         android:textColor="@color/slight_black"

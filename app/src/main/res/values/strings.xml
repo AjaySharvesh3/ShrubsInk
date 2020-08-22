@@ -3,7 +3,7 @@
     <string name="shrubslink">ShrubsInk</string>
     <string name="_1_tree_oxygen_for_you">1 Tree = Oxygen for YOU</string>
     <string name="don_t_travel_to_deserted_future">Don\'t travel to deserted future</string>
-    <string name="tnc">By continuing, you agree that you have read and accept our TnCs and Privacy Policy</string>
+    <string name="tnc">By continuing, you agree that you have read and accept our Terms and Conditions and Privacy Policy</string>
     <string name="profile_settings">Profile Settings</string>
     <string name="email">sample@gmail.com</string>
     <string name="username">Arul Mozhi S</string>
@@ -98,7 +98,7 @@
     <string name="profile">Profile</string>
     <string name="credits">Credits</string>
     <string name="_1000_points">0 Credits</string>
-    <string name="your_current_credits">Your current credits</string>
+    <string name="your_current_credits">Your current total credits</string>
     <string name="credits_board">Credits Board</string>
     <string name="posting_a_single_question">For posting each question</string>
     <string name="posting_a_single_answer">For posting each answer</string>
@@ -110,8 +110,12 @@
     <string name="ten_thousand_credits">• 10,000 Credits - Pick your favorite Shrubs</string>
     <string name="five_thousand_credits">• 5,000 Credits - Pick your favorite Shrubs</string>
     <string name="claim_my_credit">Claim my credit</string>
-    <string name="credit_note">Note\nIf we find your Question or your Answer seems spamming or related, your credits will be reduced, you\'ll be notified</string>
+    <string name="credit_note">Note, if we find your Question or your Answer violates Code of Conduct, your
+        credits will be reduced, you\'ll be notified accordingly</string>
     <string name="my_activities">My Activities</string>
     <string name="loading_notification">Loading Notification..</string>
     <string name="my_activity">My Activity</string>
+    <string name="clear_all">CLEAR ALL</string>
+    <string name="inbox">Inbox</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
 </resources>

@@ -89,7 +89,7 @@ public class MyAnswerAdapter extends RecyclerView.Adapter<MyAnswerAdapter.ViewHo
         final String issue_location = myActivitiesActivity.getIntent().getStringExtra("issue_location");*/
         final String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
-        String answerMessage = answerList.get(position).getAnswer();
+        final String answerMessage = answerList.get(position).getAnswer();
         final String user_id = answerList.get(position).getUser_id();
         holder.setComment_message(answerMessage);
 
@@ -124,13 +124,16 @@ public class MyAnswerAdapter extends RecyclerView.Adapter<MyAnswerAdapter.ViewHo
             e.printStackTrace();
         }
 
-        holder.editAnswerIv.setOnClickListener(new View.OnClickListener() {
+        /*holder.editAnswerIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(myActivitiesActivity, AnswerActivity.class);
-                view.getContext().startActivity(i);
+                *//*holder.editAnswerLayout.setVisibility(View.VISIBLE);*//*
+                *//*holder.answerFieldEt.setText(answerMessage);*//*
+                *//*Toast.makeText(myActivitiesActivity, answerMessage + " ", Toast.LENGTH_LONG).show();*//*
+                Log.d("messageeeee", answerMessage + "");
+                holder.answerFieldEt.setText(answerMessage);
             }
-        });
+        });*/
     }
 
 
@@ -150,13 +153,18 @@ public class MyAnswerAdapter extends RecyclerView.Adapter<MyAnswerAdapter.ViewHo
         public TextView username, answerDate;
         public ImageView userImage;
         public ImageView editAnswerIv;
+       /* public LinearLayout editAnswerLayout;
+        public ImageView editAnswerBtn;
+        public EditText answerFieldEt;*/
 
 
         public ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
-
-            editAnswerIv = itemView.findViewById(R.id.edit_answer_iv);
+            /*editAnswerIv = itemView.findViewById(R.id.edit_answer_iv);*/
+            /*editAnswerLayout = itemView.findViewById(R.id.edit_answer_layout);
+            editAnswerBtn = itemView.findViewById(R.id.edit_answer_btn);
+            answerFieldEt = itemView.findViewById(R.id.edit_answer_field);*/
         }
 
         public void setComment_message(String answer) {

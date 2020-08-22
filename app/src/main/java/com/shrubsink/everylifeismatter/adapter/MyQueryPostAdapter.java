@@ -35,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shrubsink.everylifeismatter.AnswerActivity;
+import com.shrubsink.everylifeismatter.EditPostQueryActivity;
 import com.shrubsink.everylifeismatter.MainActivity;
 import com.shrubsink.everylifeismatter.PostQueryActivity;
 import com.shrubsink.everylifeismatter.QueryFragment;
@@ -183,10 +184,10 @@ public class MyQueryPostAdapter extends RecyclerView.Adapter<MyQueryPostAdapter.
         }).start();
 
 
-        holder.editQueryIv.setOnClickListener(new View.OnClickListener() {
+        /*holder.editQueryIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent postQuery = new Intent(context, PostQueryActivity.class);
+                Intent postQuery = new Intent(context, EditPostQueryActivity.class);
                 postQuery.putExtra("query_post_id", queryPostId);
                 postQuery.putExtra("user_id", user_id);
                 postQuery.putExtra("title", title);
@@ -199,7 +200,7 @@ public class MyQueryPostAdapter extends RecyclerView.Adapter<MyQueryPostAdapter.
                 postQuery.putExtra("issue_location", issue_location);
                 context.startActivity(postQuery);
             }
-        });
+        });*/
 
 
         if (is_solved.equals(true)) {
@@ -229,7 +230,7 @@ public class MyQueryPostAdapter extends RecyclerView.Adapter<MyQueryPostAdapter.
         
         TextView queryPostLikeCount;
         TextView queryPostAnswersCount;
-        ImageView editQueryIv;
+        /*ImageView editQueryIv;*/
 
         private TextView isSolvedTv;
         private ImageView isSolvedQueryItemIv;
@@ -238,7 +239,7 @@ public class MyQueryPostAdapter extends RecyclerView.Adapter<MyQueryPostAdapter.
             super(itemView);
             mView = itemView;
             queryPostLikeCount = mView.findViewById(R.id.like_count_tv);
-            editQueryIv = mView.findViewById(R.id.edit_query_iv);
+            /*editQueryIv = mView.findViewById(R.id.edit_query_iv);*/
             isSolvedTv = mView.findViewById(R.id.is_solved_tv);
             isSolvedQueryItemIv = mView.findViewById(R.id.is_solved_query_item_iv);
         }

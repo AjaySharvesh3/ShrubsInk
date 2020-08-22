@@ -13,9 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
-        android:layout_marginBottom="70dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        android:layout_marginBottom="68dp"
+        app:layout_constraintBottom_toTopOf="@+id/tnc"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
@@ -72,25 +73,25 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tnc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="36dp"
+        android:fontFamily="@font/sf_pro_text"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="@string/tnc"
+        android:textColor="@color/grey"
+        android:lineSpacingExtra="3dp"
         android:textSize="11sp"
-        android:fontFamily="@font/sf_pro_display"
-        android:textColor="#707070"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center"
+        app:layout_constraintHorizontal_bias="0.718"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="RtlSymmetry,SmallSp"
-        android:paddingStart="10dp" />
+        tools:ignore="RtlSymmetry,SmallSp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

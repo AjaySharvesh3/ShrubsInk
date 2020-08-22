@@ -18,7 +18,7 @@
         tools:ignore="UnusedAttribute" />
     <item
         android:id="@+id/action_post_query"
-        android:icon="@drawable/ic_baseline_create_24_white"
+        android:icon="@drawable/create_outline"
         android:title="@string/post_query"
         app:showAsAction="ifRoom"
         tools:ignore="UnusedAttribute" />

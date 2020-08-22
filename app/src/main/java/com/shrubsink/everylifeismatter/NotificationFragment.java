@@ -1,5 +1,6 @@
 package com.shrubsink.everylifeismatter;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +26,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shrubsink.everylifeismatter.adapter.NotificationAdapter;
+import com.shrubsink.everylifeismatter.adapter.QueryAnswerRecyclerAdapter;
 import com.shrubsink.everylifeismatter.adapter.QueryPostRecyclerAdapter;
 import com.shrubsink.everylifeismatter.model.Notification;
+import com.shrubsink.everylifeismatter.model.QueryAnswer;
 import com.shrubsink.everylifeismatter.model.QueryPost;
 
 import java.util.ArrayList;
@@ -44,8 +48,7 @@ public class NotificationFragment extends Fragment {
     String currentUserId;
     private FirebaseFirestore firebaseFirestore;
     private NotificationAdapter notificationAdapter;
-    private DocumentSnapshot lastVisible;
-    private Boolean isFirstPageFirstLoad = true;
+    private ImageView noNotificationIv;
 
     ShimmerLayout shimmerLayout;
 
@@ -59,122 +62,74 @@ public class NotificationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
         currentUserId = mFirebaseAuth.getCurrentUser().getUid();
 
-        notificationList = new ArrayList<>();
         notificationRecyclerView = view.findViewById(R.id.notification_list);
+        noNotificationIv = view.findViewById(R.id.no_notification_iv);
 
-        notificationAdapter = new NotificationAdapter(notificationList);
-        notificationRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        notificationRecyclerView.setAdapter(notificationAdapter);
+        notificationList = new ArrayList<>();
+        notificationAdapter = new NotificationAdapter(notificationList, this);
         notificationRecyclerView.setHasFixedSize(true);
+        notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        notificationRecyclerView.setAdapter(notificationAdapter);
 
-        listNotifications();
+        Log.d("notificationsssss", "yessssssssssss");
+
+        firebaseFirestore.collection("user_bio/" + currentUserId + "/notifications")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                        try {
+                            if (!documentSnapshots.isEmpty()) {
+                                noNotificationIv.setVisibility(View.GONE);
+                                for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+                                    if (doc.getType() == DocumentChange.Type.ADDED) {
+                                        String notificationId = doc.getDocument().getId();
+                                        Notification notification = doc.getDocument().toObject(Notification.class).withId(notificationId);
+                                        Log.d("notificationsssss", notification + "");
+                                        notificationList.add(notification);
+                                        Log.d("notificationsssssSS", notificationList + "");
+                                        notificationAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                                Log.d("NOTIFY", notificationList + "");
+                            } else {
+                                noNotificationIv.setVisibility(View.VISIBLE);
+                            }
+                        } catch (Exception er) {
+                            er.printStackTrace();
+                        }
+                    }
+                });
 
         return view;
     }
 
-    public void listNotifications() {
-        if (mFirebaseAuth.getCurrentUser() != null) {
-            firebaseFirestore = FirebaseFirestore.getInstance();
-            notificationRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    Boolean reachedBottom = !recyclerView.canScrollVertically(1);
-                    if (reachedBottom) {
-                        loadMoreQueries();
-                    }
-                }
-            });
+    public void clearAll() {
+        /*firebaseFirestore.collection("user_bio/" + currentUserId + "/notifications/")
+                .whereEqualTo("user_id", currentUserId)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @SuppressLint({"SetTextI18n", "ResourceAsColor"})
+                    @Override
+                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                        try {
+                            if (!documentSnapshots.isEmpty()) {
+                                clearAllNotificationTv.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        clearAllNotificationTv.setEnabled(true);
 
-            try {
-                new Thread(new Runnable() {
-                    public void run() {
-                        /*shimmerLayout.startShimmerAnimation();*/
-                        Query firstQuery = firebaseFirestore.collection("user_bio" + currentUserId + "notifications")
-                                .orderBy("timestamp", Query.Direction.DESCENDING);
-                        firstQuery.addSnapshotListener(requireActivity(), new EventListener<QuerySnapshot>() {
-                            @Override
-                            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                                try {
-                                    if (!documentSnapshots.isEmpty()) {
-                                        if (isFirstPageFirstLoad) {
-                                        /*shimmerLayout.stopShimmerAnimation();
-                                        shimmerLayout.setVisibility(View.GONE);*/
-                                            Log.d("Notification", documentSnapshots+"");
-                                            lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
-                                            notificationList.clear();
-                                        }
-                                        for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-                                            if (documentSnapshots != null) {
-                                                if (doc.getType() == DocumentChange.Type.ADDED) {
-                                                    String notificationId = doc.getDocument().getId();
-                                                    Notification notification =
-                                                            doc.getDocument().toObject(Notification.class).withId(notificationId);
-                                                    if (isFirstPageFirstLoad) {
-                                                    /*shimmerLayout.stopShimmerAnimation();
-                                                    shimmerLayout.setVisibility(View.GONE);*/
-                                                        notificationList.add(notification);
-                                                    } else {
-                                                    /*shimmerLayout.stopShimmerAnimation();
-                                                    shimmerLayout.setVisibility(View.GONE);*/
-                                                        notificationList.add(0, notification);
-                                                    }
-                                                }
-                                                notificationAdapter.notifyDataSetChanged();
-                                            }
-                                        }
-                                        isFirstPageFirstLoad = false;
                                     }
-                                } catch (Exception ex) {
-                               /* shimmerLayout.stopShimmerAnimation();
-                                shimmerLayout.setVisibility(View.GONE);*/
-                                    Log.d("Error", "Error: " + ex);
-                                }
-
+                                });
+                            } else {
+                                clearAllNotificationTv.setEnabled(false);
+                                clearAllNotificationTv.setTextColor(R.color.grey);
                             }
-
-                        });
-                    }
-                }).start();
-            } catch(Exception er) {
-                er.printStackTrace();
-            }
-        }
-    }
-
-    public void loadMoreQueries() {
-        /*shimmerLayout.startShimmerAnimation();*/
-        if (mFirebaseAuth.getCurrentUser() != null) {
-            Query nextQuery = firebaseFirestore.collection("user_bio" + currentUserId + "notifications")
-                    .orderBy("timestamp", Query.Direction.DESCENDING)
-                    .startAfter(lastVisible);
-
-            nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                    try {
-                        if (!documentSnapshots.isEmpty()) {
-                            lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
-                            for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-                                if (documentSnapshots != null) {
-                                    if (doc.getType() == DocumentChange.Type.ADDED) {
-                                        /*shimmerLayout.stopShimmerAnimation();
-                                        shimmerLayout.setVisibility(View.GONE);*/
-                                        String notificationID = doc.getDocument().getId();
-                                        Notification notification = doc.getDocument().toObject(Notification.class).withId(notificationID);
-                                        notificationList.add(notification);
-                                        notificationAdapter.notifyDataSetChanged();
-                                    }
-                                }
-                            }
+                        } catch (Exception ex) {
+                            Log.d("Logout Error", "Error: " + ex);
                         }
-                    } catch (Exception ex) {
-                        Log.d("Logout Error", "Error: " + ex);
                     }
-                }
-            });
-        }
+                });*/
     }
 }

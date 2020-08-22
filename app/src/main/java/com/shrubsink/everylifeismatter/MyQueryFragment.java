@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -47,6 +48,7 @@ public class MyQueryFragment extends Fragment {
     private RecyclerView query_list_view;
     private List<QueryPost> query_list;
     static ProgressDialog mProgressDialog;
+    ImageView noDataFoundIv;
     private FirebaseFirestore firebaseFirestore;
     private MyQueryPostAdapter myQueryPostAdapter;
     private DocumentSnapshot lastVisible;
@@ -73,6 +75,7 @@ public class MyQueryFragment extends Fragment {
 
         query_list = new ArrayList<>();
         query_list_view = view.findViewById(R.id.query_list_view);
+        noDataFoundIv = view.findViewById(R.id.no_data_found_iv);
 
         myQueryPostAdapter = new MyQueryPostAdapter(query_list);
         query_list_view.setLayoutManager(new LinearLayoutManager(container.getContext()));
@@ -110,6 +113,7 @@ public class MyQueryFragment extends Fragment {
                             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                                 try {
                                     if (!documentSnapshots.isEmpty()) {
+                                        noDataFoundIv.setVisibility(View.GONE);
                                         if (isFirstPageFirstLoad) {
                                         /*shimmerLayout.stopShimmerAnimation();
                                         shimmerLayout.setVisibility(View.GONE);*/
@@ -135,6 +139,8 @@ public class MyQueryFragment extends Fragment {
                                             }
                                         }
                                         isFirstPageFirstLoad = false;
+                                    } else {
+                                        noDataFoundIv.setVisibility(View.VISIBLE);
                                     }
                                 } catch (Exception ex) {
                                /* shimmerLayout.stopShimmerAnimation();
@@ -170,6 +176,7 @@ public class MyQueryFragment extends Fragment {
                             lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
                             for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
                                 if (documentSnapshots != null) {
+                                    noDataFoundIv.setVisibility(View.GONE);
                                     if (doc.getType() == DocumentChange.Type.ADDED) {
                                         /*shimmerLayout.stopShimmerAnimation();
                                         shimmerLayout.setVisibility(View.GONE);*/
@@ -180,6 +187,8 @@ public class MyQueryFragment extends Fragment {
                                     }
                                 }
                             }
+                        } else {
+                            noDataFoundIv.setVisibility(View.VISIBLE);
                         }
                     } catch (Exception ex) {
                         Log.d("Logout Error", "Error: " + ex);

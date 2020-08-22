@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,6 +28,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
@@ -56,6 +59,7 @@ public class AnswerActivity extends AppCompatActivity {
     TextView titleView, bodyView, issueLocationView, tagsView;
     ImageView queryPostImageView;
     ImageView isQuerySolvedIv;
+    ImageView reportQuestionIv;
 
     RecyclerView answerRecyclerView;
     QueryAnswerRecyclerAdapter queryAnswerRecyclerAdapter;
@@ -69,7 +73,7 @@ public class AnswerActivity extends AppCompatActivity {
     String currentUserId;
     String queryPostUserId;
 
-    TextView noAnswerTv;
+    ImageView noAnswerIv;
     LinearLayout postAnswerLayout;
 
     @Override
@@ -91,12 +95,13 @@ public class AnswerActivity extends AppCompatActivity {
         queryPostImageView = findViewById(R.id.query_image_iv);
         postAnswerLayout = findViewById(R.id.post_answer_layout);
         isQuerySolvedIv = findViewById(R.id.is_query_solved_iv);
+        reportQuestionIv = findViewById(R.id.report_question_iv);
 
         answerRecyclerView = findViewById(R.id.answer_list);
         postAnswerIv = findViewById(R.id.answer_post_btn);
         answerFieldEt = findViewById(R.id.answer_field);
 
-        noAnswerTv = findViewById(R.id.no_answer_tv);
+        noAnswerIv = findViewById(R.id.no_answer_iv);
 
         fetchQueryPost();
 
@@ -112,7 +117,7 @@ public class AnswerActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                         if (!documentSnapshots.isEmpty()) {
-                            noAnswerTv.setVisibility(View.GONE);
+                            noAnswerIv.setVisibility(View.GONE);
                             for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
                                 if (doc.getType() == DocumentChange.Type.ADDED) {
                                     String answerId = doc.getDocument().getId();
@@ -122,7 +127,7 @@ public class AnswerActivity extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            noAnswerTv.setVisibility(View.VISIBLE);
+                            noAnswerIv.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -147,7 +152,7 @@ public class AnswerActivity extends AppCompatActivity {
                             FirebaseUser acct = firebaseAuth.getCurrentUser();
                             Map<String, Object> notificationMessage = new HashMap<>();
                             notificationMessage.put("timestamp", FieldValue.serverTimestamp());
-                            notificationMessage.put("message", " answered your question");
+                            notificationMessage.put("message", "Answered your question");
                             notificationMessage.put("user_name", acct.getDisplayName());
                             notificationMessage.put("from", currentUserId);
 
@@ -194,6 +199,58 @@ public class AnswerActivity extends AppCompatActivity {
         if (postUserid.equals(currentUserId)) {
             postAnswerLayout.setVisibility(View.GONE);
         }
+
+        try {
+            reportQuestionIv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                            AnswerActivity.this, R.style.BottomSheetDialogTheme
+                    );
+                    final View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                            .inflate(
+                                    R.layout.report_query_bottom_sheet,
+                                    (LinearLayout) view.findViewById(R.id.bottom_sheet_container)
+                            );
+                    bottomSheetView.findViewById(R.id.sexual_activity_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            reportAnswer(bottomSheetDialog, queryPostId, postUserid, "Sexual activity");
+                        }
+                    });
+                    bottomSheetView.findViewById(R.id.scam_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            reportAnswer(bottomSheetDialog, queryPostId, postUserid, "Scam or fraud");
+                        }
+                    });
+                    bottomSheetView.findViewById(R.id.hate_speech_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            reportAnswer(bottomSheetDialog, queryPostId, postUserid, "Bullying or hate words or symbols");
+                        }
+                    });
+                    bottomSheetView.findViewById(R.id.irrelevant_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            reportAnswer(bottomSheetDialog, queryPostId, postUserid, "Irrelevant or violent");
+                        }
+                    });
+                    bottomSheetView.findViewById(R.id.emergency_message_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            bottomSheetDialog.dismiss();
+                            Intent emergencyActivity = new Intent(AnswerActivity.this, EmergencyReportActivity.class);
+                            startActivity(emergencyActivity);
+                        }
+                    });
+                    bottomSheetDialog.setContentView(bottomSheetView);
+                    bottomSheetDialog.show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void fetchQueryPost() {
@@ -214,9 +271,13 @@ public class AnswerActivity extends AppCompatActivity {
                             bodyView.setText(body);
 
                             if (isSolved.equals(true)) {
-                                isQuerySolvedIv.setImageDrawable(getApplication().getDrawable(R.drawable.ic_baseline_check_circle_24));
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    isQuerySolvedIv.setImageDrawable(getApplication().getDrawable(R.drawable.ic_baseline_check_circle_24));
+                                }
                             } else {
-                                isQuerySolvedIv.setImageDrawable(getApplication().getDrawable(R.drawable.ic_outline_check_circle_24_white));
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    isQuerySolvedIv.setImageDrawable(getApplication().getDrawable(R.drawable.ic_outline_check_circle_24_white));
+                                }
                             }
 
                             RequestOptions requestOptions = new RequestOptions();
@@ -245,6 +306,29 @@ public class AnswerActivity extends AppCompatActivity {
                             Toast.makeText(AnswerActivity.this,
                                     R.string.check_internet_connection,
                                     Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    public void reportAnswer(final BottomSheetDialog bottomSheetDialog,
+                             String queryPostId, String user_id, String message) {
+        Map<String, Object> reportAnswer = new HashMap<>();
+        reportAnswer.put("query_post_id", queryPostId);
+        reportAnswer.put("user_id", user_id);
+        reportAnswer.put("report_message", message);
+
+        firebaseFirestore.collection("reported_query_posts").add(reportAnswer)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if (task.isSuccessful()) {
+                            bottomSheetDialog.dismiss();
+                            Toast.makeText(AnswerActivity.this, "Thanks for reporting, you'll receive status of this report soon.",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            bottomSheetDialog.dismiss();
+                            Toast.makeText(AnswerActivity.this, "Failed to report, check your internet", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

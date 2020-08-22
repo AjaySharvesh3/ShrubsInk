@@ -190,7 +190,7 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
                     public void onClick(View v) {
                         if (user_id.equals(currentUserId)) {
                             holder.queryPostLikeLayout.setEnabled(false);
-                            Snackbar.make(holder.queryPostLikeLayout, "Sorry! You're allowed to like your own query", Snackbar.LENGTH_LONG)
+                            Snackbar.make(holder.queryPostLikeLayout, "Sorry! You're not allowed to like your own query", Snackbar.LENGTH_LONG)
                                     .show();
                         } else {
                             firebaseFirestore.collection("query_posts/" + queryPostId + "/likes")
@@ -208,7 +208,7 @@ public class QueryPostRecyclerAdapter extends RecyclerView.Adapter<QueryPostRecy
                                             FirebaseUser acct = firebaseAuth.getCurrentUser();
                                             Map<String, Object> notificationMessage = new HashMap<>();
                                             notificationMessage.put("timestamp", FieldValue.serverTimestamp());
-                                            notificationMessage.put("message", " liked your question");
+                                            notificationMessage.put("message", "Liked your question");
                                             notificationMessage.put("user_name", acct.getDisplayName());
                                             notificationMessage.put("from", currentUserId);
                                             try {

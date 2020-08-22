@@ -82,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.bottom_action_rewards:
                         replaceFragment(creditsFragment);
                         return true;
-                    /*case R.id.bottom_action_notifications:
+                    case R.id.bottom_action_notifications:
                         replaceFragment(notificationFragment);
-                        return true;*/
+                        return true;
                     case R.id.bottom_action_profile:
                         replaceFragment(profileFragment);
                         return true;

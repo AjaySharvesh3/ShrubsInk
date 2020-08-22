@@ -14,9 +14,13 @@
         android:roundIcon="@mipmap/shrubslink"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MyActivitiesActivity"
+        <activity android:name=".TermsAndConditionsActivity"></activity>
+        <activity android:name=".CodeOfConductActivity" />
+        <activity android:name=".EditPostQueryActivity" />
+        <activity
+            android:name=".MyActivitiesActivity"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".EmergencyReportActivity"
             android:screenOrientation="portrait" />

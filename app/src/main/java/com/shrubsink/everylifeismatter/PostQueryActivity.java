@@ -94,7 +94,10 @@ public class PostQueryActivity extends AppCompatActivity {
         });
 
         postQuery();
-        fetchQuery();
+
+        /*if (!TextUtils.isEmpty(mQueryTitleEt.getText().toString())) {
+            fetchQuery();
+        }*/
     }
 
     public void postQuery() {

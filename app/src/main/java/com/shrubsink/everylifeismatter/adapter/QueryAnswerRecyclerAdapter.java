@@ -99,15 +99,19 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                String userName = task.getResult().getString("name");
-                                String userImage = task.getResult().getString("profile");
-                                /*String shortBio = task.getResult().getString("short_bio");*/
-                                holder.setUserData(userName, userImage);
-                            } else {
-                                Toast.makeText(answerActivity,
-                                        context.getString(R.string.check_internet_connection),
-                                        Toast.LENGTH_LONG).show();
+                            try {
+                                if (task.isSuccessful()) {
+                                    String userName = task.getResult().getString("name");
+                                    String userImage = task.getResult().getString("profile");
+                                    /*String shortBio = task.getResult().getString("short_bio");*/
+                                    holder.setUserData(userName, userImage);
+                                } else {
+                                    Toast.makeText(answerActivity,
+                                            context.getString(R.string.check_internet_connection),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     });
@@ -145,40 +149,36 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
 
         //UpVote Feature
         try {
-            new Thread(new Runnable() {
-                public void run() {
-                    holder.upVoteLayout.setOnClickListener(new View.OnClickListener() {
+            holder.upVoteLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                            .document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
-                        public void onClick(View v) {
-                            firebaseFirestore.collection("query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                                    .document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    try {
-                                        if (!task.getResult().exists()) {
-                                            Map<String, Object> likesMap = new HashMap<>();
-                                            likesMap.put("timestamp", FieldValue.serverTimestamp());
-                                            likesMap.put("user_id", currentUserId);
-                                            firebaseFirestore.collection(
-                                                    "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                                                    .document(currentUserId).set(likesMap);
-                                            firebaseFirestore.collection(
-                                                    "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
-                                                    .document(currentUserId).delete();
-                                        } else {
-                                            firebaseFirestore.collection(
-                                                    "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
-                                                    .document(currentUserId).delete();
-                                        }
-                                    } catch (Exception er) {
-                                        er.printStackTrace();
-                                    }
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            try {
+                                if (!task.getResult().exists()) {
+                                    Map<String, Object> likesMap = new HashMap<>();
+                                    likesMap.put("timestamp", FieldValue.serverTimestamp());
+                                    likesMap.put("user_id", currentUserId);
+                                    firebaseFirestore.collection(
+                                            "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                                            .document(currentUserId).set(likesMap);
+                                    firebaseFirestore.collection(
+                                            "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/downvotes")
+                                            .document(currentUserId).delete();
+                                } else {
+                                    firebaseFirestore.collection(
+                                            "query_posts/" + queryPostId + "/answers/" + queryAnswerId + "/upvotes")
+                                            .document(currentUserId).delete();
                                 }
-                            });
+                            } catch (Exception er) {
+                                er.printStackTrace();
+                            }
                         }
                     });
                 }
-            }).start();
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -393,7 +393,7 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
                                                 FirebaseUser acct = firebaseAuth.getCurrentUser();
                                                 Map<String, Object> notificationMessage = new HashMap<>();
                                                 notificationMessage.put("timestamp", FieldValue.serverTimestamp());
-                                                notificationMessage.put("message", " marked your answer as solved");
+                                                notificationMessage.put("message", "Marked your answer as solved");
                                                 notificationMessage.put("user_name", acct.getDisplayName());
                                                 notificationMessage.put("from", currentUserId);
 
@@ -548,13 +548,17 @@ public class QueryAnswerRecyclerAdapter extends RecyclerView.Adapter<QueryAnswer
 
         @SuppressLint("CheckResult")
         public void setUserData(String name, String image) {
-            username = mView.findViewById(R.id.answer_username_tv);
-            userImage = mView.findViewById(R.id.profile_image);
-            username.setText(name);
+            try {
+                username = mView.findViewById(R.id.answer_username_tv);
+                userImage = mView.findViewById(R.id.profile_image);
+                username.setText(name);
 
-            RequestOptions placeholderOption = new RequestOptions();
-            placeholderOption.placeholder(R.drawable.profile_placeholder);
-            Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(image).into(userImage);
+                RequestOptions placeholderOption = new RequestOptions();
+                placeholderOption.placeholder(R.drawable.profile_placeholder);
+                Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(image).into(userImage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @SuppressLint("SetTextI18n")

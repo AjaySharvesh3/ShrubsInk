@@ -66,7 +66,7 @@
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="RtlSymmetry" />
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/edit_answer_iv"
         android:layout_width="26dp"
         android:layout_height="26dp"
@@ -76,7 +76,7 @@
         android:src="@drawable/ic_baseline_create_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription" />-->
 
     <ImageView
         android:id="@+id/is_solved_iv"
@@ -86,8 +86,7 @@
         android:layout_marginEnd="14dp"
         android:visibility="gone"
         android:src="@drawable/ic_outline_check_circle_24"
-        app:layout_constraintEnd_toStartOf="@+id/edit_answer_iv"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription,MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

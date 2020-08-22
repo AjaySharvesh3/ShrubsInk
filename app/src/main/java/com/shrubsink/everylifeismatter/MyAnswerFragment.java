@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -49,6 +50,7 @@ public class MyAnswerFragment extends Fragment {
 
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
+    ImageView noDataFoundIv;
 
     String queryPostId;
     String postUserId;
@@ -69,6 +71,7 @@ public class MyAnswerFragment extends Fragment {
         currentUserId = firebaseAuth.getCurrentUser().getUid();
 
         answerRecyclerView = view.findViewById(R.id.answer_list);
+        noDataFoundIv = view.findViewById(R.id.no_data_found_iv);
 
         /*fetchQueryPost();*/
 
@@ -79,81 +82,34 @@ public class MyAnswerFragment extends Fragment {
         answerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         answerRecyclerView.setAdapter(myAnswerAdapter);
 
-        firebaseFirestore.collection("user_bio/" + currentUserId + "/answer_list/")
-                .whereEqualTo("user_id", currentUserId)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                        if (!documentSnapshots.isEmpty()) {
-                            /*noAnswerTv.setVisibility(View.GONE);*/
-                            for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-                                if (doc.getType() == DocumentChange.Type.ADDED) {
-                                    String answerId = doc.getDocument().getId();
-                                    QueryAnswer queryAnswer = doc.getDocument().toObject(QueryAnswer.class).withId(answerId);
-                                    queryAnswerList.add(queryAnswer);
-                                    myAnswerAdapter.notifyDataSetChanged();
+        try {
+            firebaseFirestore.collection("user_bio/" + currentUserId + "/answer_list/")
+                    .whereEqualTo("user_id", currentUserId)
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                            try {
+                                if (!documentSnapshots.isEmpty()) {
+                                    noDataFoundIv.setVisibility(View.GONE);
+                                    for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+                                        if (doc.getType() == DocumentChange.Type.ADDED) {
+                                            String answerId = doc.getDocument().getId();
+                                            QueryAnswer queryAnswer = doc.getDocument().toObject(QueryAnswer.class).withId(answerId);
+                                            queryAnswerList.add(queryAnswer);
+                                            myAnswerAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                } else {
+                                    noDataFoundIv.setVisibility(View.VISIBLE);
                                 }
+                            } catch (Exception er) {
+                                er.printStackTrace();
                             }
-                        } else {
-                            /*noAnswerTv.setVisibility(View.VISIBLE);*/
                         }
-                    }
-                });
-
+                    });
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
         return view;
     }
-
-    /*public void fetchQueryPost() {
-        firebaseFirestore.collection("query_posts").document(queryPostId).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @SuppressLint({"CheckResult", "SetTextI18n"})
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            String title = task.getResult().getString("title");
-                            String body = task.getResult().getString("body");
-                            String imageUrl = task.getResult().getString("image_url");
-                            Boolean isSolved = task.getResult().getBoolean("is_solved");
-                            queryPostUserId = task.getResult().getString("user_id");
-
-                            titleView.setText(title);
-                            bodyView.setText(body);
-
-                            if (isSolved.equals(true)) {
-                                isQuerySolvedIv.setImageDrawable(getApplication().getDrawable(R.drawable.ic_baseline_check_circle_24));
-                            } else {
-                                isQuerySolvedIv.setImageDrawable(getApplication().getDrawable(R.drawable.ic_outline_check_circle_24_white));
-                            }
-
-                            RequestOptions requestOptions = new RequestOptions();
-                            requestOptions.placeholder(R.drawable.ic_baseline_image_24);
-                            Glide.with(getApplicationContext()).applyDefaultRequestOptions(requestOptions).load(imageUrl)
-                                    .into(queryPostImageView);
-
-                            firebaseFirestore.collection("user_bio").document(queryPostUserId).collection("personal")
-                                    .document(queryPostUserId).get()
-                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                                        @SuppressLint({"CheckResult", "SetTextI18n"})
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                RequestOptions requestOptions = new RequestOptions();
-                                                requestOptions.placeholder(R.drawable.ic_baseline_image_24);
-                                            } else {
-                                                Toast.makeText(AnswerActivity.this,
-                                                        R.string.check_internet_connection,
-                                                        Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    });
-                        } else {
-                            Toast.makeText(AnswerActivity.this,
-                                    R.string.check_internet_connection,
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-    }*/
 }
