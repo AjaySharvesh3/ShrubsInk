@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/shrubslink"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TermsAndConditionsActivity"></activity>
+        <activity android:name=".TermsAndConditionsActivity"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".CodeOfConductActivity" />
         <activity android:name=".EditPostQueryActivity" />
         <activity

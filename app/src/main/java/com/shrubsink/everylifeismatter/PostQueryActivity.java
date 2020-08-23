@@ -135,6 +135,12 @@ public class PostQueryActivity extends AppCompatActivity {
                     return;
                 }
 
+                if (postImageUri == null) {
+                    Snackbar.make(mPostQueryBtn, "Please add the image", Snackbar.LENGTH_LONG)
+                            .show();
+                    return;
+                }
+
                 showProgressDialog(PostQueryActivity.this, "Publishing...", "Please wait until we publish your query", false);
 
                 final String randomName = UUID.randomUUID().toString();
